@@ -30,6 +30,7 @@ public class UserServiceTest {
     // given
     testUser = new User();
     testUser.setId(1L);
+    testUser.setPassword("password");
     testUser.setUsername("testUsername");
 
     // when -> any object is being save in the userRepository -> return the dummy
@@ -48,6 +49,7 @@ public class UserServiceTest {
 
     assertEquals(testUser.getId(), createdUser.getId());
     assertEquals(testUser.getUsername(), createdUser.getUsername());
+    assertEquals(testUser.getPassword(), createdUser.getPassword());
     assertNotNull(createdUser.getToken());
     assertEquals(UserStatus.OFFLINE, createdUser.getStatus());
   }
