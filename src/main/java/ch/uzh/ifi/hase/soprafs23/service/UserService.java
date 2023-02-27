@@ -14,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -38,6 +39,10 @@ public class UserService {
 
   public List<User> getUsers() {
     return this.userRepository.findAll();
+  }
+
+    public Optional<User> getUser(Long id) {
+    return this.userRepository.findById(id);
   }
 
   public User createUser(User newUser) {
