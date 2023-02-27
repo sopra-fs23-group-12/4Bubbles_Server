@@ -41,7 +41,8 @@ public class UserService {
     return this.userRepository.findAll();
   }
 
-    public Optional<User> getUser(Long id) {
+  public Optional<User> getUser(Long id) {
+    checkIfExists(id);
     return this.userRepository.findById(id);
   }
 
@@ -72,9 +73,17 @@ public class UserService {
   private void checkIfUserExists(User userToBeCreated) {
     User userByUsername = userRepository.findByUsername(userToBeCreated.getUsername());
 
-    String baseErrorMessage = "The %s provided %s not unique. Therefore, the user could not be created!";
+    String baseErrorMessage = "The %s does not exist!";
     if (userByUsername != null) {
-      throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, "username", "is"));
+      throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, "requested user"));
+    }
+  }
+
+  private void checkIfExists(Long requestedId) {
+    Optional<User> userById = userRepository.findById(requestedId);
+    if (!userById.isPresent()) {
+      String baseErrorMessage = "The %s provided %s not unique. Therefore, the user could not be created!";
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(baseErrorMessage, "username", "is"));
     }
   }
 }

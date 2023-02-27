@@ -54,7 +54,7 @@ public class UserController {
     List<UserGetDTO> userGetDTOs = new ArrayList<>();
 
     userGetDTOs.add(DTOMapper.INSTANCE.convertEntityToUserGetDTO(user));
-    
+
     return userGetDTOs;
   }
 
