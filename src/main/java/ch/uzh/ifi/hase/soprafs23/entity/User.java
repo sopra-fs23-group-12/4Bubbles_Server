@@ -4,6 +4,7 @@ import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
  * Internal User Representation
@@ -30,6 +31,9 @@ public class User implements Serializable {
 
   @Column(nullable = false)
   private String password;
+
+   @Column(nullable = false)
+  private Timestamp createdAt;
 
   @Column(nullable = false, unique = true)
   private String token;
@@ -75,5 +79,13 @@ public class User implements Serializable {
 
   public void setPassword(String password) {
     this.password = password;
+  }
+
+  public Timestamp getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(Timestamp createdAt) {
+    this.createdAt = createdAt;
   }
 }

@@ -1,5 +1,7 @@
 package ch.uzh.ifi.hase.soprafs23.rest.dto;
 
+import java.sql.Timestamp;
+
 import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 
 public class UserGetDTO {
@@ -7,6 +9,7 @@ public class UserGetDTO {
   private Long id;
   private String username;
   private UserStatus status;
+  private Timestamp createdAt;
 
   public Long getId() {
     return id;
@@ -30,5 +33,13 @@ public class UserGetDTO {
 
   public void setStatus(UserStatus status) {
     this.status = status;
+  }
+
+  public Timestamp getCreatedAt() {
+    return createdAt;
+  }
+
+  public void setCreatedAt(Timestamp createdAt) {
+    this.createdAt = createdAt;
   }
 }
