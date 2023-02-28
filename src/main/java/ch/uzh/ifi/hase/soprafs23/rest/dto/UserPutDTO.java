@@ -1,10 +1,15 @@
 package ch.uzh.ifi.hase.soprafs23.rest.dto;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 
-public class UserGetDTO {
+public class UserPutDTO {
 
   private Long id;
   private String username;
@@ -48,7 +53,12 @@ public class UserGetDTO {
     return birthday;
   }
 
-  public void setBirthday(Date birthday) {
-    this.birthday = birthday;
+  public void setBirthday(String birthday) throws ParseException {
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    LocalDate date = LocalDate.parse(birthday, formatter);
+    ZoneId defaultZoneId = ZoneId.of("UTC");
+    this.birthday = Date.from(date.atStartOfDay(defaultZoneId).toInstant());
+
   }
 }

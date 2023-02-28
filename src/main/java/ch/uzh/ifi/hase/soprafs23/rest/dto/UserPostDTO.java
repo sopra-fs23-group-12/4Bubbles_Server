@@ -1,14 +1,12 @@
 package ch.uzh.ifi.hase.soprafs23.rest.dto;
 
-import java.sql.Timestamp;
+import java.util.Date;
 
 public class UserPostDTO {
 
-
   private String username;
   private String password;
-  private Timestamp createdAt;
-
+  private Date creationDate;
 
   public String getUsername() {
     return username;
@@ -26,11 +24,11 @@ public class UserPostDTO {
     this.password = password;
   }
 
-  public Timestamp getCreatedAt() {
-    return createdAt;
+  public Date getCreationDate() {
+    return creationDate;
   }
 
-  public void setCreatedAt(Timestamp createdAt) {
-    this.createdAt = createdAt;
+  public void setCreatedAt(Date creationDate) {
+    this.creationDate = creationDate;
   }
 }

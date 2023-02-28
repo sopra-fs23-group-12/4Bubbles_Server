@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -46,10 +46,24 @@ public class UserService {
     return this.userRepository.findById(id);
   }
 
+  public User updateUser(Long id, User newUser) {
+    checkIfExists(id);
+    User user = this.userRepository.findById(id).get();
+    user.setUsername(newUser.getUsername());
+    user.setBirthday(newUser.getBirthday());
+    // saves the given entity but data is only persisted in the database once
+    // flush() is called
+    user = userRepository.save(user);
+    userRepository.flush();
+
+    log.debug("Created Information for User: {}", user);
+    return user;
+  }
+
   public User createUser(User newUser) {
     newUser.setToken(UUID.randomUUID().toString());
     newUser.setStatus(UserStatus.OFFLINE);
-    newUser.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+    newUser.setCreationDate(new Date());
     checkIfUserExists(newUser);
     // saves the given entity but data is only persisted in the database once
     // flush() is called
