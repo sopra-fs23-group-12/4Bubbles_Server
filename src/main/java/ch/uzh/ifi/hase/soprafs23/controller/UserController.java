@@ -50,9 +50,9 @@ public class UserController {
   public List<UserGetDTO> getUser(@PathVariable Long id, @RequestHeader(value = "Authorization") String authorization) {
 
     // Bearer Token --> check if User is allowed to get this Resource
-    System.out.println(authorization.replace("Bearer ", ""));
+    String token = authorization.replace("Bearer ", "");
 
-    Optional<User> optionalUser = userService.getUser(id);
+    Optional<User> optionalUser = userService.getUser(id, token);
     User user = optionalUser.get();
     List<UserGetDTO> userGetDTOs = new ArrayList<>();
 

@@ -38,11 +38,14 @@ public class UserService {
   }
 
   public List<User> getUsers() {
+    // authenticateUser(token);
+
     return this.userRepository.findAll();
   }
 
-  public Optional<User> getUser(Long id) {
+  public Optional<User> getUser(Long id, String token) {
     checkIfExists(id);
+    authenticateUser(token);
     return this.userRepository.findById(id);
   }
 
@@ -98,6 +101,14 @@ public class UserService {
     if (!userById.isPresent()) {
       String baseErrorMessage = "The user with id %s was not found.";
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(baseErrorMessage, requestedId));
+    }
+  }
+
+  private void authenticateUser(String token) {
+    // check if user token is correct
+    if (userRepository.findByToken(token) == null) {
+      String baseErrorMessage = "You need to log in to see this information.";
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage));
     }
   }
 }
