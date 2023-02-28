@@ -96,8 +96,8 @@ public class UserService {
   private void checkIfExists(Long requestedId) {
     Optional<User> userById = userRepository.findById(requestedId);
     if (!userById.isPresent()) {
-      String baseErrorMessage = "The %s provided %s not unique. Therefore, the user could not be created!";
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(baseErrorMessage, "username", "is"));
+      String baseErrorMessage = "The user with id %s was not found.";
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(baseErrorMessage, requestedId));
     }
   }
 }
