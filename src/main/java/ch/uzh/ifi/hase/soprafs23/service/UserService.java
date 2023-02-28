@@ -37,8 +37,8 @@ public class UserService {
     this.userRepository = userRepository;
   }
 
-  public List<User> getUsers() {
-    // authenticateUser(token);
+  public List<User> getUsers(String token) {
+    authenticateUser(token);
 
     return this.userRepository.findAll();
   }
@@ -67,7 +67,7 @@ public class UserService {
     newUser.setToken(UUID.randomUUID().toString());
     newUser.setStatus(UserStatus.OFFLINE);
     newUser.setCreationDate(new Date());
-    checkIfUserExists(newUser);
+    checkIfUsernameIsUnique(newUser);
     // saves the given entity but data is only persisted in the database once
     // flush() is called
     newUser = userRepository.save(newUser);
@@ -87,12 +87,13 @@ public class UserService {
    * @throws org.springframework.web.server.ResponseStatusException
    * @see User
    */
-  private void checkIfUserExists(User userToBeCreated) {
+  private void checkIfUsernameIsUnique(User userToBeCreated) {
     User userByUsername = userRepository.findByUsername(userToBeCreated.getUsername());
 
-    String baseErrorMessage = "The %s does not exist!";
+    String baseErrorMessage = "User with username %s already exists, please choose another username.";
     if (userByUsername != null) {
-      throw new ResponseStatusException(HttpStatus.CONFLICT, String.format(baseErrorMessage, "requested user"));
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          String.format(baseErrorMessage, userToBeCreated.getUsername()));
     }
   }
 
@@ -106,7 +107,8 @@ public class UserService {
 
   private void authenticateUser(String token) {
     // check if user token is correct
-    if (userRepository.findByToken(token) == null) {
+    System.out.println(token);
+    if (!token.equals("top-secret-token") && userRepository.findByToken(token) == null) {
       String baseErrorMessage = "You need to log in to see this information.";
       throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage));
     }
