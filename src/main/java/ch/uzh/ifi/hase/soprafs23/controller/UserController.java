@@ -1,7 +1,6 @@
 package ch.uzh.ifi.hase.soprafs23.controller;
 
 import ch.uzh.ifi.hase.soprafs23.entity.User;
-import ch.uzh.ifi.hase.soprafs23.repository.UserRepository;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.UserPostDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.UserPutDTO;
@@ -48,7 +47,10 @@ public class UserController {
   @GetMapping("/users/{id}")
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public List<UserGetDTO> getUser(@PathVariable Long id) {
+  public List<UserGetDTO> getUser(@PathVariable Long id, @RequestHeader(value = "Authorization") String authorization) {
+
+    // Bearer Token --> check if User is allowed to get this Resource
+    System.out.println(authorization.replace("Bearer ", ""));
 
     Optional<User> optionalUser = userService.getUser(id);
     User user = optionalUser.get();
@@ -84,4 +86,5 @@ public class UserController {
     // return DTOMapper.INSTANCE.convertEntityToUserGetDTO(createdUser);
 
   }
+
 }

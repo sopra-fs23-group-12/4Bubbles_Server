@@ -1,7 +1,6 @@
 package ch.uzh.ifi.hase.soprafs23.rest.dto;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
