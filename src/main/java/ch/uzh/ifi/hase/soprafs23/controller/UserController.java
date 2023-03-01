@@ -8,9 +8,11 @@ import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs23.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -32,7 +34,13 @@ public class UserController {
   @GetMapping("/users")
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public List<UserGetDTO> getAllUsers(@RequestHeader(value = "Authorization") String authorization) {
+  public List<UserGetDTO> getAllUsers(@RequestHeader(value = "Authorization", required = false) String authorization) {
+
+    // check if authorization is set
+    if (Objects.isNull(authorization)) {
+      String baseErrorMessage = "You need to log in to see this information.";
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage));
+    }
 
     String token = authorization.replace("Bearer ", "");
 
@@ -50,7 +58,14 @@ public class UserController {
   @GetMapping("/users/{id}")
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public List<UserGetDTO> getUser(@PathVariable Long id, @RequestHeader(value = "Authorization") String authorization) {
+  public List<UserGetDTO> getUser(@PathVariable Long id,
+      @RequestHeader(value = "Authorization", required = false) String authorization) {
+
+    // check if authorization is set
+    if (Objects.isNull(authorization)) {
+      String baseErrorMessage = "You need to log in to see this information.";
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage));
+    }
 
     // Bearer Token --> check if User is allowed to get this Resource
     String token = authorization.replace("Bearer ", "");
@@ -85,8 +100,6 @@ public class UserController {
     User userInput = DTOMapper.INSTANCE.convertUserPutDTOtoEntity(userPutDTO);
 
     User createdUser = userService.updateUser(id, userInput);
-
-    // return DTOMapper.INSTANCE.convertEntityToUserGetDTO(createdUser);
 
   }
 

@@ -106,8 +106,6 @@ public class UserService {
   }
 
   private void authenticateUser(String token) {
-    // check if user token is correct
-    System.out.println(token);
     if (!token.equals("top-secret-token") && userRepository.findByToken(token) == null) {
       String baseErrorMessage = "You need to log in to see this information.";
       throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage));

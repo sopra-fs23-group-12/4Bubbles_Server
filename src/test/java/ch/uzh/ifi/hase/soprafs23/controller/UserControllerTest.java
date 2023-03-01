@@ -2,7 +2,6 @@ package ch.uzh.ifi.hase.soprafs23.controller;
 
 import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
-import ch.uzh.ifi.hase.soprafs23.rest.dto.LoginGetDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.UserPostDTO;
 import ch.uzh.ifi.hase.soprafs23.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -15,7 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
+
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -55,7 +54,7 @@ public class UserControllerTest {
 
     // this mocks the UserService -> we define above what the userService should
     // return when getUsers() is called
-    given(userService.getUsers("top-secret-token")).willReturn(allUsers);
+    given(userService.getUsers(Mockito.any())).willReturn(allUsers);
 
     // when
     MockHttpServletRequestBuilder getRequest = get("/users").contentType(MediaType.APPLICATION_JSON)
@@ -111,4 +110,42 @@ public class UserControllerTest {
           String.format("The request body could not be created.%s", e.toString()));
     }
   }
+
+  @Test
+  public void UsersTestAuthenticated() throws Exception {
+
+    MockHttpServletRequestBuilder getRequest = get("/users").header("Authorization", "Bearer " + "top-secret-token");
+
+    // then
+    mockMvc.perform(getRequest).andExpect(status().isOk());
+
+  }
+
+  @Test
+  public void UsersTestNotAuthenticated() throws Exception {
+
+    MockHttpServletRequestBuilder getRequest = get("/users");
+    ;
+
+    // then
+    mockMvc.perform(getRequest).andExpect(status().isForbidden());
+
+  }
+
+  @Test
+  public void RegisterTest() throws Exception {
+
+    UserPostDTO userPostDTO = new UserPostDTO();
+    userPostDTO.setUsername("asdf");
+    userPostDTO.setPassword("asdf");
+
+    MockHttpServletRequestBuilder postRequest = post("/users")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(asJsonString(userPostDTO));
+
+    // then
+    mockMvc.perform(postRequest).andExpect(status().isCreated());
+
+  }
+
 }
