@@ -9,7 +9,6 @@ import ch.uzh.ifi.hase.soprafs23.service.AuthenticationService;
 import ch.uzh.ifi.hase.soprafs23.service.UserService;
 
 import java.util.Objects;
-import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -48,7 +47,7 @@ public class AuthenticationController {
     User userInput = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
 
     // create user
-    User createdUser = userService.createUser(userInput);
+    User createdUser = userService.registerUser(userInput);
     // convert internal representation of user back to API
     return DTOMapper.INSTANCE.convertEntityToLoginPostGetDTO(createdUser);
   }
@@ -65,7 +64,7 @@ public class AuthenticationController {
     // Bearer Token --> check if User is allowed to get this Resource
     String token = authorization.replace("Bearer ", "");
 
-    User user = authenticationService.logout(token);
+    authenticationService.logout(token);
 
   }
 }
