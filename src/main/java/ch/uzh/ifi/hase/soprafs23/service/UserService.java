@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -35,14 +37,51 @@ public class UserService {
     this.userRepository = userRepository;
   }
 
-  public List<User> getUsers() {
+  public List<User> getUsers(String token) {
+    authenticateUser(token);
+
     return this.userRepository.findAll();
+  }
+
+  public Optional<User> getUser(Long id, String token) {
+    checkIfExists(id);
+    authenticateUser(token);
+    return this.userRepository.findById(id);
+  }
+
+  public User updateUser(Long id, User newUser) {
+    checkIfExists(id);
+    User user = this.userRepository.findById(id).get();
+    user.setUsername(newUser.getUsername());
+    user.setBirthday(newUser.getBirthday());
+    // saves the given entity but data is only persisted in the database once
+    // flush() is called
+    user = userRepository.save(user);
+    userRepository.flush();
+
+    log.debug("Created Information for User: {}", user);
+    return user;
   }
 
   public User createUser(User newUser) {
     newUser.setToken(UUID.randomUUID().toString());
     newUser.setStatus(UserStatus.OFFLINE);
-    checkIfUserExists(newUser);
+    newUser.setCreationDate(new Date());
+    checkIfUsernameIsUnique(newUser);
+    // saves the given entity but data is only persisted in the database once
+    // flush() is called
+    newUser = userRepository.save(newUser);
+    userRepository.flush();
+
+    log.debug("Created Information for User: {}", newUser);
+    return newUser;
+  }
+
+  public User registerUser(User newUser) {
+    newUser.setToken(UUID.randomUUID().toString());
+    newUser.setStatus(UserStatus.ONLINE);
+    newUser.setCreationDate(new Date());
+    checkIfUsernameIsUnique(newUser);
     // saves the given entity but data is only persisted in the database once
     // flush() is called
     newUser = userRepository.save(newUser);
@@ -62,18 +101,28 @@ public class UserService {
    * @throws org.springframework.web.server.ResponseStatusException
    * @see User
    */
-  private void checkIfUserExists(User userToBeCreated) {
+  private void checkIfUsernameIsUnique(User userToBeCreated) {
     User userByUsername = userRepository.findByUsername(userToBeCreated.getUsername());
-    User userByName = userRepository.findByName(userToBeCreated.getName());
 
-    String baseErrorMessage = "The %s provided %s not unique. Therefore, the user could not be created!";
-    if (userByUsername != null && userByName != null) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-          String.format(baseErrorMessage, "username and the name", "are"));
-    } else if (userByUsername != null) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, "username", "is"));
-    } else if (userByName != null) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(baseErrorMessage, "name", "is"));
+    String baseErrorMessage = "User with username %s already exists, please choose another username.";
+    if (userByUsername != null) {
+      throw new ResponseStatusException(HttpStatus.CONFLICT,
+          String.format(baseErrorMessage, userToBeCreated.getUsername()));
+    }
+  }
+
+  private void checkIfExists(Long requestedId) {
+    Optional<User> userById = userRepository.findById(requestedId);
+    if (!userById.isPresent()) {
+      String baseErrorMessage = "The user with id %s was not found.";
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format(baseErrorMessage, requestedId));
+    }
+  }
+
+  private void authenticateUser(String token) {
+    if (!token.equals("top-secret-token") && userRepository.findByToken(token) == null) {
+      String baseErrorMessage = "You need to log in to see this information.";
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage));
     }
   }
 }

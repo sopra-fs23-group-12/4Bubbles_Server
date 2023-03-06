@@ -14,6 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -47,23 +48,21 @@ public class UserControllerTest {
   public void givenUsers_whenGetUsers_thenReturnJsonArray() throws Exception {
     // given
     User user = new User();
-    user.setName("Firstname Lastname");
     user.setUsername("firstname@lastname");
     user.setStatus(UserStatus.OFFLINE);
-
     List<User> allUsers = Collections.singletonList(user);
 
     // this mocks the UserService -> we define above what the userService should
     // return when getUsers() is called
-    given(userService.getUsers()).willReturn(allUsers);
+    given(userService.getUsers(Mockito.any())).willReturn(allUsers);
 
     // when
-    MockHttpServletRequestBuilder getRequest = get("/users").contentType(MediaType.APPLICATION_JSON);
+    MockHttpServletRequestBuilder getRequest = get("/users").contentType(MediaType.APPLICATION_JSON)
+        .header("Authorization", "Bearer " + "top-secret-token");
 
     // then
     mockMvc.perform(getRequest).andExpect(status().isOk())
         .andExpect(jsonPath("$", hasSize(1)))
-        .andExpect(jsonPath("$[0].name", is(user.getName())))
         .andExpect(jsonPath("$[0].username", is(user.getUsername())))
         .andExpect(jsonPath("$[0].status", is(user.getStatus().toString())));
   }
@@ -73,13 +72,11 @@ public class UserControllerTest {
     // given
     User user = new User();
     user.setId(1L);
-    user.setName("Test User");
     user.setUsername("testUsername");
     user.setToken("1");
     user.setStatus(UserStatus.ONLINE);
 
     UserPostDTO userPostDTO = new UserPostDTO();
-    userPostDTO.setName("Test User");
     userPostDTO.setUsername("testUsername");
 
     given(userService.createUser(Mockito.any())).willReturn(user);
@@ -93,7 +90,6 @@ public class UserControllerTest {
     mockMvc.perform(postRequest)
         .andExpect(status().isCreated())
         .andExpect(jsonPath("$.id", is(user.getId().intValue())))
-        .andExpect(jsonPath("$.name", is(user.getName())))
         .andExpect(jsonPath("$.username", is(user.getUsername())))
         .andExpect(jsonPath("$.status", is(user.getStatus().toString())));
   }
@@ -114,4 +110,42 @@ public class UserControllerTest {
           String.format("The request body could not be created.%s", e.toString()));
     }
   }
+
+  @Test
+  public void UsersTestAuthenticated() throws Exception {
+
+    MockHttpServletRequestBuilder getRequest = get("/users").header("Authorization", "Bearer " + "top-secret-token");
+
+    // then
+    mockMvc.perform(getRequest).andExpect(status().isOk());
+
+  }
+
+  @Test
+  public void UsersTestNotAuthenticated() throws Exception {
+
+    MockHttpServletRequestBuilder getRequest = get("/users");
+    ;
+
+    // then
+    mockMvc.perform(getRequest).andExpect(status().isForbidden());
+
+  }
+
+  @Test
+  public void RegisterTest() throws Exception {
+
+    UserPostDTO userPostDTO = new UserPostDTO();
+    userPostDTO.setUsername("asdf");
+    userPostDTO.setPassword("asdf");
+
+    MockHttpServletRequestBuilder postRequest = post("/users")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(asJsonString(userPostDTO));
+
+    // then
+    mockMvc.perform(postRequest).andExpect(status().isCreated());
+
+  }
+
 }
