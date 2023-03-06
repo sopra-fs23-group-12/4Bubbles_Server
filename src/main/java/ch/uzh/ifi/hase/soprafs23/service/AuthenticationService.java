@@ -1,7 +1,10 @@
 package ch.uzh.ifi.hase.soprafs23.service;
 
+import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.repository.UserRepository;
+
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +37,13 @@ public class AuthenticationService {
                     String.format(baseErrorMessage, "requested user"));
         }
         log.debug("Created Information for User: {}", user);
+        user.setStatus(UserStatus.ONLINE);
+        return user;
+    }
+
+    public User logout(String token) {
+        User user = this.userRepository.findByToken(token);
+        user.setStatus(UserStatus.OFFLINE);
         return user;
     }
 
