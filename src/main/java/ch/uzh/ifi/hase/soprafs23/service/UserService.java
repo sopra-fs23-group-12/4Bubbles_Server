@@ -14,8 +14,10 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 /**
  * User Service
@@ -37,25 +39,48 @@ public class UserService {
     this.userRepository = userRepository;
   }
 
-  public List<User> getUsers(String token) {
-    authenticateUser(token);
+  public List<User> getUsers(String bearerToken) {
+    authenticateUser(bearerToken);
 
     return this.userRepository.findAll();
   }
 
-  public Optional<User> getUser(Long id, String token) {
+  public Optional<User> getUser(Long id, String bearerToken) {
+    authenticateUser(bearerToken);
     checkIfExists(id);
-    authenticateUser(token);
     return this.userRepository.findById(id);
   }
 
-  public User updateUser(Long id, User newUser) {
+  public User updateUser(Long id, String bearerToken, User newUser) {
+
+    authenticateUser(bearerToken);
     checkIfExists(id);
+
+    // if no body is set throw bad request
+    if (newUser.getUsername() == null && newUser.getBirthday() == null) {
+      String baseErrorMessage = "Oups, your request is wrong. Either username or birthday should be set!";
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+          String.format(baseErrorMessage));
+    }
+
+    // check if new username is not empty
+    if (newUser.getUsername() == "") {
+      String baseErrorMessage = "Oups, your request is wrong. The username cannot be empty! ";
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+          String.format(baseErrorMessage));
+    }
+
     User user = this.userRepository.findById(id).get();
-    user.setUsername(newUser.getUsername());
-    user.setBirthday(newUser.getBirthday());
-    // saves the given entity but data is only persisted in the database once
-    // flush() is called
+
+    if (!newUser.getUsername().equals(user.getUsername()) && newUser.getUsername() != null) {
+      checkIfUsernameIsUnique(newUser);
+      user.setUsername(newUser.getUsername());
+    }
+
+    if (newUser.getBirthday() != null) {
+      user.setBirthday(newUser.getBirthday());
+    }
+
     user = userRepository.save(user);
     userRepository.flush();
 
@@ -64,10 +89,20 @@ public class UserService {
   }
 
   public User createUser(User newUser) {
+
+    // check if password and username is set
+    if (newUser.getPassword() == null || newUser.getUsername() == null) {
+      String baseErrorMessage = "Oups, your request is wrong. ";
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+          String.format(baseErrorMessage));
+    }
+
+    checkIfUsernameIsUnique(newUser);
+
     newUser.setToken(UUID.randomUUID().toString());
     newUser.setStatus(UserStatus.OFFLINE);
     newUser.setCreationDate(new Date());
-    checkIfUsernameIsUnique(newUser);
+
     // saves the given entity but data is only persisted in the database once
     // flush() is called
     newUser = userRepository.save(newUser);
@@ -119,8 +154,16 @@ public class UserService {
     }
   }
 
-  private void authenticateUser(String token) {
-    if (!token.equals("top-secret-token") && userRepository.findByToken(token) == null) {
+  private void authenticateUser(String bearerToken) {
+
+    if (Objects.isNull(bearerToken)) {
+      String baseErrorMessage = "You need to log in to see this information.";
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage));
+    }
+
+    String token = bearerToken.replace("Bearer ", "");
+
+    if (userRepository.findByToken(token) == null) {
       String baseErrorMessage = "You need to log in to see this information.";
       throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage));
     }
