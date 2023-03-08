@@ -262,7 +262,7 @@ public class UserControllerTest {
 
     // then
     mockMvc.perform(postRequest)
-        .andExpect(status().isNoContent());
+        .andExpect(status().isForbidden());
 
   }
 
