@@ -45,6 +45,13 @@ public class AuthenticationController {
     // convert API user to internal representation
     User userInput = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
 
+    // check if password and username is set
+    if (userInput.getPassword() == null || userInput.getUsername() == null) {
+      String baseErrorMessage = "Oups, your request is wrong. ";
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+          String.format(baseErrorMessage));
+    }
+
     // create user
     User createdUser = userService.registerUser(userInput);
     // convert internal representation of user back to API

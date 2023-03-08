@@ -194,10 +194,8 @@ public class UserControllerTest {
   public void RegisterTest() throws Exception {
 
     User user = new User();
-    user.setId(1L);
     user.setUsername("testUsername");
-    user.setToken("1");
-    user.setStatus(UserStatus.ONLINE);
+    user.setPassword("testUsername");
 
     UserPostDTO userPostDTO = new UserPostDTO();
     userPostDTO.setUsername("testUsername");
