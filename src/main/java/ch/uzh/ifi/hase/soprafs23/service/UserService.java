@@ -14,10 +14,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 /**
  * User Service
@@ -45,10 +43,10 @@ public class UserService {
     return this.userRepository.findAll();
   }
 
-  public Optional<User> getUser(Long id, String bearerToken) {
+  public User getUser(Long id, String bearerToken) {
     authenticateUser(bearerToken);
     checkIfExists(id);
-    return this.userRepository.findById(id);
+    return this.userRepository.findById(id).get();
   }
 
   public User updateUser(Long id, String bearerToken, User newUser) {
@@ -89,13 +87,6 @@ public class UserService {
   }
 
   public User createUser(User newUser) {
-
-    // check if password and username is set
-    if (newUser.getPassword() == null || newUser.getUsername() == null) {
-      String baseErrorMessage = "Oups, your request is wrong. ";
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-          String.format(baseErrorMessage));
-    }
 
     checkIfUsernameIsUnique(newUser);
 
@@ -155,11 +146,6 @@ public class UserService {
   }
 
   private void authenticateUser(String bearerToken) {
-
-    if (Objects.isNull(bearerToken)) {
-      String baseErrorMessage = "You need to log in to see this information.";
-      throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage));
-    }
 
     String token = bearerToken.replace("Bearer ", "");
 
