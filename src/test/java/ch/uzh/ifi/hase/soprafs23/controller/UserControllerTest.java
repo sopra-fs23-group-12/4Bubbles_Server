@@ -176,7 +176,7 @@ public class UserControllerTest {
   @Test
   public void getUserById_NotFound() throws Exception {
 
-    given(userService.createUser(Mockito.any()))
+    given(userService.getUser(Mockito.any()))
         .willThrow(new ResponseStatusException(HttpStatus.NOT_FOUND,
             String.format("This User does not exist.")));
 
