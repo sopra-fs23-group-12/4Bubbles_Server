@@ -167,8 +167,7 @@ public class UserControllerTest {
 
     given(userService.getUser(Mockito.any(), Mockito.any())).willReturn(user);
 
-    MockHttpServletRequestBuilder getRequest = get("/users/1").contentType(MediaType.APPLICATION_JSON)
-        .header("Authorization", "Bearer " + "top-secret-token");
+    MockHttpServletRequestBuilder getRequest = get("/users/1").contentType(MediaType.APPLICATION_JSON);
 
     mockMvc.perform(getRequest).andExpect(status().isForbidden());
 
@@ -181,7 +180,8 @@ public class UserControllerTest {
         .willThrow(new ResponseStatusException(HttpStatus.NOT_FOUND,
             String.format("This User does not exist.")));
 
-    MockHttpServletRequestBuilder getRequest = get("/users/2").contentType(MediaType.APPLICATION_JSON);
+    MockHttpServletRequestBuilder getRequest = get("/users/2").contentType(MediaType.APPLICATION_JSON)
+        .header("Authorization", "Bearer " + "top-secret-token");
 
     mockMvc.perform(getRequest).andExpect(status().isNotFound());
 
