@@ -114,6 +114,16 @@ public class UserControllerTest {
   @Test
   public void UsersTestAuthenticated() throws Exception {
 
+    // given
+    User user = new User();
+    user.setUsername("firstname@lastname");
+    user.setStatus(UserStatus.OFFLINE);
+    List<User> allUsers = Collections.singletonList(user);
+
+    // this mocks the UserService -> we define above what the userService should
+    // return when getUsers() is called
+    given(userService.getUsers(Mockito.any())).willReturn(allUsers);
+
     MockHttpServletRequestBuilder getRequest = get("/users").header("Authorization", "Bearer " + "top-secret-token");
 
     // then
@@ -124,10 +134,12 @@ public class UserControllerTest {
   @Test
   public void UsersTestNotAuthenticated() throws Exception {
 
-    MockHttpServletRequestBuilder getRequest = get("/users");
-    ;
+    given(userService.getUsers(Mockito.any()))
+        .willThrow(new ResponseStatusException(HttpStatus.FORBIDDEN,
+            String.format("You need to log in to see this information.")));
 
-    // then
+    MockHttpServletRequestBuilder getRequest = get("/users");
+
     mockMvc.perform(getRequest).andExpect(status().isForbidden());
 
   }
@@ -143,7 +155,6 @@ public class UserControllerTest {
         .contentType(MediaType.APPLICATION_JSON)
         .content(asJsonString(userPostDTO));
 
-    // then
     mockMvc.perform(postRequest).andExpect(status().isCreated());
 
   }

@@ -35,18 +35,10 @@ public class UserController {
   @GetMapping("/users")
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  public List<UserGetDTO> getAllUsers(@RequestHeader(value = "Authorization", required = false) String authorization) {
-
-    // check if authorization is set
-    if (Objects.isNull(authorization)) {
-      String baseErrorMessage = "You need to log in to see this information.";
-      throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage));
-    }
-
-    String token = authorization.replace("Bearer ", "");
+  public List<UserGetDTO> getAllUsers(@RequestHeader(value = "Authorization", required = false) String bearerToken) {
 
     // fetch all users in the internal representation
-    List<User> users = userService.getUsers(token);
+    List<User> users = userService.getUsers(bearerToken);
     List<UserGetDTO> userGetDTOs = new ArrayList<>();
 
     // convert each user to the API representation
@@ -60,18 +52,9 @@ public class UserController {
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   public List<UserGetDTO> getUser(@PathVariable Long id,
-      @RequestHeader(value = "Authorization", required = false) String authorization) {
+      @RequestHeader(value = "Authorization", required = false) String bearerToken) {
 
-    // check if authorization is set
-    if (Objects.isNull(authorization)) {
-      String baseErrorMessage = "You need to log in to see this information.";
-      throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage));
-    }
-
-    // Bearer Token --> check if User is allowed to get this Resource
-    String token = authorization.replace("Bearer ", "");
-
-    Optional<User> optionalUser = userService.getUser(id, token);
+    Optional<User> optionalUser = userService.getUser(id, bearerToken);
     User user = optionalUser.get();
     List<UserGetDTO> userGetDTOs = new ArrayList<>();
 
@@ -96,11 +79,13 @@ public class UserController {
   @PutMapping("/users/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   @ResponseBody
-  public void updateUser(@PathVariable Long id, @RequestBody UserPutDTO userPutDTO) {
+  public void updateUser(@PathVariable Long id,
+      @RequestHeader(value = "Authorization", required = false) String bearerToken,
+      @RequestBody UserPutDTO userPutDTO) {
 
     User userInput = DTOMapper.INSTANCE.convertUserPutDTOtoEntity(userPutDTO);
 
-    userService.updateUser(id, userInput);
+    userService.updateUser(id, bearerToken, userInput);
 
   }
 
