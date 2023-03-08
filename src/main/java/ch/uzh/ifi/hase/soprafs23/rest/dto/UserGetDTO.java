@@ -8,8 +8,8 @@ public class UserGetDTO {
 
   private Long id;
   private String username;
-  private UserStatus status;
   private Date creationDate;
+  private UserStatus status;
   private Date birthday;
 
   public Long getId() {

@@ -68,6 +68,15 @@ public class UserControllerTest {
   }
 
   @Test
+  public void getUsers_NotAuthenticated() throws Exception {
+
+    MockHttpServletRequestBuilder getRequest = get("/users").contentType(MediaType.APPLICATION_JSON);
+
+    // then
+    mockMvc.perform(getRequest).andExpect(status().isForbidden());
+  }
+
+  @Test
   public void createUser_validInput_userCreated() throws Exception {
     // given
     User user = new User();
@@ -78,6 +87,7 @@ public class UserControllerTest {
 
     UserPostDTO userPostDTO = new UserPostDTO();
     userPostDTO.setUsername("testUsername");
+    userPostDTO.setPassword("testUsername");
 
     given(userService.createUser(Mockito.any())).willReturn(user);
 
@@ -92,6 +102,118 @@ public class UserControllerTest {
         .andExpect(jsonPath("$.id", is(user.getId().intValue())))
         .andExpect(jsonPath("$.username", is(user.getUsername())))
         .andExpect(jsonPath("$.status", is(user.getStatus().toString())));
+
+  }
+
+  @Test
+  public void createUser_invalidInput() throws Exception {
+    // given
+    UserPostDTO userPostDTO = new UserPostDTO();
+
+    // when/then -> do the request + validate the result
+    MockHttpServletRequestBuilder postRequest = post("/users")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(asJsonString(userPostDTO));
+
+    // then
+    mockMvc.perform(postRequest)
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  public void createUser_userAlreadyExists() throws Exception {
+
+    UserPostDTO userPostDTO = new UserPostDTO();
+    userPostDTO.setUsername("testUsername");
+    userPostDTO.setPassword("testUsername");
+
+    given(userService.createUser(Mockito.any()))
+        .willThrow(new ResponseStatusException(HttpStatus.CONFLICT,
+            String.format("You need to log in to see this information.")));
+
+    // when/then -> do the request + validate the result
+    MockHttpServletRequestBuilder postRequest = post("/users")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(asJsonString(userPostDTO));
+
+    // then
+    mockMvc.perform(postRequest)
+        .andExpect(status().isConflict());
+
+  }
+
+  @Test
+  public void getUserById_Authenticated() throws Exception {
+
+    User user = new User();
+    user.setUsername("firstname@lastname");
+    user.setStatus(UserStatus.OFFLINE);
+
+    given(userService.getUser(Mockito.any(), Mockito.any())).willReturn(user);
+
+    MockHttpServletRequestBuilder getRequest = get("/users/1").contentType(MediaType.APPLICATION_JSON)
+        .header("Authorization", "Bearer " + "top-secret-token");
+
+    mockMvc.perform(getRequest).andExpect(status().isOk());
+
+  }
+
+  @Test
+  public void getUserById_NotAuthenticated() throws Exception {
+
+    User user = new User();
+    user.setUsername("firstname@lastname");
+    user.setStatus(UserStatus.OFFLINE);
+
+    given(userService.getUser(Mockito.any(), Mockito.any())).willReturn(user);
+
+    MockHttpServletRequestBuilder getRequest = get("/users/1").contentType(MediaType.APPLICATION_JSON);
+
+    mockMvc.perform(getRequest).andExpect(status().isForbidden());
+
+  }
+
+  @Test
+  public void getUserById_NotFound() throws Exception {
+
+    given(userService.getUser(Mockito.any()))
+        .willThrow(new ResponseStatusException(HttpStatus.NOT_FOUND,
+            String.format("This User does not exist.")));
+
+    MockHttpServletRequestBuilder getRequest = get("/users/2").contentType(MediaType.APPLICATION_JSON)
+        .header("Authorization", "Bearer " + "top-secret-token");
+
+    mockMvc.perform(getRequest).andExpect(status().isNotFound());
+
+  }
+
+  @Test
+  public void RegisterTest() throws Exception {
+
+    User user = new User();
+    user.setId(1L);
+    user.setUsername("testUsername");
+    user.setToken("1");
+    user.setStatus(UserStatus.ONLINE);
+
+    UserPostDTO userPostDTO = new UserPostDTO();
+    userPostDTO.setUsername("testUsername");
+    userPostDTO.setPassword("testUsername");
+
+    given(userService.createUser(Mockito.any())).willReturn(user);
+
+    // when/then -> do the request + validate the result
+    MockHttpServletRequestBuilder postRequest = post("/users")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(asJsonString(userPostDTO));
+
+    // then
+    mockMvc.perform(postRequest)
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("$.id", is(user.getId().intValue())))
+        .andExpect(jsonPath("$.username", is(user.getUsername())))
+        .andExpect(jsonPath("$.status", is(user.getStatus().toString())));
+
   }
 
   /**
@@ -109,54 +231,6 @@ public class UserControllerTest {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
           String.format("The request body could not be created.%s", e.toString()));
     }
-  }
-
-  @Test
-  public void UsersTestAuthenticated() throws Exception {
-
-    // given
-    User user = new User();
-    user.setUsername("firstname@lastname");
-    user.setStatus(UserStatus.OFFLINE);
-    List<User> allUsers = Collections.singletonList(user);
-
-    // this mocks the UserService -> we define above what the userService should
-    // return when getUsers() is called
-    given(userService.getUsers(Mockito.any())).willReturn(allUsers);
-
-    MockHttpServletRequestBuilder getRequest = get("/users").header("Authorization", "Bearer " + "top-secret-token");
-
-    // then
-    mockMvc.perform(getRequest).andExpect(status().isOk());
-
-  }
-
-  @Test
-  public void UsersTestNotAuthenticated() throws Exception {
-
-    given(userService.getUsers(Mockito.any()))
-        .willThrow(new ResponseStatusException(HttpStatus.FORBIDDEN,
-            String.format("You need to log in to see this information.")));
-
-    MockHttpServletRequestBuilder getRequest = get("/users");
-
-    mockMvc.perform(getRequest).andExpect(status().isForbidden());
-
-  }
-
-  @Test
-  public void RegisterTest() throws Exception {
-
-    UserPostDTO userPostDTO = new UserPostDTO();
-    userPostDTO.setUsername("asdf");
-    userPostDTO.setPassword("asdf");
-
-    MockHttpServletRequestBuilder postRequest = post("/users")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(asJsonString(userPostDTO));
-
-    mockMvc.perform(postRequest).andExpect(status().isCreated());
-
   }
 
 }

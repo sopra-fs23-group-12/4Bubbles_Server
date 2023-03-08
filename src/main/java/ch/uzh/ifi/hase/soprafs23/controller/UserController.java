@@ -1,12 +1,12 @@
 package ch.uzh.ifi.hase.soprafs23.controller;
 
-import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.UserPostDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.UserPutDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs23.service.UserService;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -14,7 +14,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * User Controller
@@ -37,6 +36,8 @@ public class UserController {
   @ResponseBody
   public List<UserGetDTO> getAllUsers(@RequestHeader(value = "Authorization", required = false) String bearerToken) {
 
+    throwForbiddenWhenNoBearerToken(bearerToken);
+
     // fetch all users in the internal representation
     List<User> users = userService.getUsers(bearerToken);
     List<UserGetDTO> userGetDTOs = new ArrayList<>();
@@ -54,8 +55,9 @@ public class UserController {
   public List<UserGetDTO> getUser(@PathVariable Long id,
       @RequestHeader(value = "Authorization", required = false) String bearerToken) {
 
-    Optional<User> optionalUser = userService.getUser(id, bearerToken);
-    User user = optionalUser.get();
+    throwForbiddenWhenNoBearerToken(bearerToken);
+
+    User user = userService.getUser(id, bearerToken);
     List<UserGetDTO> userGetDTOs = new ArrayList<>();
 
     userGetDTOs.add(DTOMapper.INSTANCE.convertEntityToUserGetDTO(user));
@@ -67,8 +69,16 @@ public class UserController {
   @ResponseStatus(HttpStatus.CREATED)
   @ResponseBody
   public UserGetDTO createUser(@RequestBody UserPostDTO userPostDTO) {
+
     // convert API user to internal representation
     User userInput = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
+
+    // check if password and username is set
+    if (userInput.getPassword() == null || userInput.getUsername() == null) {
+      String baseErrorMessage = "Oups, your request is wrong. ";
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+          String.format(baseErrorMessage));
+    }
 
     // create user
     User createdUser = userService.createUser(userInput);
@@ -83,10 +93,19 @@ public class UserController {
       @RequestHeader(value = "Authorization", required = false) String bearerToken,
       @RequestBody UserPutDTO userPutDTO) {
 
+    throwForbiddenWhenNoBearerToken(bearerToken);
+
     User userInput = DTOMapper.INSTANCE.convertUserPutDTOtoEntity(userPutDTO);
 
     userService.updateUser(id, bearerToken, userInput);
 
+  }
+
+  public void throwForbiddenWhenNoBearerToken(String bearerToken) {
+    if (Objects.isNull(bearerToken)) {
+      String baseErrorMessage = "You need to log in to see this information.";
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage));
+    }
   }
 
 }
