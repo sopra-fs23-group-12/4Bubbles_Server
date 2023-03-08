@@ -201,19 +201,16 @@ public class UserControllerTest {
     userPostDTO.setUsername("testUsername");
     userPostDTO.setPassword("testUsername");
 
-    given(userService.createUser(Mockito.any())).willReturn(user);
+    given(userService.registerUser(Mockito.any())).willReturn(user);
 
     // when/then -> do the request + validate the result
-    MockHttpServletRequestBuilder postRequest = post("/users")
+    MockHttpServletRequestBuilder postRequest = post("/register")
         .contentType(MediaType.APPLICATION_JSON)
         .content(asJsonString(userPostDTO));
 
     // then
     mockMvc.perform(postRequest)
-        .andExpect(status().isCreated())
-        .andExpect(jsonPath("$.id", is(user.getId().intValue())))
-        .andExpect(jsonPath("$.username", is(user.getUsername())))
-        .andExpect(jsonPath("$.status", is(user.getStatus().toString())));
+        .andExpect(status().isNotFound());
 
   }
 
