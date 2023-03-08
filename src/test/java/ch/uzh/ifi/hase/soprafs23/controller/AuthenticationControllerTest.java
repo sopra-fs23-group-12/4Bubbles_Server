@@ -75,16 +75,8 @@ public class AuthenticationControllerTest {
   @Test
   public void RegisterTest_Invalid() throws Exception {
 
-    User user = new User();
-    user.setUsername("testUsername");
-    user.setPassword("testUsername");
-
     UserPostDTO userPostDTO = new UserPostDTO();
     userPostDTO.setUsername("testUsername");
-
-    given(userService.registerUser(Mockito.any()))
-        .willThrow(new ResponseStatusException(HttpStatus.BAD_REQUEST,
-            String.format("This User does not exist.")));
 
     // when/then -> do the request + validate the result
     MockHttpServletRequestBuilder postRequest = post("/register")
