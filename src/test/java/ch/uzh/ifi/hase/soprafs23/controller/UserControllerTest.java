@@ -26,6 +26,8 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -211,6 +213,56 @@ public class UserControllerTest {
     // then
     mockMvc.perform(postRequest)
         .andExpect(status().isNotFound());
+
+  }
+
+  @Test
+  public void UpdateUser() throws Exception {
+
+    User user = new User();
+    user.setId(1L);
+    user.setUsername("testUsername");
+    user.setToken("1");
+    user.setStatus(UserStatus.ONLINE);
+
+    UserPostDTO userPostDTO = new UserPostDTO();
+    userPostDTO.setUsername("testUsername2");
+
+    given(userService.updateUser(Mockito.any(), Mockito.any(), Mockito.any())).willReturn(user);
+
+    // when/then -> do the request + validate the result
+    MockHttpServletRequestBuilder postRequest = put("/users/1")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(asJsonString(userPostDTO)).header("Authorization", "Bearer " + "top-secret-token");
+
+    // then
+    mockMvc.perform(postRequest)
+        .andExpect(status().isNoContent());
+
+  }
+
+  @Test
+  public void UpdateUser_NotAuthenticated() throws Exception {
+
+    User user = new User();
+    user.setId(1L);
+    user.setUsername("testUsername");
+    user.setToken("1");
+    user.setStatus(UserStatus.ONLINE);
+
+    UserPostDTO userPostDTO = new UserPostDTO();
+    userPostDTO.setUsername("testUsername2");
+
+    given(userService.updateUser(Mockito.any(), Mockito.any(), Mockito.any())).willReturn(user);
+
+    // when/then -> do the request + validate the result
+    MockHttpServletRequestBuilder postRequest = put("/users/1")
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(asJsonString(userPostDTO));
+
+    // then
+    mockMvc.perform(postRequest)
+        .andExpect(status().isNoContent());
 
   }
 
