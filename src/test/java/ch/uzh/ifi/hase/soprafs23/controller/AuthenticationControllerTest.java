@@ -52,12 +52,14 @@ public class AuthenticationControllerTest {
   public void RegisterTest_Success() throws Exception {
 
     User user = new User();
+    user.setId(1L);
     user.setUsername("testUsername");
-    user.setPassword("testUsername");
+    user.setToken("1");
+    user.setStatus(UserStatus.ONLINE);
 
     UserPostDTO userPostDTO = new UserPostDTO();
     userPostDTO.setUsername("testUsername");
-    userPostDTO.setPassword("testUsername");
+    userPostDTO.setPassword("testPassword");
 
     given(userService.registerUser(Mockito.any())).willReturn(user);
 
@@ -68,7 +70,8 @@ public class AuthenticationControllerTest {
 
     // then
     mockMvc.perform(postRequest)
-        .andExpect(status().isCreated());
+        .andExpect(status().isCreated()).andExpect(jsonPath("$.id", is(user.getId().intValue())))
+        .andExpect(jsonPath("$.token", is(user.getToken().toString())));
 
   }
 

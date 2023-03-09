@@ -18,7 +18,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -30,6 +33,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 /**
  * UserControllerTest
@@ -86,6 +91,7 @@ public class UserControllerTest {
     user.setUsername("testUsername");
     user.setToken("1");
     user.setStatus(UserStatus.ONLINE);
+    user.setCreationDate(new Date());
 
     UserPostDTO userPostDTO = new UserPostDTO();
     userPostDTO.setUsername("testUsername");
@@ -148,15 +154,20 @@ public class UserControllerTest {
   public void getUserById_Authenticated() throws Exception {
 
     User user = new User();
-    user.setUsername("firstname@lastname");
-    user.setStatus(UserStatus.OFFLINE);
+    user.setId(1L);
+    user.setUsername("testUsername");
+    user.setToken("1");
+    user.setStatus(UserStatus.ONLINE);
 
     given(userService.getUser(Mockito.any(), Mockito.any())).willReturn(user);
 
     MockHttpServletRequestBuilder getRequest = get("/users/1").contentType(MediaType.APPLICATION_JSON)
         .header("Authorization", "Bearer " + "top-secret-token");
 
-    mockMvc.perform(getRequest).andExpect(status().isOk());
+    mockMvc.perform(getRequest).andDo(print()).andExpect(status().isOk())
+        .andExpect(jsonPath("$[0].id", is(user.getId().intValue())))
+        .andExpect(jsonPath("$[0].username", is(user.getUsername())))
+        .andExpect(jsonPath("$[0].status", is(user.getStatus().toString())));
 
   }
 
