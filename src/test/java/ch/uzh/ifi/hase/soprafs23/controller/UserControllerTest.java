@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -158,16 +159,22 @@ public class UserControllerTest {
     user.setUsername("testUsername");
     user.setToken("1");
     user.setStatus(UserStatus.ONLINE);
+    user.setCreationDate(new Date());
 
     given(userService.getUser(Mockito.any(), Mockito.any())).willReturn(user);
 
     MockHttpServletRequestBuilder getRequest = get("/users/1").contentType(MediaType.APPLICATION_JSON)
         .header("Authorization", "Bearer " + "top-secret-token");
 
+    // SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ",
+    // Locale.ITALY);
+
     mockMvc.perform(getRequest).andDo(print()).andExpect(status().isOk())
         .andExpect(jsonPath("$[0].id", is(user.getId().intValue())))
         .andExpect(jsonPath("$[0].username", is(user.getUsername())))
         .andExpect(jsonPath("$[0].status", is(user.getStatus().toString())));
+    // .andExpect(jsonPath("$[0].creationDate",
+    // is(format.format(user.getCreationDate()))));
 
   }
 
