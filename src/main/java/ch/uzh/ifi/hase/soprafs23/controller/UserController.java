@@ -1,10 +1,14 @@
 package ch.uzh.ifi.hase.soprafs23.controller;
 
+import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
+import ch.uzh.ifi.hase.soprafs23.rest.dto.GameRoomGetDTO;
+import ch.uzh.ifi.hase.soprafs23.rest.dto.GameRoomPostDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.UserPostDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.UserPutDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
+import ch.uzh.ifi.hase.soprafs23.service.GameRoomService;
 import ch.uzh.ifi.hase.soprafs23.service.UserService;
 
 import org.springframework.http.HttpStatus;
@@ -99,6 +103,17 @@ public class UserController {
 
     userService.updateUser(id, bearerToken, userInput);
 
+  }
+
+  //update with barerToken
+  @PostMapping("/createRoom")
+  @ResponseStatus(HttpStatus.CREATED)
+  @ResponseBody
+  public GameRoomGetDTO createGameRoom(@RequestBody GameRoomPostDTO gameRoomPostDTO){
+    GameRoom gameRoomInput = new GameRoom();
+    gameRoomInput =DTOMapper.INSTANCE.convertGameRoomPostDTOtoEntity(gameRoomPostDTO);
+    GameRoom createdGameRoom = GameRoomService.createGameRoom(gameRoomInput);
+    return DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(createdGameRoom);
   }
 
   public void throwForbiddenWhenNoBearerToken(String bearerToken) {

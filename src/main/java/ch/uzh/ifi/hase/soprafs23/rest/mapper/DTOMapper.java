@@ -1,6 +1,8 @@
 package ch.uzh.ifi.hase.soprafs23.rest.mapper;
 
+import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
+import ch.uzh.ifi.hase.soprafs23.rest.dto.GameRoomPostDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.LoginGetDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.UserPostDTO;
@@ -45,5 +47,13 @@ public interface DTOMapper {
   @Mapping(source = "token", target = "token")
   @Mapping(source = "id", target = "id")
   LoginGetDTO convertEntityToLoginPostGetDTO(User user);
+
+  @Mapping(source = "gameMode", target = "gameMode");
+  @Mapping(source = "questionTopic", target = "questionTopic");
+  @Mapping(source = "gameMode", target = "gameMode");
+  @Mapping(source = "leader", target = "leader");
+  GameRoom convertGameRoomPostDTOtoEntity(GameRoomPostDTO gameRoomPostDTO);
+
+
 
 }
