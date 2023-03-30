@@ -52,9 +52,6 @@ public class UserControllerTest {
     @MockBean
     private UserService userService;
 
-    @MockBean
-    private GameRoomService gameRoomService;
-
     @Test
     public void givenUsers_whenGetUsers_thenReturnJsonArray() throws Exception {
         // given

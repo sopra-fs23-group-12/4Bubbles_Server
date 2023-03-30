@@ -30,10 +30,11 @@ import java.util.Objects;
 public class UserController {
 
     private final UserService userService;
+    private final DTOMapper dtoMapper;
 
-
-    UserController(UserService userService) {
+    UserController(UserService userService, DTOMapper dtoMapper) {
         this.userService = userService;
+        this.dtoMapper = dtoMapper;
     }
 
     @GetMapping("/users")
@@ -49,7 +50,7 @@ public class UserController {
 
         // convert each user to the API representation
         for (User user : users) {
-            userGetDTOs.add(DTOMapper.INSTANCE.convertEntityToUserGetDTO(user));
+            userGetDTOs.add(dtoMapper.convertEntityToUserGetDTO(user));
         }
         return userGetDTOs;
     }
@@ -65,7 +66,7 @@ public class UserController {
         User user = userService.getUser(id, bearerToken);
         List<UserGetDTO> userGetDTOs = new ArrayList<>();
 
-        userGetDTOs.add(DTOMapper.INSTANCE.convertEntityToUserGetDTO(user));
+        userGetDTOs.add(dtoMapper.convertEntityToUserGetDTO(user));
 
         return userGetDTOs;
     }
@@ -76,7 +77,7 @@ public class UserController {
     public UserGetDTO createUser(@RequestBody UserPostDTO userPostDTO) {
 
         // convert API user to internal representation
-        User userInput = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
+        User userInput = dtoMapper.convertUserPostDTOtoEntity(userPostDTO);
 
         // check if password and username is set
         if (userInput.getPassword() == null || userInput.getUsername() == null) {
@@ -88,7 +89,7 @@ public class UserController {
         // create user
         User createdUser = userService.createUser(userInput);
         // convert internal representation of user back to API
-        return DTOMapper.INSTANCE.convertEntityToUserGetDTO(createdUser);
+        return dtoMapper.convertEntityToUserGetDTO(createdUser);
     }
 
     @PutMapping("/users/{id}")
@@ -100,22 +101,11 @@ public class UserController {
 
         throwForbiddenWhenNoBearerToken(bearerToken);
 
-        User userInput = DTOMapper.INSTANCE.convertUserPutDTOtoEntity(userPutDTO);
+        User userInput = dtoMapper.convertUserPutDTOtoEntity(userPutDTO);
 
         userService.updateUser(id, bearerToken, userInput);
 
     }
-
-    /*//update with barerToken
-    @PostMapping("/createRoom")
-    @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
-    public GameRoomGetDTO createGameRoom(@RequestBody GameRoomPostDTO gameRoomPostDTO) {
-        GameRoom gameRoomInput = new GameRoom();
-        gameRoomInput = DTOMapper.INSTANCE.convertGameRoomPostDTOtoEntity(gameRoomPostDTO);
-        GameRoom createdGameRoom = gameRoomService.generateRoomCode(gameRoomInput);
-        return DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(createdGameRoom);
-    }*/
 
     public void throwForbiddenWhenNoBearerToken(String bearerToken) {
         if (Objects.isNull(bearerToken)) {

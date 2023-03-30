@@ -4,14 +4,12 @@ import ch.uzh.ifi.hase.soprafs23.entity.User;
 
 public class GameRoomPostDTO {
 
-
-/*    private long leader;
+    private long leader; //userId of leader
     private int numOfQuestions;
-    private String questionTopic;*/
-    private int gameMode;
+    private String questionTopic;
+    private String gameMode;
 
 
-/*
     public long getLeader() {
         return leader;
     }
@@ -43,7 +41,5 @@ public class GameRoomPostDTO {
     public void setGameMode(String gameMode) {
         this.gameMode = gameMode;
     }
-*/
-
 
 }
