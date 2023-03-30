@@ -29,98 +29,99 @@ import java.util.Objects;
 @RestController
 public class UserController {
 
-  private final UserService userService;
+    private final UserService userService;
 
-  UserController(UserService userService) {
-    this.userService = userService;
-  }
 
-  @GetMapping("/users")
-  @ResponseStatus(HttpStatus.OK)
-  @ResponseBody
-  public List<UserGetDTO> getAllUsers(@RequestHeader(value = "Authorization", required = false) String bearerToken) {
-
-    throwForbiddenWhenNoBearerToken(bearerToken);
-
-    // fetch all users in the internal representation
-    List<User> users = userService.getUsers(bearerToken);
-    List<UserGetDTO> userGetDTOs = new ArrayList<>();
-
-    // convert each user to the API representation
-    for (User user : users) {
-      userGetDTOs.add(DTOMapper.INSTANCE.convertEntityToUserGetDTO(user));
-    }
-    return userGetDTOs;
-  }
-
-  @GetMapping("/users/{id}")
-  @ResponseStatus(HttpStatus.OK)
-  @ResponseBody
-  public List<UserGetDTO> getUser(@PathVariable Long id,
-      @RequestHeader(value = "Authorization", required = false) String bearerToken) {
-
-    throwForbiddenWhenNoBearerToken(bearerToken);
-
-    User user = userService.getUser(id, bearerToken);
-    List<UserGetDTO> userGetDTOs = new ArrayList<>();
-
-    userGetDTOs.add(DTOMapper.INSTANCE.convertEntityToUserGetDTO(user));
-
-    return userGetDTOs;
-  }
-
-  @PostMapping("/users")
-  @ResponseStatus(HttpStatus.CREATED)
-  @ResponseBody
-  public UserGetDTO createUser(@RequestBody UserPostDTO userPostDTO) {
-
-    // convert API user to internal representation
-    User userInput = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
-
-    // check if password and username is set
-    if (userInput.getPassword() == null || userInput.getUsername() == null) {
-      String baseErrorMessage = "Oups, your request is wrong. ";
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-          String.format(baseErrorMessage));
+    UserController(UserService userService) {
+        this.userService = userService;
     }
 
-    // create user
-    User createdUser = userService.createUser(userInput);
-    // convert internal representation of user back to API
-    return DTOMapper.INSTANCE.convertEntityToUserGetDTO(createdUser);
-  }
+    @GetMapping("/users")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<UserGetDTO> getAllUsers(@RequestHeader(value = "Authorization", required = false) String bearerToken) {
 
-  @PutMapping("/users/{id}")
-  @ResponseStatus(HttpStatus.NO_CONTENT)
-  @ResponseBody
-  public void updateUser(@PathVariable Long id,
-      @RequestHeader(value = "Authorization", required = false) String bearerToken,
-      @RequestBody UserPutDTO userPutDTO) {
+        throwForbiddenWhenNoBearerToken(bearerToken);
 
-    throwForbiddenWhenNoBearerToken(bearerToken);
+        // fetch all users in the internal representation
+        List<User> users = userService.getUsers(bearerToken);
+        List<UserGetDTO> userGetDTOs = new ArrayList<>();
 
-    User userInput = DTOMapper.INSTANCE.convertUserPutDTOtoEntity(userPutDTO);
-
-    userService.updateUser(id, bearerToken, userInput);
-
-  }
-
-  //update with barerToken
-  @PostMapping("/createRoom")
-  @ResponseStatus(HttpStatus.CREATED)
-  @ResponseBody
-  public GameRoomGetDTO createGameRoom(@RequestBody GameRoomPostDTO gameRoomPostDTO){
-    GameRoom gameRoomInput = new GameRoom();
-    gameRoomInput =DTOMapper.INSTANCE.convertGameRoomPostDTOtoEntity(gameRoomPostDTO);
-    GameRoom createdGameRoom = GameRoomService.createGameRoom(gameRoomInput);
-    return DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(createdGameRoom);
-  }
-
-  public void throwForbiddenWhenNoBearerToken(String bearerToken) {
-    if (Objects.isNull(bearerToken)) {
-      String baseErrorMessage = "You need to log in to see this information.";
-      throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage));
+        // convert each user to the API representation
+        for (User user : users) {
+            userGetDTOs.add(DTOMapper.INSTANCE.convertEntityToUserGetDTO(user));
+        }
+        return userGetDTOs;
     }
-  }
+
+    @GetMapping("/users/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<UserGetDTO> getUser(@PathVariable Long id,
+                                    @RequestHeader(value = "Authorization", required = false) String bearerToken) {
+
+        throwForbiddenWhenNoBearerToken(bearerToken);
+
+        User user = userService.getUser(id, bearerToken);
+        List<UserGetDTO> userGetDTOs = new ArrayList<>();
+
+        userGetDTOs.add(DTOMapper.INSTANCE.convertEntityToUserGetDTO(user));
+
+        return userGetDTOs;
+    }
+
+    @PostMapping("/users")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseBody
+    public UserGetDTO createUser(@RequestBody UserPostDTO userPostDTO) {
+
+        // convert API user to internal representation
+        User userInput = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
+
+        // check if password and username is set
+        if (userInput.getPassword() == null || userInput.getUsername() == null) {
+            String baseErrorMessage = "Oups, your request is wrong. ";
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    String.format(baseErrorMessage));
+        }
+
+        // create user
+        User createdUser = userService.createUser(userInput);
+        // convert internal representation of user back to API
+        return DTOMapper.INSTANCE.convertEntityToUserGetDTO(createdUser);
+    }
+
+    @PutMapping("/users/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseBody
+    public void updateUser(@PathVariable Long id,
+                           @RequestHeader(value = "Authorization", required = false) String bearerToken,
+                           @RequestBody UserPutDTO userPutDTO) {
+
+        throwForbiddenWhenNoBearerToken(bearerToken);
+
+        User userInput = DTOMapper.INSTANCE.convertUserPutDTOtoEntity(userPutDTO);
+
+        userService.updateUser(id, bearerToken, userInput);
+
+    }
+
+    /*//update with barerToken
+    @PostMapping("/createRoom")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseBody
+    public GameRoomGetDTO createGameRoom(@RequestBody GameRoomPostDTO gameRoomPostDTO) {
+        GameRoom gameRoomInput = new GameRoom();
+        gameRoomInput = DTOMapper.INSTANCE.convertGameRoomPostDTOtoEntity(gameRoomPostDTO);
+        GameRoom createdGameRoom = gameRoomService.generateRoomCode(gameRoomInput);
+        return DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(createdGameRoom);
+    }*/
+
+    public void throwForbiddenWhenNoBearerToken(String bearerToken) {
+        if (Objects.isNull(bearerToken)) {
+            String baseErrorMessage = "You need to log in to see this information.";
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage));
+        }
+    }
 
 }

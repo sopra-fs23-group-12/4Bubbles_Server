@@ -5,11 +5,11 @@ import java.util.List;
 
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 
-public abstract class BasicMode implements Mode{
+public abstract class BasicMode implements Mode {
 
     /* just an initial implementation
      * will be changed later
-      */
+     */
     protected int numOfQuestions;
     protected String questionTopic;
     protected String gameMode;
@@ -21,7 +21,6 @@ public abstract class BasicMode implements Mode{
     protected HashMap<User, Integer> votes;
     protected HashMap<User, Integer> scores;
     protected int bubbleSize;
-
 
 
     public int getNumOfQuestions() {
@@ -68,5 +67,5 @@ public abstract class BasicMode implements Mode{
         return bubbleSize;
     }
 
-    
+
 }
