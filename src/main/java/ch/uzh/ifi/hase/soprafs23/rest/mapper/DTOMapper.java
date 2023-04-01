@@ -2,6 +2,7 @@ package ch.uzh.ifi.hase.soprafs23.rest.mapper;
 
 import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
+import ch.uzh.ifi.hase.soprafs23.repository.RoomRepository;
 import ch.uzh.ifi.hase.soprafs23.repository.UserRepository;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.*;
 
@@ -39,6 +40,19 @@ public abstract  class DTOMapper {
         return userRepository.findById(leaderId).orElseThrow(
                 () -> new EntityNotFoundException("User not found with ID: " + leaderId));
     }
+
+    /*@Mapping(source = "leader", target = "leader", qualifiedByName = "retrieveLeaderUser")
+    @Mapping(source = "gameMode", target = "gameMode", qualifiedByName = "retrieveGameRoom")
+    public abstract GameRoom convertGameRoomPutDTOtoEntity(GameRoomPutDTO gameRoomPutDTO);
+
+    @Autowired
+    RoomRepository gameRoomRepository;
+
+    @Named("retrieveGameRoom")
+    public GameRoom retrieveGameRoom(Long roomId) {
+        return gameRoomRepository.findById(roomId).orElseThrow(
+                () -> new EntityNotFoundException("GameRoom not found with ID: " + roomCode));
+    }*/
 
 
     @Mapping(source = "username", target = "username")

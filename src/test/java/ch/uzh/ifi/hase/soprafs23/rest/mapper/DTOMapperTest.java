@@ -14,6 +14,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * works.
  */
 public class DTOMapperTest {
+
+    private final DTOMapper dtoMapper;
+
+    public DTOMapperTest(DTOMapper dtoMapper) {
+        this.dtoMapper = dtoMapper;
+    }
+
     @Test
     public void testCreateUser_fromUserPostDTO_toUser_success() {
         // create UserPostDTO
@@ -21,7 +28,7 @@ public class DTOMapperTest {
         userPostDTO.setUsername("username");
 
         // MAP -> Create user
-        User user = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
+        User user = dtoMapper.convertUserPostDTOtoEntity(userPostDTO);
 
         // check content
         assertEquals(userPostDTO.getUsername(), user.getUsername());
@@ -36,7 +43,7 @@ public class DTOMapperTest {
         user.setToken("1");
 
         // MAP -> Create UserGetDTO
-        UserGetDTO userGetDTO = DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
+        UserGetDTO userGetDTO = dtoMapper.convertEntityToUserGetDTO(user);
 
         // check content
         assertEquals(user.getId(), userGetDTO.getId());

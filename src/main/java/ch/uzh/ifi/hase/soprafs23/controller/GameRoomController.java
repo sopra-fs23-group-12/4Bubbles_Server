@@ -28,20 +28,18 @@ public class GameRoomController {
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public GameRoomGetDTO createGameRoom(@RequestBody GameRoomPostDTO gameRoomPostDTO, @RequestHeader(value = "Authorization", required = false) String bearerToken) {
-        //take also userId
+        //convert DTO with only GameRoom object containing userId to contain user instance
         GameRoom gameRoomInput = dtoMapper.convertGameRoomPostDTOtoEntity(gameRoomPostDTO);
-        //intialize gameRoom
+        //set RoomCode and add Leader to members list
         gameRoomService.initGameRoom(gameRoomInput);
-        //add current user to members
-        //createdGameRoom.addPlayer(gameRoomPostDTO.getLeader(), bearerToken);
+        //return DTO containing leader as user instance
         return dtoMapper.convertEntityToGameRoomGetDTO(gameRoomInput);
     }
 
-    /*
-    @PutMapping("/joinRoom/{userId}")
+    /*@PutMapping("/joinRoom/{userId}")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public GameRoomGetDTO createGameRoom(@RequestBody GameRoomPutDTO gameRoomPutDTO, @RequestHeader(value = "Authorization", required = false) String bearerToken {
+    public GameRoomGetDTO joinGameRoom(@RequestBody GameRoomPutDTO gameRoomPutDTO, @RequestHeader(value = "Authorization", required = false) String bearerToken {
         //take userId and gameRoom code
         GameRoom gameRoomInput = dtoMapper.convertGameRoomPutDTOtoEntity(gameRoomPutDTO);
         //intialize gameRoom
@@ -51,38 +49,11 @@ public class GameRoomController {
         return dtoMapper.convertEntityToGameRoomGetDTO(gameRoomInput);
     }*/
 
+
     public void throwForbiddenWhenNoBearerToken(String bearerToken) {
         if (Objects.isNull(bearerToken)) {
             String baseErrorMessage = "You need to log in to see this information.";
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage));
         }
     }
-
-    /*
-    @PostMapping("/users")
-    @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
-    public UserGetDTO createRoom(@RequestBody GameRoomDTO gameRoomDTO) {
-
-        // convert API user to internal representation
-        //User userInput = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
-        //with empty fields
-
-
-        new GameRoom();
-
-
-        // check if password and username is set
-        if (userInput.getPassword() == null || userInput.getUsername() == null) {
-            String baseErrorMessage = "Oups, your request is wrong. ";
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    String.format(baseErrorMessage));
-        }
-
-        // create user
-        User createdUser = userService.createUser(userInput);
-        // convert internal representation of user back to API
-        return DTOMapper.INSTANCE.convertEntityToUserGetDTO(createdUser);
-    }
-    */
 }
