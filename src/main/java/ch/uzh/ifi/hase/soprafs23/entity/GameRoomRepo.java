@@ -1,32 +1,34 @@
 package ch.uzh.ifi.hase.soprafs23.entity;
 
-import java.util.ArrayList;
+import javax.persistence.*;
 import java.util.List;
-import java.util.Random;
 
-import ch.uzh.ifi.hase.soprafs23.GameModes.Mode;
-import ch.uzh.ifi.hase.soprafs23.service.UserService;
+@Entity
+@Table(name = "GAMEROOM")
+public class GameRoomRepo {
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+    @Id
+    @GeneratedValue
+    private Long id;
 
-
-public class GameRoom {
-
+    @Column(nullable = false)
     private List<User> members;
+    @Column(nullable = false)
     private User leader;
+    @Column(nullable = false)
     private int numOfQuestions;
+    @Column(nullable = false)
     private String questionTopic;
+    @Column(nullable = false, unique = true)
     private int roomCode;
-    private List<Mode> availableModes;
+    @Column(nullable = false)
     private String gameMode;
 
 
     public List<User> getMembers() {
         return members;
     }
+
 
     public User getLeader() {
         return leader;
@@ -60,15 +62,6 @@ public class GameRoom {
         this.roomCode = roomCode;
     }
 
-
-    public List<Mode> getAvailableModes() {
-        return availableModes;
-    }
-
-    public void setAvailableModes(List<Mode> availableModes) {
-        this.availableModes = availableModes;
-    }
-
     public String getGameMode() {
         return gameMode;
     }
@@ -77,7 +70,8 @@ public class GameRoom {
         this.gameMode = gameMode;
     }
 
-    public void setMembers(List<User> users) {
+    public void setMembers(List<User> members) {
+        this.members = members;
     }
 }
 

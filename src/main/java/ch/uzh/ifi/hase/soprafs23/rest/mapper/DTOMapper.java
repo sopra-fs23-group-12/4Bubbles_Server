@@ -41,6 +41,13 @@ public abstract  class DTOMapper {
                 () -> new EntityNotFoundException("User not found with ID: " + leaderId));
     }
 
+    //TODO: think about if this is necessary to do in the mapper
+    //public abstract GameRoom convertGameRoomPutDTOtoEntity(GameRoomPutDTO gameRoomPutDTO);
+
+    public abstract GameRoomGetDTO convertEntityToGameRoomGetDTO(GameRoom gameRoom);
+
+
+
     /*@Mapping(source = "leader", target = "leader", qualifiedByName = "retrieveLeaderUser")
     @Mapping(source = "gameMode", target = "gameMode", qualifiedByName = "retrieveGameRoom")
     public abstract GameRoom convertGameRoomPutDTOtoEntity(GameRoomPutDTO gameRoomPutDTO);
@@ -90,5 +97,5 @@ public abstract  class DTOMapper {
     @Mapping(source = "gameMode", target = "gameMode");
     @Mapping(source = "leader", target = "leader");
     */
-public abstract GameRoomGetDTO convertEntityToGameRoomGetDTO(GameRoom createdGameRoom);
+
 }
