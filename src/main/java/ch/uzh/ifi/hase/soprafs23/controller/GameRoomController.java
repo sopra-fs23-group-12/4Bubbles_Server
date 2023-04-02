@@ -18,7 +18,6 @@ public class GameRoomController {
     private final GameRoomService gameRoomService;
     private final DTOMapper dtoMapper;
 
-    @Autowired
     private final RoomCoordinator roomCoordinator;
 
 
@@ -43,7 +42,7 @@ public class GameRoomController {
         return dtoMapper.convertEntityToGameRoomGetDTO(gameRoomInput);
     }
 
-    @PutMapping("/joinRoom/{userId}")
+    @PutMapping("/joinRoom")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public GameRoomGetDTO joinGameRoom(@RequestBody GameRoomPutDTO gameRoomPutDTO, @RequestHeader(value = "Authorization", required = false) String bearerToken) {
@@ -57,20 +56,6 @@ public class GameRoomController {
         //createdGameRoom.addPlayer(gameRoomPostDTO.getLeader(), bearerToken);
         return dtoMapper.convertEntityToGameRoomGetDTO(room);
     }
-
-    /*@PutMapping("/joinRoom/{userId}")
-    @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
-    public GameRoomGetDTO joinGameRoom(@RequestBody GameRoomPutDTO gameRoomPutDTO, @RequestHeader(value = "Authorization", required = false) String bearerToken {
-        //take userId and gameRoom code
-        GameRoom gameRoomInput = dtoMapper.convertGameRoomPutDTOtoEntity(gameRoomPutDTO);
-        //intialize gameRoom
-        gameRoomService.addPlayerToGameRoom();
-        //add current user to members
-        //createdGameRoom.addPlayer(gameRoomPostDTO.getLeader(), bearerToken);
-        return dtoMapper.convertEntityToGameRoomGetDTO(gameRoomInput);
-    }*/
-
 
     public void throwForbiddenWhenNoBearerToken(String bearerToken) {
         if (Objects.isNull(bearerToken)) {

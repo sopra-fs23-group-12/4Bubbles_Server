@@ -3,10 +3,10 @@ package ch.uzh.ifi.hase.soprafs23.entity;
 import javax.persistence.*;
 import java.util.List;
 
-@Entity
-@Table(name = "GAMEROOM")
+//@Entity
+//@Table(name = "GAMEROOM")
 public class GameRoomRepo {
-
+/*
     @Id
     @GeneratedValue
     private Long id;
@@ -72,6 +72,6 @@ public class GameRoomRepo {
 
     public void setMembers(List<User> members) {
         this.members = members;
-    }
+    }*/
 }
 

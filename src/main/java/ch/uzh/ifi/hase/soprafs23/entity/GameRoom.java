@@ -77,7 +77,8 @@ public class GameRoom {
         this.gameMode = gameMode;
     }
 
-    public void setMembers(List<User> users) {
+    public void setMembers(List<User> members) {
+        this.members = members;
     }
 }
 
