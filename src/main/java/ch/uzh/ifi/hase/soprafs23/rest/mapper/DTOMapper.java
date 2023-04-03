@@ -1,13 +1,14 @@
 package ch.uzh.ifi.hase.soprafs23.rest.mapper;
 
+import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
-import ch.uzh.ifi.hase.soprafs23.rest.dto.LoginGetDTO;
-import ch.uzh.ifi.hase.soprafs23.rest.dto.UserGetDTO;
-import ch.uzh.ifi.hase.soprafs23.rest.dto.UserPostDTO;
-import ch.uzh.ifi.hase.soprafs23.rest.dto.UserPutDTO;
+import ch.uzh.ifi.hase.soprafs23.repository.UserRepository;
+import ch.uzh.ifi.hase.soprafs23.rest.dto.*;
 
 import org.mapstruct.*;
-import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.persistence.EntityNotFoundException;
 
 /**
  * DTOMapper
@@ -20,30 +21,42 @@ import org.mapstruct.factory.Mappers;
  * Always created one mapper for getting information (GET) and one mapper for
  * creating information (POST).
  */
-@Mapper
-public interface DTOMapper {
+@Mapper(componentModel = "spring")
+public abstract  class DTOMapper {
 
-  DTOMapper INSTANCE = Mappers.getMapper(DTOMapper.class);
+    @Mapping(source = "leader", target = "leader", qualifiedByName = "retrieveLeaderUser")
+    @Mapping(source = "gameMode", target = "gameMode", qualifiedByName = "retrieveLeaderUser")
+    public abstract GameRoom convertGameRoomPostDTOtoEntity(GameRoomPostDTO gameRoomPostDTO);
 
-  @Mapping(source = "username", target = "username")
-  @Mapping(source = "password", target = "password")
-  User convertUserPostDTOtoEntity(UserPostDTO userPostDTO);
+    @Autowired
+    UserRepository userRepository;
 
-  @Mapping(source = "id", target = "id")
-  @Mapping(source = "username", target = "username")
-  @Mapping(source = "creationDate", target = "creationDate")
-  @Mapping(source = "status", target = "status")
-  @Mapping(source = "birthday", target = "birthday")
-  UserGetDTO convertEntityToUserGetDTO(User user);
+    @Named("retrieveLeaderUser")
+    public User retrieveLeaderUser(Long leaderId) {
+        return userRepository.findById(leaderId).orElseThrow(
+                () -> new EntityNotFoundException("User not found with ID: " + leaderId));
+    }
 
-  @Mapping(source = "id", target = "id")
-  @Mapping(source = "username", target = "username")
-  @Mapping(source = "birthday", target = "birthday")
-  @Mapping(source = "creationDate", target = "creationDate")
-  User convertUserPutDTOtoEntity(UserPutDTO UserPutDTO);
+    public abstract GameRoomGetDTO convertEntityToGameRoomGetDTO(GameRoom gameRoom);
 
-  @Mapping(source = "token", target = "token")
-  @Mapping(source = "id", target = "id")
-  LoginGetDTO convertEntityToLoginPostGetDTO(User user);
+    @Mapping(source = "username", target = "username")
+    @Mapping(source = "password", target = "password")
+    public abstract User convertUserPostDTOtoEntity(UserPostDTO userPostDTO);
 
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "username", target = "username")
+    @Mapping(source = "creationDate", target = "creationDate")
+    @Mapping(source = "status", target = "status")
+    @Mapping(source = "birthday", target = "birthday")
+    public abstract  UserGetDTO convertEntityToUserGetDTO(User user);
+
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "username", target = "username")
+    @Mapping(source = "birthday", target = "birthday")
+    @Mapping(source = "creationDate", target = "creationDate")
+    public abstract User convertUserPutDTOtoEntity(UserPutDTO UserPutDTO);
+
+    @Mapping(source = "token", target = "token")
+    @Mapping(source = "id", target = "id")
+    public abstract LoginGetDTO convertEntityToLoginPostGetDTO(User user);
 }

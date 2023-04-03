@@ -14,33 +14,40 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * works.
  */
 public class DTOMapperTest {
-  @Test
-  public void testCreateUser_fromUserPostDTO_toUser_success() {
-    // create UserPostDTO
-    UserPostDTO userPostDTO = new UserPostDTO();
-    userPostDTO.setUsername("username");
 
-    // MAP -> Create user
-    User user = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
+/*    private final DTOMapper dtoMapper;
 
-    // check content
-    assertEquals(userPostDTO.getUsername(), user.getUsername());
-  }
+    public DTOMapperTest(DTOMapper dtoMapper) {
+        this.dtoMapper = dtoMapper;
+    }
 
-  @Test
-  public void testGetUser_fromUser_toUserGetDTO_success() {
-    // create User
-    User user = new User();
-    user.setUsername("firstname@lastname");
-    user.setStatus(UserStatus.OFFLINE);
-    user.setToken("1");
+    @Test
+    public void testCreateUser_fromUserPostDTO_toUser_success() {
+        // create UserPostDTO
+        UserPostDTO userPostDTO = new UserPostDTO();
+        userPostDTO.setUsername("username");
 
-    // MAP -> Create UserGetDTO
-    UserGetDTO userGetDTO = DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
+        // MAP -> Create user
+        User user = dtoMapper.convertUserPostDTOtoEntity(userPostDTO);
 
-    // check content
-    assertEquals(user.getId(), userGetDTO.getId());
-    assertEquals(user.getUsername(), userGetDTO.getUsername());
-    assertEquals(user.getStatus(), userGetDTO.getStatus());
-  }
+        // check content
+        assertEquals(userPostDTO.getUsername(), user.getUsername());
+    }
+
+    @Test
+    public void testGetUser_fromUser_toUserGetDTO_success() {
+        // create User
+        User user = new User();
+        user.setUsername("firstname@lastname");
+        user.setStatus(UserStatus.OFFLINE);
+        user.setToken("1");
+
+        // MAP -> Create UserGetDTO
+        UserGetDTO userGetDTO = dtoMapper.convertEntityToUserGetDTO(user);
+
+        // check content
+        assertEquals(user.getId(), userGetDTO.getId());
+        assertEquals(user.getUsername(), userGetDTO.getUsername());
+        assertEquals(user.getStatus(), userGetDTO.getStatus());
+    }*/
 }

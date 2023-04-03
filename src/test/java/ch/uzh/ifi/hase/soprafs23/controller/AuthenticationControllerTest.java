@@ -39,74 +39,75 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(AuthenticationController.class)
 public class AuthenticationControllerTest {
 
-  @Autowired
-  private MockMvc mockMvc;
+    @Autowired
+    private MockMvc mockMvc;
 
-  @MockBean
-  private AuthenticationService authenticationService;
+    @MockBean
+    private AuthenticationService authenticationService;
 
-  @MockBean
-  private UserService userService;
+    @MockBean
+    private UserService userService;
 
-  @Test
-  public void RegisterTest_Success() throws Exception {
+    @Test
+    public void RegisterTest_Success() throws Exception {
 
-    User user = new User();
-    user.setId(1L);
-    user.setUsername("testUsername");
-    user.setToken("1");
-    user.setStatus(UserStatus.ONLINE);
+        User user = new User();
+        user.setId(1L);
+        user.setUsername("testUsername");
+        user.setToken("1");
+        user.setStatus(UserStatus.ONLINE);
 
-    UserPostDTO userPostDTO = new UserPostDTO();
-    userPostDTO.setUsername("testUsername");
-    userPostDTO.setPassword("testPassword");
+        UserPostDTO userPostDTO = new UserPostDTO();
+        userPostDTO.setUsername("testUsername");
+        userPostDTO.setPassword("testPassword");
 
-    given(userService.registerUser(Mockito.any())).willReturn(user);
+        given(userService.registerUser(Mockito.any())).willReturn(user);
 
-    // when/then -> do the request + validate the result
-    MockHttpServletRequestBuilder postRequest = post("/register")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(asJsonString(userPostDTO));
+        // when/then -> do the request + validate the result
+        MockHttpServletRequestBuilder postRequest = post("/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(userPostDTO));
 
-    // then
-    mockMvc.perform(postRequest)
-        .andExpect(status().isCreated()).andExpect(jsonPath("$.id", is(user.getId().intValue())))
-        .andExpect(jsonPath("$.token", is(user.getToken().toString())));
+        // then
+        mockMvc.perform(postRequest)
+                .andExpect(status().isCreated()).andExpect(jsonPath("$.id", is(user.getId().intValue())))
+                .andExpect(jsonPath("$.token", is(user.getToken().toString())));
 
-  }
-
-  @Test
-  public void RegisterTest_Invalid() throws Exception {
-
-    UserPostDTO userPostDTO = new UserPostDTO();
-    userPostDTO.setUsername("testUsername");
-
-    // when/then -> do the request + validate the result
-    MockHttpServletRequestBuilder postRequest = post("/register")
-        .contentType(MediaType.APPLICATION_JSON)
-        .content(asJsonString(userPostDTO));
-
-    // then
-    mockMvc.perform(postRequest)
-        .andExpect(status().isBadRequest());
-
-  }
-
-  /**
-   * Helper Method to convert userPostDTO into a JSON string such that the input
-   * can be processed
-   * Input will look like this: {"name": "Test User", "username": "testUsername"}
-   * 
-   * @param object
-   * @return string
-   */
-  private String asJsonString(final Object object) {
-    try {
-      return new ObjectMapper().writeValueAsString(object);
-    } catch (JsonProcessingException e) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-          String.format("The request body could not be created.%s", e.toString()));
     }
-  }
+
+    @Test
+    public void RegisterTest_Invalid() throws Exception {
+
+        UserPostDTO userPostDTO = new UserPostDTO();
+        userPostDTO.setUsername("testUsername");
+
+        // when/then -> do the request + validate the result
+        MockHttpServletRequestBuilder postRequest = post("/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(userPostDTO));
+
+        // then
+        mockMvc.perform(postRequest)
+                .andExpect(status().isBadRequest());
+
+    }
+
+    /**
+     * Helper Method to convert userPostDTO into a JSON string such that the input
+     * can be processed
+     * Input will look like this: {"name": "Test User", "username": "testUsername"}
+     *
+     * @param object
+     * @return string
+     */
+    private String asJsonString(final Object object) {
+        try {
+            return new ObjectMapper().writeValueAsString(object);
+        }
+        catch (JsonProcessingException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    String.format("The request body could not be created.%s", e.toString()));
+        }
+    }
 
 }
