@@ -1,5 +1,6 @@
 package ch.uzh.ifi.hase.soprafs23.entity;
 
+import javassist.NotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -17,12 +18,12 @@ public class RoomCoordinator {
         this.rooms.add(gameRoom);
     }
 
-    public GameRoom getRoomByCode(int roomId) {
+    public GameRoom getRoomByCode(int roomId) throws NotFoundException {
         for (GameRoom room : rooms) {
             if (room.getRoomCode() == roomId) {
                 return room;
             }
         }
-        return null; // Return null if no room with the given id is found
+        throw new NotFoundException("Room with given room code could not be found");
     }
 }

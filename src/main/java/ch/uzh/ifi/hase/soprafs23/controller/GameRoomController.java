@@ -2,11 +2,12 @@ package ch.uzh.ifi.hase.soprafs23.controller;
 
 import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
 import ch.uzh.ifi.hase.soprafs23.entity.RoomCoordinator;
+import ch.uzh.ifi.hase.soprafs23.exceptions.RoomNotFoundException;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.*;
 import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs23.service.GameRoomService;
 import ch.uzh.ifi.hase.soprafs23.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import javassist.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,7 +18,6 @@ import java.util.Objects;
 public class GameRoomController {
     private final GameRoomService gameRoomService;
     private final DTOMapper dtoMapper;
-
     private final RoomCoordinator roomCoordinator;
 
 
@@ -27,18 +27,14 @@ public class GameRoomController {
         this.roomCoordinator = roomCoordinator;
     }
 
-    //update with barerToken
     @PostMapping("/createRoom")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public GameRoomGetDTO createGameRoom(@RequestBody GameRoomPostDTO gameRoomPostDTO, @RequestHeader(value = "Authorization", required = false) String bearerToken) {
-        //convert DTO with only GameRoom object containing userId to contain user instance
+        throwForbiddenWhenNoBearerToken(bearerToken);
         GameRoom gameRoomInput = dtoMapper.convertGameRoomPostDTOtoEntity(gameRoomPostDTO);
-        //set RoomCode and add Leader to members list
         gameRoomService.initGameRoom(gameRoomInput);
-        //add room to coordinator
         roomCoordinator.addRoom(gameRoomInput);
-        //return DTO containing leader as user instance
         return dtoMapper.convertEntityToGameRoomGetDTO(gameRoomInput);
     }
 
@@ -46,15 +42,15 @@ public class GameRoomController {
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public GameRoomGetDTO joinGameRoom(@RequestBody GameRoomPutDTO gameRoomPutDTO, @RequestHeader(value = "Authorization", required = false) String bearerToken) {
-        //take userId and gameRoom code
-        //GameRoom gameRoomInput = dtoMapper.convertGameRoomPutDTOtoEntity(gameRoomPutDTO);
-        // get gameRoom
-        GameRoom room = roomCoordinator.getRoomByCode(gameRoomPutDTO.getRoomCode());
-        //intialize gameRoom
-        gameRoomService.addPlayerToGameRoom(room, gameRoomPutDTO.getUserId());
-        //add current user to members
-        //createdGameRoom.addPlayer(gameRoomPostDTO.getLeader(), bearerToken);
-        return dtoMapper.convertEntityToGameRoomGetDTO(room);
+        throwForbiddenWhenNoBearerToken(bearerToken);
+        try {
+            GameRoom room = roomCoordinator.getRoomByCode(gameRoomPutDTO.getRoomCode());
+            gameRoomService.addPlayerToGameRoom(room, gameRoomPutDTO.getUserId());
+            return dtoMapper.convertEntityToGameRoomGetDTO(room);
+        }
+        catch (NotFoundException e) {
+            throw new RoomNotFoundException("Unable to find game room with code: " + gameRoomPutDTO.getRoomCode(), e);
+        }
     }
 
     public void throwForbiddenWhenNoBearerToken(String bearerToken) {

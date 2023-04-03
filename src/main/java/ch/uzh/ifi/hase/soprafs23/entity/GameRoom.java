@@ -20,7 +20,6 @@ public class GameRoom {
     private int numOfQuestions;
     private String questionTopic;
     private int roomCode;
-    private List<Mode> availableModes;
     private String gameMode;
 
 
@@ -58,15 +57,6 @@ public class GameRoom {
 
     public void setRoomCode(int roomCode) {
         this.roomCode = roomCode;
-    }
-
-
-    public List<Mode> getAvailableModes() {
-        return availableModes;
-    }
-
-    public void setAvailableModes(List<Mode> availableModes) {
-        this.availableModes = availableModes;
     }
 
     public String getGameMode() {

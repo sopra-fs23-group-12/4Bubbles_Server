@@ -24,8 +24,6 @@ import javax.persistence.EntityNotFoundException;
 @Mapper(componentModel = "spring")
 public abstract  class DTOMapper {
 
-
-
     @Mapping(source = "leader", target = "leader", qualifiedByName = "retrieveLeaderUser")
     @Mapping(source = "gameMode", target = "gameMode", qualifiedByName = "retrieveLeaderUser")
     public abstract GameRoom convertGameRoomPostDTOtoEntity(GameRoomPostDTO gameRoomPostDTO);
@@ -39,26 +37,7 @@ public abstract  class DTOMapper {
                 () -> new EntityNotFoundException("User not found with ID: " + leaderId));
     }
 
-    //TODO: think about if this is necessary to do in the mapper
-    //public abstract GameRoom convertGameRoomPutDTOtoEntity(GameRoomPutDTO gameRoomPutDTO);
-
     public abstract GameRoomGetDTO convertEntityToGameRoomGetDTO(GameRoom gameRoom);
-
-
-
-    /*@Mapping(source = "leader", target = "leader", qualifiedByName = "retrieveLeaderUser")
-    @Mapping(source = "gameMode", target = "gameMode", qualifiedByName = "retrieveGameRoom")
-    public abstract GameRoom convertGameRoomPutDTOtoEntity(GameRoomPutDTO gameRoomPutDTO);
-
-    @Autowired
-    RoomRepository gameRoomRepository;
-
-    @Named("retrieveGameRoom")
-    public GameRoom retrieveGameRoom(Long roomId) {
-        return gameRoomRepository.findById(roomId).orElseThrow(
-                () -> new EntityNotFoundException("GameRoom not found with ID: " + roomCode));
-    }*/
-
 
     @Mapping(source = "username", target = "username")
     @Mapping(source = "password", target = "password")
@@ -77,23 +56,7 @@ public abstract  class DTOMapper {
     @Mapping(source = "creationDate", target = "creationDate")
     public abstract User convertUserPutDTOtoEntity(UserPutDTO UserPutDTO);
 
-
-    /*@Mapping(source = "leader", target = "leader")
-    GameRoom convertGameRoomPostDTOtoEntity(GameRoomPostDTO gameRoomPostDTO);*/
-
-
-
-
-
-
     @Mapping(source = "token", target = "token")
     @Mapping(source = "id", target = "id")
     public abstract LoginGetDTO convertEntityToLoginPostGetDTO(User user);
-
-/*    @Mapping(source = "gameMode", target = "gameMode");
-    @Mapping(source = "questionTopic", target = "questionTopic");
-    @Mapping(source = "gameMode", target = "gameMode");
-    @Mapping(source = "leader", target = "leader");
-    */
-
 }
