@@ -39,7 +39,7 @@ public class GameRoomController {
     }
 
     //put request has no return value -> get request
-    @GetMapping("/joinRoom")
+    @PutMapping("/joinRoom")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public GameRoomGetDTO joinGameRoom(@RequestBody GameRoomJoinDTO gameRoomJoinDTO, @RequestHeader(value = "Authorization", required = false) String bearerToken) {
