@@ -1,6 +1,6 @@
 package ch.uzh.ifi.hase.soprafs23.rest.dto;
 
-public class GameRoomPutDTO {
+public class GameRoomJoinDTO {
 
     private int roomCode;
     private int userId;
