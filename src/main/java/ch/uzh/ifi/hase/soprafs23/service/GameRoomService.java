@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Stream;
@@ -32,11 +32,17 @@ public class GameRoomService {
         return userRepository.findByid(userId);
     }
 
-    public GameRoom initGameRoom(GameRoom gameRoom) {
+    public void initGameRoom(GameRoom gameRoom) {
         gameRoom.setRoomCode(new Random().nextInt(100000, 1000000));
         //list unmodifiable -> every time pass a new one
         gameRoom.setMembers(List.of(gameRoom.getLeader()));
-        return gameRoom;
+    }
+
+    public void setLeaderFromRepo(GameRoom gameRoom){
+        Long leaderId = gameRoom.getLeaderUserId();
+        User leader = userRepository.findById(leaderId).orElseThrow(
+                () -> new EntityNotFoundException("User not found with ID: " + leaderId));
+        gameRoom.setLeader(leader);
     }
 
     public GameRoom addPlayerToGameRoom(GameRoom gameRoom, long userId) {

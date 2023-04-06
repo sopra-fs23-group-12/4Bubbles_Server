@@ -9,7 +9,6 @@ import ch.uzh.ifi.hase.soprafs23.service.UserService;
 
 import java.util.Objects;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -20,12 +19,9 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
     private final UserService userService;
 
-    private final DTOMapper dtoMapper;
-
-    AuthenticationController(AuthenticationService authenticationService, UserService userService, DTOMapper dtoMapper) {
+    AuthenticationController(AuthenticationService authenticationService, UserService userService) {
         this.authenticationService = authenticationService;
         this.userService = userService;
-        this.dtoMapper = dtoMapper;
     }
 
     @PostMapping("/login")
@@ -33,11 +29,11 @@ public class AuthenticationController {
     @ResponseBody
     public LoginGetDTO login(@RequestBody UserPostDTO userPostDTO) {
         // convert API user to internal representation
-        User userInput = dtoMapper.convertUserPostDTOtoEntity(userPostDTO);
+        User userInput = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
         User internalUser = authenticationService.authenticateUser(userInput);
 
         // convert internal representation of user back to API
-        return dtoMapper.convertEntityToLoginPostGetDTO(internalUser);
+        return DTOMapper.INSTANCE.convertEntityToLoginPostGetDTO(internalUser);
         // return internalUser.getToken();
     }
 
@@ -46,7 +42,7 @@ public class AuthenticationController {
     @ResponseBody
     public LoginGetDTO register(@RequestBody UserPostDTO userPostDTO) {
         // convert API user to internal representation
-        User userInput = dtoMapper.convertUserPostDTOtoEntity(userPostDTO);
+        User userInput = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
 
         // check if password and username is set
         if (userInput.getPassword() == null || userInput.getUsername() == null) {
@@ -58,7 +54,7 @@ public class AuthenticationController {
         // create user
         User createdUser = userService.registerUser(userInput);
         // convert internal representation of user back to API
-        return dtoMapper.convertEntityToLoginPostGetDTO(createdUser);
+        return DTOMapper.INSTANCE.convertEntityToLoginPostGetDTO(createdUser);
     }
 
     @GetMapping("/logout")

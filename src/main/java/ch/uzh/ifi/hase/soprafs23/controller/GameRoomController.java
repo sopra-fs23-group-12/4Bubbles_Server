@@ -17,13 +17,11 @@ import java.util.Objects;
 @RestController
 public class GameRoomController {
     private final GameRoomService gameRoomService;
-    private final DTOMapper dtoMapper;
     private final RoomCoordinator roomCoordinator;
 
 
-    GameRoomController(UserService userService, GameRoomService gameRoomService, DTOMapper dtoMapper, RoomCoordinator roomCoordinator) {
+    GameRoomController(UserService userService, GameRoomService gameRoomService, RoomCoordinator roomCoordinator) {
         this.gameRoomService = gameRoomService;
-        this.dtoMapper = dtoMapper;
         this.roomCoordinator = roomCoordinator;
     }
 
@@ -32,24 +30,25 @@ public class GameRoomController {
     @ResponseBody
     public GameRoomGetDTO createGameRoom(@RequestBody GameRoomPostDTO gameRoomPostDTO, @RequestHeader(value = "Authorization", required = false) String bearerToken) {
         throwForbiddenWhenNoBearerToken(bearerToken);
-        GameRoom gameRoomInput = dtoMapper.convertGameRoomPostDTOtoEntity(gameRoomPostDTO);
+        GameRoom gameRoomInput = DTOMapper.INSTANCE.convertGameRoomPostDTOtoEntity(gameRoomPostDTO);
+        gameRoomService.setLeaderFromRepo(gameRoomInput);
         gameRoomService.initGameRoom(gameRoomInput);
         roomCoordinator.addRoom(gameRoomInput);
-        return dtoMapper.convertEntityToGameRoomGetDTO(gameRoomInput);
+        return DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(gameRoomInput);
     }
 
     @PutMapping("/joinRoom")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public GameRoomGetDTO joinGameRoom(@RequestBody GameRoomPutDTO gameRoomPutDTO, @RequestHeader(value = "Authorization", required = false) String bearerToken) {
+    public GameRoomGetDTO joinGameRoom(@RequestBody GameRoomPutDTO GameRoomPutDTO, @RequestHeader(value = "Authorization", required = false) String bearerToken) {
         throwForbiddenWhenNoBearerToken(bearerToken);
         try {
-            GameRoom room = roomCoordinator.getRoomByCode(gameRoomPutDTO.getRoomCode());
-            gameRoomService.addPlayerToGameRoom(room, gameRoomPutDTO.getUserId());
-            return dtoMapper.convertEntityToGameRoomGetDTO(room);
+            GameRoom room = roomCoordinator.getRoomByCode(GameRoomPutDTO.getRoomCode());
+            gameRoomService.addPlayerToGameRoom(room, GameRoomPutDTO.getUserId());
+            return DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(room);
         }
         catch (NotFoundException e) {
-            throw new RoomNotFoundException("Unable to find game room with code: " + gameRoomPutDTO.getRoomCode(), e);
+            throw new RoomNotFoundException("Unable to find game room with code: " + GameRoomPutDTO.getRoomCode(), e);
         }
     }
 

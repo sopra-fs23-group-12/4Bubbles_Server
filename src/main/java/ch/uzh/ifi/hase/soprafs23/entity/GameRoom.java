@@ -1,17 +1,6 @@
 package ch.uzh.ifi.hase.soprafs23.entity;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-
-import ch.uzh.ifi.hase.soprafs23.GameModes.Mode;
-import ch.uzh.ifi.hase.soprafs23.service.UserService;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
 
 public class GameRoom {
 
@@ -21,7 +10,15 @@ public class GameRoom {
     private String questionTopic;
     private int roomCode;
     private String gameMode;
+    private long leaderUserId;
 
+    public long getLeaderUserId() {
+        return leaderUserId;
+    }
+
+    public void setLeaderUserId(long leaderUserId) {
+        this.leaderUserId = leaderUserId;
+    }
 
     public List<User> getMembers() {
         return members;
