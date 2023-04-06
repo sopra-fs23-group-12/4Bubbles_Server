@@ -10,7 +10,6 @@ public class GameRoom {
     private String questionTopic;
     private int roomCode;
     private String gameMode;
-
     private long leaderUserId;
 
     public long getLeaderUserId() {

@@ -20,12 +20,13 @@ import org.mapstruct.factory.Mappers;
  */
 @Mapper
 public interface DTOMapper {
-    
+
     DTOMapper INSTANCE = Mappers.getMapper(DTOMapper.class);
 
     @Mapping(source = "leaderId", target = "leaderUserId")
     @Mapping(source = "gameMode", target = "gameMode")
     GameRoom convertGameRoomPostDTOtoEntity(GameRoomPostDTO gameRoomPostDTO);
+
 
 
     GameRoomGetDTO convertEntityToGameRoomGetDTO(GameRoom gameRoom);
