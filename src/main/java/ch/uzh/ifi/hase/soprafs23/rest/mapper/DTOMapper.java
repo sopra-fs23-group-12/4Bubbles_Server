@@ -20,7 +20,7 @@ import org.mapstruct.factory.Mappers;
  */
 @Mapper
 public interface DTOMapper {
-    
+
     DTOMapper INSTANCE = Mappers.getMapper(DTOMapper.class);
 
     @Mapping(source = "leaderId", target = "leaderUserId")
