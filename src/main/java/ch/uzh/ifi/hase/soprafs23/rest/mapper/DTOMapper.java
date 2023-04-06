@@ -28,6 +28,7 @@ public interface DTOMapper {
     GameRoom convertGameRoomPostDTOtoEntity(GameRoomPostDTO gameRoomPostDTO);
 
 
+
     GameRoomGetDTO convertEntityToGameRoomGetDTO(GameRoom gameRoom);
 
     @Mapping(source = "username", target = "username")

@@ -29,14 +29,12 @@ public class GameRoomController {
     public GameRoomGetDTO createGameRoom(@RequestBody GameRoomPostDTO gameRoomPostDTO, @RequestHeader(value = "Authorization", required = false) String bearerToken) {
         //throwForbiddenWhenNoBearerToken(bearerToken);
         GameRoom gameRoomInput = DTOMapper.INSTANCE.convertGameRoomPostDTOtoEntity(gameRoomPostDTO);
-        //need to set leader
         gameRoomService.setLeaderFromRepo(gameRoomInput);
         gameRoomService.initGameRoom(gameRoomInput);
         roomCoordinator.addRoom(gameRoomInput);
         return DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(gameRoomInput);
     }
 
-    //put request has no return value -> get request
     @PutMapping("/joinRoom")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
