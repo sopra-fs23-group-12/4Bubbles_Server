@@ -27,7 +27,7 @@ public class GameRoomController {
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public GameRoomGetDTO createGameRoom(@RequestBody GameRoomPostDTO gameRoomPostDTO, @RequestHeader(value = "Authorization", required = false) String bearerToken) {
-        throwForbiddenWhenNoBearerToken(bearerToken);
+        //throwForbiddenWhenNoBearerToken(bearerToken);
         GameRoom gameRoomInput = DTOMapper.INSTANCE.convertGameRoomPostDTOtoEntity(gameRoomPostDTO);
         //need to set leader
         gameRoomService.setLeaderFromRepo(gameRoomInput);
@@ -37,18 +37,18 @@ public class GameRoomController {
     }
 
     //put request has no return value -> get request
-    @GetMapping("/joinRoom")
+    @PutMapping("/joinRoom")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public GameRoomGetDTO joinGameRoom(@RequestBody GameRoomJoinDTO gameRoomJoinDTO, @RequestHeader(value = "Authorization", required = false) String bearerToken) {
-        throwForbiddenWhenNoBearerToken(bearerToken);
+    public GameRoomGetDTO joinGameRoom(@RequestBody GameRoomPutDTO gameRoomPutDTO, @RequestHeader(value = "Authorization", required = false) String bearerToken) {
+        //throwForbiddenWhenNoBearerToken(bearerToken);
         try {
-            GameRoom room = roomCoordinator.getRoomByCode(gameRoomJoinDTO.getRoomCode());
-            gameRoomService.addPlayerToGameRoom(room, gameRoomJoinDTO.getUserId());
+            GameRoom room = roomCoordinator.getRoomByCode(gameRoomPutDTO.getRoomCode());
+            gameRoomService.addPlayerToGameRoom(room, gameRoomPutDTO.getUserId());
             return DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(room);
         }
         catch (NotFoundException e) {
-            throw new RoomNotFoundException("Unable to find game room with code: " + gameRoomJoinDTO.getRoomCode(), e);
+            throw new RoomNotFoundException("Unable to find game room with code: " + gameRoomPutDTO.getRoomCode(), e);
         }
     }
 
