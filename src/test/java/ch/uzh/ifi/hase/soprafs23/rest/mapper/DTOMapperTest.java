@@ -15,12 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 public class DTOMapperTest {
 
-/*    private final DTOMapper dtoMapper;
-
-    public DTOMapperTest(DTOMapper dtoMapper) {
-        this.dtoMapper = dtoMapper;
-    }
-
     @Test
     public void testCreateUser_fromUserPostDTO_toUser_success() {
         // create UserPostDTO
@@ -28,7 +22,7 @@ public class DTOMapperTest {
         userPostDTO.setUsername("username");
 
         // MAP -> Create user
-        User user = dtoMapper.convertUserPostDTOtoEntity(userPostDTO);
+        User user = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
 
         // check content
         assertEquals(userPostDTO.getUsername(), user.getUsername());
@@ -43,11 +37,11 @@ public class DTOMapperTest {
         user.setToken("1");
 
         // MAP -> Create UserGetDTO
-        UserGetDTO userGetDTO = dtoMapper.convertEntityToUserGetDTO(user);
+        UserGetDTO userGetDTO = DTOMapper.INSTANCE.convertEntityToUserGetDTO(user);
 
         // check content
         assertEquals(user.getId(), userGetDTO.getId());
         assertEquals(user.getUsername(), userGetDTO.getUsername());
         assertEquals(user.getStatus(), userGetDTO.getStatus());
-    }*/
+    }
 }

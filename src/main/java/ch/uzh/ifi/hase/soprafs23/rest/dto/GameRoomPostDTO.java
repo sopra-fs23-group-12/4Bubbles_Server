@@ -1,21 +1,19 @@
 package ch.uzh.ifi.hase.soprafs23.rest.dto;
 
-import ch.uzh.ifi.hase.soprafs23.entity.User;
-
 public class GameRoomPostDTO {
 
-    private long leader; //userId of leader
+    private long leaderId; //userId of leaderId
     private int numOfQuestions;
     private String questionTopic;
     private String gameMode;
 
 
-    public long getLeader() {
-        return leader;
+    public long getleaderId() {
+        return leaderId;
     }
 
-    public void setLeader(long leader) {
-        this.leader = leader;
+    public void setleaderId(long leaderId) {
+        this.leaderId = leaderId;
     }
 
     public int getNumOfQuestions() {

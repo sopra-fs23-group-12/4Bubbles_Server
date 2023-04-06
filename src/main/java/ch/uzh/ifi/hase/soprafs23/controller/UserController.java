@@ -1,14 +1,10 @@
 package ch.uzh.ifi.hase.soprafs23.controller;
 
-import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
-import ch.uzh.ifi.hase.soprafs23.rest.dto.GameRoomGetDTO;
-import ch.uzh.ifi.hase.soprafs23.rest.dto.GameRoomPostDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.UserPostDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.UserPutDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
-import ch.uzh.ifi.hase.soprafs23.service.GameRoomService;
 import ch.uzh.ifi.hase.soprafs23.service.UserService;
 
 import org.springframework.http.HttpStatus;
@@ -30,11 +26,10 @@ import java.util.Objects;
 public class UserController {
 
     private final UserService userService;
-    private final DTOMapper dtoMapper;
+    
 
-    UserController(UserService userService, DTOMapper dtoMapper) {
+    UserController(UserService userService) {
         this.userService = userService;
-        this.dtoMapper = dtoMapper;
     }
 
     @GetMapping("/users")
@@ -50,7 +45,7 @@ public class UserController {
 
         // convert each user to the API representation
         for (User user : users) {
-            userGetDTOs.add(dtoMapper.convertEntityToUserGetDTO(user));
+            userGetDTOs.add(DTOMapper.INSTANCE.INSTANCE.convertEntityToUserGetDTO(user));
         }
         return userGetDTOs;
     }
@@ -66,7 +61,7 @@ public class UserController {
         User user = userService.getUser(id, bearerToken);
         List<UserGetDTO> userGetDTOs = new ArrayList<>();
 
-        userGetDTOs.add(dtoMapper.convertEntityToUserGetDTO(user));
+        userGetDTOs.add(DTOMapper.INSTANCE.convertEntityToUserGetDTO(user));
 
         return userGetDTOs;
     }
@@ -77,7 +72,7 @@ public class UserController {
     public UserGetDTO createUser(@RequestBody UserPostDTO userPostDTO) {
 
         // convert API user to internal representation
-        User userInput = dtoMapper.convertUserPostDTOtoEntity(userPostDTO);
+        User userInput = DTOMapper.INSTANCE.convertUserPostDTOtoEntity(userPostDTO);
 
         // check if password and username is set
         if (userInput.getPassword() == null || userInput.getUsername() == null) {
@@ -89,7 +84,7 @@ public class UserController {
         // create user
         User createdUser = userService.createUser(userInput);
         // convert internal representation of user back to API
-        return dtoMapper.convertEntityToUserGetDTO(createdUser);
+        return DTOMapper.INSTANCE.convertEntityToUserGetDTO(createdUser);
     }
 
     @PutMapping("/users/{id}")
@@ -101,7 +96,7 @@ public class UserController {
 
         throwForbiddenWhenNoBearerToken(bearerToken);
 
-        User userInput = dtoMapper.convertUserPutDTOtoEntity(userPutDTO);
+        User userInput = DTOMapper.INSTANCE.convertUserPutDTOtoEntity(userPutDTO);
 
         userService.updateUser(id, bearerToken, userInput);
 

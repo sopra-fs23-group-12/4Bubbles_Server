@@ -6,7 +6,6 @@ import ch.uzh.ifi.hase.soprafs23.exceptions.RoomNotFoundException;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.*;
 import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs23.service.GameRoomService;
-import ch.uzh.ifi.hase.soprafs23.service.UserService;
 import javassist.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +16,10 @@ import java.util.Objects;
 @RestController
 public class GameRoomController {
     private final GameRoomService gameRoomService;
-    private final DTOMapper dtoMapper;
     private final RoomCoordinator roomCoordinator;
 
-
-    GameRoomController(UserService userService, GameRoomService gameRoomService, DTOMapper dtoMapper, RoomCoordinator roomCoordinator) {
+    GameRoomController(GameRoomService gameRoomService, RoomCoordinator roomCoordinator) {
         this.gameRoomService = gameRoomService;
-        this.dtoMapper = dtoMapper;
         this.roomCoordinator = roomCoordinator;
     }
 
@@ -32,10 +28,12 @@ public class GameRoomController {
     @ResponseBody
     public GameRoomGetDTO createGameRoom(@RequestBody GameRoomPostDTO gameRoomPostDTO, @RequestHeader(value = "Authorization", required = false) String bearerToken) {
         throwForbiddenWhenNoBearerToken(bearerToken);
-        GameRoom gameRoomInput = dtoMapper.convertGameRoomPostDTOtoEntity(gameRoomPostDTO);
+        GameRoom gameRoomInput = DTOMapper.INSTANCE.convertGameRoomPostDTOtoEntity(gameRoomPostDTO);
+        //need to set leader
+        gameRoomService.setLeaderFromRepo(gameRoomInput);
         gameRoomService.initGameRoom(gameRoomInput);
         roomCoordinator.addRoom(gameRoomInput);
-        return dtoMapper.convertEntityToGameRoomGetDTO(gameRoomInput);
+        return DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(gameRoomInput);
     }
 
     //put request has no return value -> get request
@@ -47,7 +45,7 @@ public class GameRoomController {
         try {
             GameRoom room = roomCoordinator.getRoomByCode(gameRoomJoinDTO.getRoomCode());
             gameRoomService.addPlayerToGameRoom(room, gameRoomJoinDTO.getUserId());
-            return dtoMapper.convertEntityToGameRoomGetDTO(room);
+            return DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(room);
         }
         catch (NotFoundException e) {
             throw new RoomNotFoundException("Unable to find game room with code: " + gameRoomJoinDTO.getRoomCode(), e);
