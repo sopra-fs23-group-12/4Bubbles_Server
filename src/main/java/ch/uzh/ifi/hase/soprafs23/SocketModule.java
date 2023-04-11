@@ -39,19 +39,22 @@ public class SocketModule {
     public SocketModule(SocketIOServer server, SocketService socketService) {
         this.server = server;
         this.socketService = socketService;
+
         server.addConnectListener(onConnected());
         server.addDisconnectListener(onDisconnected());
-       
+
         server.addEventListener("send_message", Message.class, onChatReceived());
 
     }
 
 
     private DataListener<Message> onChatReceived() {
+        System.out.print("onchatreceived method reached");
         return (senderClient, data, ackSender) -> {
 
-            System.out.println("message received");
-            logger.info(data.toString());
+            System.out.println("message received:");
+            logger.info(data.getMessage());
+            logger.info(data.getRoom());
             socketService.sendMessage(data.getRoom(),"get_message", senderClient, data.getMessage());
         };
     }
@@ -60,8 +63,22 @@ public class SocketModule {
 
     private ConnectListener onConnected() {
         return (client) -> {
+
             String room = client.getHandshakeData().getSingleUrlParam("room");
-            client.joinRoom(room);
+            System.out.printf("room: %s", room);
+            logger.info("the room is:");
+            logger.info(room);
+            //if a room is specified and passed with the url, you sign the user into the room. Otherwise a room is created that has the name of the socket id
+            if (room != null){
+                client.joinRoom(room);
+                logger.info("room is joined!");
+                logger.info(room);
+                client.joinRoom(room);
+            }
+            else {
+                client.joinRoom((client.getSessionId().toString()));
+                logger.info("no room available, session id was made into a room");
+            }
             logger.info("Socket ID[{}]  Connected to socket");
             logger.info(client.getSessionId().toString());
         };
@@ -72,6 +89,7 @@ public class SocketModule {
         return client -> {
             logger.info("Client[{}] - Disconnected from socket");
             logger.info(client.getSessionId().toString());
+            System.out.print("\n\n\n DISCONNECT!! \n\n\n\n");
         };
     }
 

@@ -19,11 +19,13 @@ public class SocketService {
     // i got the dependency from here:  https://mvnrepository.com/artifact/com.corundumstudio.socketio/netty-socketio/1.5.0
     public void sendMessage(String room, String eventName, SocketIOClient senderClient, String message) {
         for ( SocketIOClient client : senderClient.getNamespace().getRoomOperations(room).getClients()) {
-            if (!client.getSessionId().equals(senderClient.getSessionId())) {
-                client.sendEvent(eventName,
-                        new Message(MessageType.SERVER, message));
+            //if (!client.getSessionId().equals(senderClient.getSessionId())) {
+             //   client.sendEvent(eventName,
+             //           new Message(MessageType.SERVER, message));
+            client.sendEvent(eventName, new Message(MessageType.SERVER, message));
             }
         }
     }
 
-}
+
+
