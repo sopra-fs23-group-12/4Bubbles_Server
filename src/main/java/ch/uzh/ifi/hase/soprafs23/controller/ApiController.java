@@ -13,10 +13,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import ch.uzh.ifi.hase.soprafs23.entity.Topic;
+
 import ch.uzh.ifi.hase.soprafs23.exceptions.ApiConnectionError;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.TopicGetDTO;
-import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs23.service.ApiService;
 
 @RestController
@@ -36,20 +35,15 @@ public class ApiController {
     @ResponseBody
     public List<TopicGetDTO> getTopics(@RequestHeader(value = "Authorization", required = false) String bearerToken){
         throwForbiddenWhenNoBearerToken(bearerToken);
-        List<Topic> topics = new ArrayList<Topic>();
+        List<TopicGetDTO> topics = new ArrayList<TopicGetDTO>();
         String apiURL = "https://opentdb.com/api_category.php";
         try {
             topics = apiService.getTopicsFromApi(apiURL);
         } catch (IOException e) {
             throw new ApiConnectionError("Something went wrong while accessing the API", e);
         }
-
-        List<TopicGetDTO> topicGetDTOs = new ArrayList<TopicGetDTO>();
-        for (Topic topic : topics) {
-            topicGetDTOs.add(DTOMapper.INSTANCE.convertEntityToTopicGetDTO(topic));
-        }
         
-        return topicGetDTOs;
+        return topics;
     }
 
 
