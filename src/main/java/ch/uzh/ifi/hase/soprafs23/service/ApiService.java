@@ -52,6 +52,7 @@ public class ApiService {
         while ((cp = br.read()) != -1) {
             json.append((char) cp);
         }
+        br.close();
         
         return new JSONObject(json.toString());
         
