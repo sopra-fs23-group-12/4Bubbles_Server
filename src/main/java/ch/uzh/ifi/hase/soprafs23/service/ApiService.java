@@ -42,17 +42,20 @@ public class ApiService {
 
 
     //helper method that call the api and returns a JSONObject
-    private JSONObject getTopics(String apiURL) throws MalformedURLException, IOException {
+    private JSONObject getTopics(String apiURL) throws IOException {
         URL url = new URL(apiURL);
         StringBuilder json = new StringBuilder();
         InputStream is = url.openStream();
         InputStreamReader isr = new InputStreamReader(is, Charset.forName("UTF-8"));
         BufferedReader br = new BufferedReader(isr);
-        int cp;
-        while ((cp = br.read()) != -1) {
-            json.append((char) cp);
+        try{
+            int cp;
+            while ((cp = br.read()) != -1) {
+                json.append((char) cp);
+            }
+        } finally {
+            br.close();
         }
-        br.close();
         
         return new JSONObject(json.toString());
         
