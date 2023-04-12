@@ -23,26 +23,24 @@ public class Game {
         this.ranking  = new GameRanking(gameRoom.getMembers());
         this.triviaCaller = new MockTriviaCaller();
         this.questions = triviaCaller.getTriviaQuestions();
-        this.roundCounter = 2;
-
+        this.roundCounter = 1;
     }
 
     public void startGame(){
         //call triviaCaller with configs that are specified in gameRoom
-        while(roundCounter > 0){
+        while(roundCounter >= 0){
             playRound();
+            roundCounter--;
         }
     }
 
-
-
     public void playRound(){
-        Timer timer = new Timer(10);
+        Timer timer = new Timer(10, elapsedTimeInSeconds -> System.out.println("Elapsed time: " + elapsedTimeInSeconds + " seconds"));
         this.voting = new MockVoting(timer);
-        timer.start();
+        System.out.println(questions.get(roundCounter).getQuestion() + ": " + questions.get(roundCounter).getAnswers() + " " + questions.get(roundCounter).getNumOfCorrectAnswer());
+        Thread thread = new Thread(timer::start);
+        thread.start();
         List<Vote> votes = voting.getVotes();
         ranking.updateRanking(questions.get(roundCounter), votes);
     }
-
-
 }

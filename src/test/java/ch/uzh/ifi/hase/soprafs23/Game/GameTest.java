@@ -23,12 +23,12 @@ public class GameTest {
         User testUser1 = new User();
         testUser1.setId(1L);
         testUser1.setPassword("password1");
-        testUser1.setUsername("testUsername1");
+        testUser1.setUsername("playerName1");
 
         User testUser2 = new User();
         testUser2.setId(2L);
         testUser2.setPassword("password2");
-        testUser2.setUsername("testUsername2");
+        testUser2.setUsername("playerName2");
 
         /*User user2 = new User();
         user2.setId(2L);
@@ -53,7 +53,7 @@ public class GameTest {
 
     @Test
     public void testGameRound() {
-
+        game.playRound();
 
 
 
