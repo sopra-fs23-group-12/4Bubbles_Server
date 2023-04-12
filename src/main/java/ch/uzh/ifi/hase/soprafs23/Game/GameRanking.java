@@ -28,5 +28,6 @@ public class GameRanking {
             }
             rankingDict.put(vote.getPlayerName(), oldPoints + addPoints);
         }
+        System.out.println(rankingDict);
     }
 }

@@ -1,39 +1,50 @@
 package ch.uzh.ifi.hase.soprafs23.Game;
 
 import ch.uzh.ifi.hase.soprafs23.Game.stateStorage.Timer;
+import ch.uzh.ifi.hase.soprafs23.Game.stateStorage.TimerController;
 import ch.uzh.ifi.hase.soprafs23.Game.stateStorage.Vote;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MockVoting {
-        private List<Vote> votes;
+        private List<Vote> votes = new ArrayList<Vote>();
 
-        private boolean votingOpen;
+        private boolean votingOpen = true;
 
-        private Timer timer;
+        private TimerController timer;
 
-        public MockVoting(Timer timer){
+        public MockVoting(TimerController timer){
             this.timer = timer;
-            Vote vote1 = new Vote();
-            vote1.setPlayerName("playerName1");
-            vote1.setVoteNum(2);
-            vote1.setTime(7);
-            Vote vote2 = new Vote();
-            vote2.setPlayerName("playerName2");
-            vote2.setVoteNum(4);
-            vote2.setTime(5);
-            votes = new ArrayList<Vote>();
-            votes.add(vote1);
-            votes.add(vote2);
         }
 
+        public void initMockVotes(){
+            Thread thread = new Thread(() -> {
+                try {
+                    Thread.sleep(3000);
+                    setVote("playerName1",2);
+                    Thread.sleep(2000);
+                    setVote("playerName2", 4);
+                }
+                catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            thread.start();
+        }
+
+        //later transfer to post request
+
         public void setVote(String playerName, int voteNum){
-            Vote vote = new Vote();
-            vote.setTime(timer.getRemainingTimeInSeconds());
-            vote.setVoteNum(voteNum);
-            vote.setPlayerName(playerName);
-            votes.add(vote);
+            if(votingOpen) {
+                Vote vote = new Vote();
+                vote.setTime(timer.getTimer().getRemainingTimeInSeconds());
+                vote.setVoteNum(voteNum);
+                vote.setPlayerName(playerName);
+                votes.add(vote);
+            }
         }
 
         public List<Vote> getVotes(){

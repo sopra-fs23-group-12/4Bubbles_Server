@@ -1,17 +1,16 @@
 package ch.uzh.ifi.hase.soprafs23.Game.stateStorage;
 
 
+import org.springframework.stereotype.Component;
 
 public class Timer {
     private final int timeInSeconds;
     private int elapsedTimeInSeconds;
 
-    private TimerCallBack callback;
 
-    public Timer(int timeInSeconds, TimerCallBack callback) {
+    public Timer(int timeInSeconds) {
         this.timeInSeconds = timeInSeconds;
         this.elapsedTimeInSeconds = 0;
-        this.callback = callback;
     }
 
     public void start() {
