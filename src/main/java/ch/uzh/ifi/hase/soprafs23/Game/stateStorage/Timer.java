@@ -1,12 +1,17 @@
 package ch.uzh.ifi.hase.soprafs23.Game.stateStorage;
 
+
+
 public class Timer {
     private final int timeInSeconds;
     private int elapsedTimeInSeconds;
 
-    public Timer(int timeInSeconds) {
+    private TimerCallBack callback;
+
+    public Timer(int timeInSeconds, TimerCallBack callback) {
         this.timeInSeconds = timeInSeconds;
         this.elapsedTimeInSeconds = 0;
+        this.callback = callback;
     }
 
     public void start() {
@@ -14,6 +19,8 @@ public class Timer {
             for (int i = timeInSeconds; i > 0; i--) {
                 Thread.sleep(1000);
                 elapsedTimeInSeconds++;
+                System.out.println("Elapsed time: " + elapsedTimeInSeconds + " seconds");
+                callback.onElapsed(elapsedTimeInSeconds);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
