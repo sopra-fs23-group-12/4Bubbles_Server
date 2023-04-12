@@ -13,9 +13,9 @@ public class MockTriviaCaller {
         triviaQuestion1.setAnswers(List.of("South Africa", "Congo", "Kenia", "Nigeria"));
         triviaQuestion1.setNumOfCorrectAnswer(4);
         Question triviaQuestion2 = new Question();
-        triviaQuestion1.setQuestion("What is the largest Country in Europe by size?");
-        triviaQuestion1.setAnswers(List.of("Germany", "Ukraine", "Spain", "Finland"));
-        triviaQuestion1.setNumOfCorrectAnswer(2);
+        triviaQuestion2.setQuestion("What is the largest Country in Europe by size?");
+        triviaQuestion2.setAnswers(List.of("Germany", "Ukraine", "Spain", "Finland"));
+        triviaQuestion2.setNumOfCorrectAnswer(2);
         List<Question> questions = List.of(triviaQuestion1, triviaQuestion2);
         return questions;
     }

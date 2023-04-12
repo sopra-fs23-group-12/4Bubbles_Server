@@ -38,8 +38,8 @@ public class Game {
         Timer timer = new Timer(10, elapsedTimeInSeconds -> System.out.println("Elapsed time: " + elapsedTimeInSeconds + " seconds"));
         this.voting = new MockVoting(timer);
         System.out.println(questions.get(roundCounter).getQuestion() + ": " + questions.get(roundCounter).getAnswers() + " " + questions.get(roundCounter).getNumOfCorrectAnswer());
-        Thread thread = new Thread(timer::start);
-        thread.start();
+        //in a new thread allow to set votes
+        timer.start();
         List<Vote> votes = voting.getVotes();
         ranking.updateRanking(questions.get(roundCounter), votes);
     }

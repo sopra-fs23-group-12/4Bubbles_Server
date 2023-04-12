@@ -19,8 +19,7 @@ public class Timer {
             for (int i = timeInSeconds; i > 0; i--) {
                 Thread.sleep(1000);
                 elapsedTimeInSeconds++;
-                System.out.println("Elapsed time: " + elapsedTimeInSeconds + " seconds");
-                callback.onElapsed(elapsedTimeInSeconds);
+                System.out.println("Remaining time: " + (timeInSeconds-elapsedTimeInSeconds) + " seconds");
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
