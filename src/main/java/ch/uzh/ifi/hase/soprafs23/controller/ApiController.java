@@ -7,23 +7,31 @@ import java.util.Objects;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import ch.uzh.ifi.hase.soprafs23.constant.ApiUrls;
+import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
+import ch.uzh.ifi.hase.soprafs23.entity.RoomCoordinator;
 import ch.uzh.ifi.hase.soprafs23.exceptions.ApiConnectionError;
+import ch.uzh.ifi.hase.soprafs23.rest.dto.QuestionGetDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.TopicGetDTO;
 import ch.uzh.ifi.hase.soprafs23.service.ApiService;
+import javassist.NotFoundException;
 
 @RestController
 public class ApiController {
     private final ApiService apiService;
+    private final RoomCoordinator roomCoordinator;
 
-    public ApiController(ApiService apiService) {
+    public ApiController(ApiService apiService, RoomCoordinator roomCoordinator) {
         this.apiService = apiService;
+        this.roomCoordinator = roomCoordinator;
     }
 
 
@@ -47,6 +55,31 @@ public class ApiController {
     }
 
 
+    @GetMapping("/questions")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<QuestionGetDTO> getQuestions(@RequestParam int roomCode, @RequestHeader(value = "Authorization", required = false) String bearerToken){
+        throwForbiddenWhenNoBearerToken(bearerToken);
+        List<QuestionGetDTO> questions = new ArrayList<QuestionGetDTO>();
+        GameRoom room = new GameRoom();
+        try {
+            room = roomCoordinator.getRoomByCode(roomCode);
+        } catch (NotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        String apiURL = String.format(ApiUrls.QUESTIONS.url, room.getNumOfQuestions(), 23);
+        
+        try {
+            questions = apiService.getQuestionsFromApi(apiURL);
+        } catch (IOException e) {
+            throw new ApiConnectionError("Something went wrong while accessing the API", e);
+        }
+        
+        return questions;
+    }
+
+    //Helper method that throws a 403 error when no bearer token is present
     private void throwForbiddenWhenNoBearerToken(String bearerToken) {
         if (Objects.isNull(bearerToken)) {
             String baseErrorMessage = "You need to log in to see this information.";
