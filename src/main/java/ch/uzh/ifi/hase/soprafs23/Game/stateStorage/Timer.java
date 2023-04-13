@@ -3,9 +3,13 @@ package ch.uzh.ifi.hase.soprafs23.Game.stateStorage;
 
 import org.springframework.stereotype.Component;
 
+import java.util.TimerTask;
+
 public class Timer {
     private final int timeInSeconds;
     private int elapsedTimeInSeconds;
+
+    private boolean isRunning;
 
 
     public Timer(int timeInSeconds) {
@@ -14,15 +18,18 @@ public class Timer {
     }
 
     public void start() {
-        try {
-            for (int i = timeInSeconds; i > 0; i--) {
-                Thread.sleep(1000);
+        isRunning = true;
+        java.util.Timer timer = new java.util.Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
                 elapsedTimeInSeconds++;
                 System.out.println("Remaining time: " + (timeInSeconds-elapsedTimeInSeconds) + " seconds");
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        };
+
+        timer.scheduleAtFixedRate(task, 1000, 10000);
+        isRunning = false;
     }
 
     public int getTimeInSeconds() {
@@ -31,6 +38,10 @@ public class Timer {
 
     public int getElapsedTimeInSeconds() {
         return elapsedTimeInSeconds;
+    }
+
+    public boolean isRunning() {
+        return isRunning;
     }
 
     public int getRemainingTimeInSeconds() {
