@@ -14,11 +14,11 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class SocketService {
 
-    //getRoomOperations(room) seems to not be in the package that is imported, but it is in the newest version on github
-    // i have no idea how this could be fixed, maybe look more into the import?
+
     // i got the dependency from here:  https://mvnrepository.com/artifact/com.corundumstudio.socketio/netty-socketio/1.5.0
     public void sendMessage(String room, String eventName, SocketIOClient senderClient, String message) {
         for ( SocketIOClient client : senderClient.getNamespace().getRoomOperations(room).getClients()) {
+            //this is the version that would send to all members of a room except the sender
             //if (!client.getSessionId().equals(senderClient.getSessionId())) {
              //   client.sendEvent(eventName,
              //           new Message(MessageType.SERVER, message));

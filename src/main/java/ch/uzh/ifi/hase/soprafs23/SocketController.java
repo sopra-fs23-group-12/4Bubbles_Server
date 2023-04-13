@@ -24,19 +24,19 @@ import java.util.logging.Logger;
 
 @Slf4j
 @Component
-public class SocketModule {
+public class SocketController {
 
 
-    // Create a Logger
+    // Create a Logger debugging
     Logger logger
             = Logger.getLogger(
-            SocketModule.class.getName());
+            SocketController.class.getName());
 
 
     private final SocketIOServer server;
     private final SocketService socketService;
 
-    public SocketModule(SocketIOServer server, SocketService socketService) {
+    public SocketController(SocketIOServer server, SocketService socketService) {
         this.server = server;
         this.socketService = socketService;
 
@@ -49,13 +49,11 @@ public class SocketModule {
 
 
     private DataListener<Message> onChatReceived() {
-        System.out.print("onchatreceived method reached");
         return (senderClient, data, ackSender) -> {
-
             System.out.println("message received:");
             logger.info(data.getMessage());
             logger.info(data.getRoom());
-            socketService.sendMessage(data.getRoom(),"get_message", senderClient, data.getMessage());
+            socketService.sendMessage(data.getRoom(),"get_message", senderClient, "hello this is the server");
         };
     }
 
@@ -65,15 +63,14 @@ public class SocketModule {
         return (client) -> {
 
             String room = client.getHandshakeData().getSingleUrlParam("room");
-            System.out.printf("room: %s", room);
-            logger.info("the room is:");
-            logger.info(room);
-            //if a room is specified and passed with the url, you sign the user into the room. Otherwise a room is created that has the name of the socket id
+
+            //if a room is specified and passed with the url, you sign the user into the room. Otherwise, a room is created that has the name of the socket id
             if (room != null){
                 client.joinRoom(room);
                 logger.info("room is joined!");
                 logger.info(room);
-                client.joinRoom(room);
+                socketService.sendMessage(room,"get_message", client, "you have joined a room");
+
             }
             else {
                 client.joinRoom((client.getSessionId().toString()));
@@ -89,7 +86,7 @@ public class SocketModule {
         return client -> {
             logger.info("Client[{}] - Disconnected from socket");
             logger.info(client.getSessionId().toString());
-            System.out.print("\n\n\n DISCONNECT!! \n\n\n\n");
+            System.out.print("\n\n DISCONNECT!! \n\n");
         };
     }
 
