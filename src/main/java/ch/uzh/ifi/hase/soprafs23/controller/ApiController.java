@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-
+import ch.uzh.ifi.hase.soprafs23.constant.ApiUrls;
 import ch.uzh.ifi.hase.soprafs23.exceptions.ApiConnectionError;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.TopicGetDTO;
 import ch.uzh.ifi.hase.soprafs23.service.ApiService;
@@ -36,7 +36,7 @@ public class ApiController {
     public List<TopicGetDTO> getTopics(@RequestHeader(value = "Authorization", required = false) String bearerToken){
         throwForbiddenWhenNoBearerToken(bearerToken);
         List<TopicGetDTO> topics = new ArrayList<TopicGetDTO>();
-        String apiURL = "https://opentdb.com/api_category.php";
+        String apiURL = ApiUrls.CATEGORIES.url;
         try {
             topics = apiService.getTopicsFromApi(apiURL);
         } catch (IOException e) {

@@ -12,7 +12,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import ch.uzh.ifi.hase.soprafs23.rest.dto.TopicGetDTO;
@@ -22,9 +22,7 @@ import ch.uzh.ifi.hase.soprafs23.rest.dto.TopicGetDTO;
 @Transactional
 public class ApiService {
 
-    @Autowired
-    public ApiService() {
-    }
+
 
     //returns a list of topics from the api
     public List<TopicGetDTO> getTopicsFromApi(String apiURL) throws IOException {
@@ -41,6 +39,7 @@ public class ApiService {
 
 
     //helper method that call the api and returns a JSONObject
+    //maybe rename to getJSON or something like that, could be used for other api calls
     private JSONObject getTopics(String apiURL) throws IOException {
         URL url = new URL(apiURL);
         StringBuilder json = new StringBuilder();
