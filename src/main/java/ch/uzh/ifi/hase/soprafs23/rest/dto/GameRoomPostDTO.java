@@ -6,6 +6,7 @@ public class GameRoomPostDTO {
     private long leaderId; //userId of leaderId
     private int numOfQuestions;
     private String questionTopic;
+    private int questionTopicId;
     private String gameMode;
 
 
@@ -31,6 +32,14 @@ public class GameRoomPostDTO {
 
     public void setQuestionTopic(String questionTopic) {
         this.questionTopic = questionTopic;
+    }
+
+    public int getQuestionTopicId() {
+        return questionTopicId;
+    }
+
+    public void setQuestionTopicId(int questionTopicId) {
+        this.questionTopicId = questionTopicId;
     }
 
     public String getGameMode() {
