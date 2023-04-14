@@ -40,6 +40,7 @@ public class Game {
         //call triviaCaller with configs that are specified in gameRoom
         while(roundCounter >= 0){
             playRound();
+            this.voting.resetVotes();
             roundCounter--;
         }
     }
@@ -52,4 +53,15 @@ public class Game {
         List<Vote> votes = voting.getVotes();
         ranking.updateRanking(questions.get(roundCounter), votes);
     }
+
+    public int getRemainingTime(){
+        return this.timer.getTimer().getRemainingTimeInSeconds();
+    }
+
+    public MockVoting getVotingSystem(){
+        return this.voting;
+    }
+
+
+
 }

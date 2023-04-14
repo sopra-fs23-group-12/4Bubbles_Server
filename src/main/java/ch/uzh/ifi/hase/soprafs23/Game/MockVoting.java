@@ -20,6 +20,8 @@ public class MockVoting {
             this.timer = timer;
         }
 
+
+
         public void initMockVotes(){
             Thread thread = new Thread(() -> {
                 try {
@@ -38,7 +40,7 @@ public class MockVoting {
         //later transfer to post request
 
         public void setVote(String playerName, int voteNum){
-            if(votingOpen) {
+            if(timer.getTimer().isRunning()) {
                 Vote vote = new Vote();
                 vote.setTime(timer.getTimer().getRemainingTimeInSeconds());
                 vote.setVoteNum(voteNum);
@@ -49,6 +51,10 @@ public class MockVoting {
 
         public List<Vote> getVotes(){
             return votes;
+        }
+
+        public void resetVotes(){
+            this.votes = new ArrayList<Vote>();
         }
 
 
