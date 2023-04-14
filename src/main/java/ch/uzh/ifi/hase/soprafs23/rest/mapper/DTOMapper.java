@@ -22,6 +22,7 @@ import org.mapstruct.factory.Mappers;
 public interface DTOMapper {
 
     DTOMapper INSTANCE = Mappers.getMapper(DTOMapper.class);
+    
 
     @Mapping(source = "leaderId", target = "leaderUserId")
     @Mapping(source = "gameMode", target = "gameMode")
