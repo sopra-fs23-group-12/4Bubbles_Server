@@ -68,7 +68,7 @@ public class ApiController {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        String apiURL = String.format(ApiUrls.QUESTIONS.url, room.getNumOfQuestions(), 23);
+        String apiURL = String.format(ApiUrls.QUESTIONS.url, room.getNumOfQuestions(), room.getQuestionTopicId());
         
         try {
             questions = apiService.getQuestionsFromApi(apiURL);
