@@ -53,7 +53,7 @@ public class GameTest {
 
     @Test
     public void testGameRound() {
-        game.playRound();
+        game.startGame();
 
 
 

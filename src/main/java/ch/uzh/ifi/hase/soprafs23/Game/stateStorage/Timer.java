@@ -1,14 +1,9 @@
 package ch.uzh.ifi.hase.soprafs23.Game.stateStorage;
 
-
-import org.springframework.stereotype.Component;
-
 public class Timer {
     private final int timeInSeconds;
     private int elapsedTimeInSeconds;
-
     private boolean isRunning;
-
 
     public Timer(int timeInSeconds) {
         this.timeInSeconds = timeInSeconds;
@@ -21,12 +16,17 @@ public class Timer {
                 isRunning = true;
                 Thread.sleep(1000);
                 elapsedTimeInSeconds++;
+                //TODO: push timer to socket
                 System.out.println("Remaining time: " + (timeInSeconds-elapsedTimeInSeconds) + " seconds");
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         isRunning = false;
+    }
+
+    public void reset(){
+        elapsedTimeInSeconds = 0;
     }
 
     public int getTimeInSeconds() {
@@ -41,6 +41,7 @@ public class Timer {
         return isRunning;
     }
 
+    //TODO: this should be called by websocket to get the remaining time
     public int getRemainingTimeInSeconds() {
         return timeInSeconds-elapsedTimeInSeconds;
     }

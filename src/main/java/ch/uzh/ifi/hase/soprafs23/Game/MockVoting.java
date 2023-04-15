@@ -1,28 +1,23 @@
 package ch.uzh.ifi.hase.soprafs23.Game;
 
 import ch.uzh.ifi.hase.soprafs23.Game.stateStorage.Timer;
-import ch.uzh.ifi.hase.soprafs23.Game.stateStorage.TimerController;
 import ch.uzh.ifi.hase.soprafs23.Game.stateStorage.Vote;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MockVoting {
+public class MockVoting implements Voting {
         private List<Vote> votes = new ArrayList<Vote>();
 
-        private boolean votingOpen = true;
+        private Timer timer;
 
-        private TimerController timer;
-
-        public MockVoting(TimerController timer){
+        public MockVoting(Timer timer){
             this.timer = timer;
+            initMockVotes();
         }
 
-
-
         public void initMockVotes(){
+            //this simulates calls to set votes from frontend
             Thread thread = new Thread(() -> {
                 try {
                     Thread.sleep(3000);
@@ -37,12 +32,10 @@ public class MockVoting {
             thread.start();
         }
 
-        //later transfer to post request
-
         public void setVote(String playerName, int voteNum){
-            if(timer.getTimer().isRunning()) {
+            if(timer.isRunning()) {
                 Vote vote = new Vote();
-                vote.setTime(timer.getTimer().getRemainingTimeInSeconds());
+                vote.setTime(timer.getRemainingTimeInSeconds());
                 vote.setVoteNum(voteNum);
                 vote.setPlayerName(playerName);
                 votes.add(vote);
@@ -56,9 +49,4 @@ public class MockVoting {
         public void resetVotes(){
             this.votes = new ArrayList<Vote>();
         }
-
-
-
-
-
 }
