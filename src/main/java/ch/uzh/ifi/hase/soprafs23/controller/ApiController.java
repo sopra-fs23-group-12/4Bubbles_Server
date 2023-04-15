@@ -65,8 +65,6 @@ public class ApiController {
         try {
             room = roomCoordinator.getRoomByCode(roomCode);
         } catch (NotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         }
         String apiURL = String.format(ApiUrls.QUESTIONS.url, room.getNumOfQuestions(), room.getQuestionTopicId());
         
