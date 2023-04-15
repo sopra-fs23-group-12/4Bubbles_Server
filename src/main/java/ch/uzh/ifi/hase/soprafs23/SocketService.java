@@ -8,6 +8,12 @@ import com.corundumstudio.socketio.SocketIONamespace;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.*;
+
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 //this is for the websockets
 // from https://medium.com/folksdev/spring-boot-netty-socket-io-example-3f21fcc1147d
 @Service
@@ -25,6 +31,28 @@ public class SocketService {
             client.sendEvent(eventName, new Message(MessageType.SERVER, message));
             }
         }
+
+        public void timerExample(String room, SocketIOClient senderClient ){
+
+            int counter = 40;
+
+            while(counter>0){
+                try {
+                    Thread.sleep(1000);
+                    System.out.println(counter);
+
+                    for (SocketIOClient client : senderClient.getNamespace().getRoomOperations(room).getClients()){
+                        client.sendEvent("timer_count", new Message(MessageType.SERVER, String.valueOf(counter)));
+                    }
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                counter--;
+            }
+            for (SocketIOClient client : senderClient.getNamespace().getRoomOperations(room).getClients()){
+                client.sendEvent("timer_count", new Message(MessageType.SERVER, "time over"));
+            }        }
     }
 
 

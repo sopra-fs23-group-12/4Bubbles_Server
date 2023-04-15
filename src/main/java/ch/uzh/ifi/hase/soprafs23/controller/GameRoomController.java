@@ -25,7 +25,7 @@ public class GameRoomController {
         this.roomCoordinator = roomCoordinator;
     }
 
-    @PostMapping("/createRoom")
+    @PostMapping("/createRoom") // to create a room, we need; creator, namespace
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public GameRoomGetDTO createGameRoom(@RequestBody GameRoomPostDTO gameRoomPostDTO, @RequestHeader(value = "Authorization", required = false) String bearerToken) {
@@ -37,7 +37,7 @@ public class GameRoomController {
         return DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(gameRoomInput);
     }
 
-    @PutMapping("/joinRoom")
+    @PutMapping("/joinRoom") // who and which room, evtl authorization?
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public GameRoomGetDTO joinGameRoom(@RequestBody GameRoomPutDTO GameRoomPutDTO, @RequestHeader(value = "Authorization", required = false) String bearerToken) {
