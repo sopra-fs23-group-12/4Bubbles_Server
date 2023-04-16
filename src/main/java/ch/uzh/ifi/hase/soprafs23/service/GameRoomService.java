@@ -8,11 +8,14 @@ import ch.uzh.ifi.hase.soprafs23.repository.UserRepository;
 import org.slf4j.LoggerFactory; */
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Stream;
 
@@ -33,9 +36,10 @@ public class GameRoomService {
     }
 
     public void initGameRoom(GameRoom gameRoom) {
-        gameRoom.setRoomCode(new Random().nextInt(100000, 1000000));
+        gameRoom.setRoomCode(String.valueOf(new Random().nextInt(100000, 1000000)));
         //list unmodifiable -> every time pass a new one
         gameRoom.setMembers(List.of(gameRoom.getLeader()));
+
     }
 
     public void setLeaderFromRepo(GameRoom gameRoom){
@@ -52,5 +56,12 @@ public class GameRoomService {
         List<User> members = Stream.concat(gameRoom.getMembers().stream(), Stream.of(player)).toList();
         gameRoom.setMembers(members);
         return gameRoom;
+    }
+
+    public void throwForbiddenWhenNoBearerToken(String bearerToken) {
+        if (Objects.isNull(bearerToken)) {
+            String baseErrorMessage = "You need to log in to see this information.";
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage));
+        }
     }
 }

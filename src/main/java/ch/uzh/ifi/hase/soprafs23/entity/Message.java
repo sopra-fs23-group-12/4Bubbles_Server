@@ -10,7 +10,11 @@ import lombok.Data;
 public class Message {
     private MessageType type;
     private String message;
-    private String room;
+    private String roomCode;
+
+    private String userId;
+
+    private String bearerToken;
 
     public Message() {
     }
@@ -19,8 +23,8 @@ public class Message {
         this.message = message;
     }
 
-    public String getRoom(){
-        return this.room;
+    public String getRoomCode(){
+        return this.roomCode;
     }
 
     public String getMessage(){
@@ -30,6 +34,10 @@ public class Message {
     public MessageType getType(){
         return this.type;
     }
+
+    public String getUserId(){return this.userId;}
+
+    public String getBearerToken() {return this.bearerToken;}
 }
 
 

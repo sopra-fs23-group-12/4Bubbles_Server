@@ -22,18 +22,19 @@ public class GameRoomController {
 
     GameRoomController(UserService userService, GameRoomService gameRoomService, RoomCoordinator roomCoordinator) {
         this.gameRoomService = gameRoomService;
-        this.roomCoordinator = roomCoordinator;
+        this.roomCoordinator = RoomCoordinator.getInstance();
     }
 
     @PostMapping("/createRoom") // to create a room, we need; creator, namespace
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public GameRoomGetDTO createGameRoom(@RequestBody GameRoomPostDTO gameRoomPostDTO, @RequestHeader(value = "Authorization", required = false) String bearerToken) {
-        throwForbiddenWhenNoBearerToken(bearerToken);
+        gameRoomService.throwForbiddenWhenNoBearerToken(bearerToken);
         GameRoom gameRoomInput = DTOMapper.INSTANCE.convertGameRoomPostDTOtoEntity(gameRoomPostDTO);
         gameRoomService.setLeaderFromRepo(gameRoomInput);
         gameRoomService.initGameRoom(gameRoomInput);
         roomCoordinator.addRoom(gameRoomInput);
+
         return DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(gameRoomInput);
     }
 
@@ -41,7 +42,7 @@ public class GameRoomController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public GameRoomGetDTO joinGameRoom(@RequestBody GameRoomPutDTO GameRoomPutDTO, @RequestHeader(value = "Authorization", required = false) String bearerToken) {
-        throwForbiddenWhenNoBearerToken(bearerToken);
+        gameRoomService.throwForbiddenWhenNoBearerToken(bearerToken);
         try {
             GameRoom room = roomCoordinator.getRoomByCode(GameRoomPutDTO.getRoomCode());
             gameRoomService.addPlayerToGameRoom(room, GameRoomPutDTO.getUserId());
@@ -52,10 +53,5 @@ public class GameRoomController {
         }
     }
 
-    public void throwForbiddenWhenNoBearerToken(String bearerToken) {
-        if (Objects.isNull(bearerToken)) {
-            String baseErrorMessage = "You need to log in to see this information.";
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage));
-        }
-    }
+
 }

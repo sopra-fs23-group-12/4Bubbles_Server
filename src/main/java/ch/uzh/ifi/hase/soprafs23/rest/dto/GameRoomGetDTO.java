@@ -10,7 +10,7 @@ public class GameRoomGetDTO {
     private User leader;
     private int numOfQuestions;
     private String questionTopic;
-    private int roomCode;
+    private String roomCode;
     private String gameMode;
 
 
@@ -46,11 +46,11 @@ public class GameRoomGetDTO {
         this.questionTopic = questionTopic;
     }
 
-    public int getRoomCode() {
+    public String getRoomCode() {
         return roomCode;
     }
 
-    public void setRoomCode(int roomCode) {
+    public void setRoomCode(String roomCode) {
         this.roomCode = roomCode;
     }
 
