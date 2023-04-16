@@ -8,6 +8,7 @@ public class GameRoom {
     private User leader;
     private int numOfQuestions;
     private String questionTopic;
+    private int questionTopicId;
     private int roomCode;
     private String gameMode;
     private long leaderUserId;
@@ -46,6 +47,14 @@ public class GameRoom {
 
     public void setQuestionTopic(String questionTopic) {
         this.questionTopic = questionTopic;
+    }
+
+    public int getQuestionTopicId() {
+        return questionTopicId;
+    }
+
+    public void setQuestionTopicId(int questionTopicId) {
+        this.questionTopicId = questionTopicId;
     }
 
     public int getRoomCode() {
