@@ -51,7 +51,6 @@ public class GameRoomService {
 
     public GameRoom addPlayerToGameRoom(GameRoom gameRoom, long userId) {
         //list unmodifiable -> every time pass a new one
-        gameRoom.setMembers(List.of(gameRoom.getLeader()));
         User player = retrieveUserFromRepo(userId);
         List<User> members = Stream.concat(gameRoom.getMembers().stream(), Stream.of(player)).toList();
         gameRoom.setMembers(members);

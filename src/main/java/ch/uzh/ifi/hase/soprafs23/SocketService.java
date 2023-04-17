@@ -5,6 +5,7 @@ import ch.uzh.ifi.hase.soprafs23.constant.MessageType;
 import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
 import ch.uzh.ifi.hase.soprafs23.entity.Message;
 import ch.uzh.ifi.hase.soprafs23.entity.RoomCoordinator;
+import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.exceptions.RoomNotFoundException;
 import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs23.service.GameRoomService;
@@ -12,6 +13,8 @@ import com.corundumstudio.socketio.SocketIOClient;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 //this is for the websockets
 // from https://medium.com/folksdev/spring-boot-netty-socket-io-example-3f21fcc1147d
@@ -38,9 +41,9 @@ public class SocketService {
         }
     }
 
-    public void notifyMembers(String roomCode, SocketIOClient senderClient, GameRoom gameRoom){
+    public void notifyMembers(String roomCode, SocketIOClient senderClient, List<User> members){
         for ( SocketIOClient client : senderClient.getNamespace().getRoomOperations(roomCode).getClients()) {
-            client.sendEvent("new_player_joined", gameRoom);
+            client.sendEvent("new_player_joined", members);
         }
         }
 

@@ -8,6 +8,7 @@ import ch.uzh.ifi.hase.soprafs23.Game.Game;
 import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
 import ch.uzh.ifi.hase.soprafs23.entity.Message;
 import ch.uzh.ifi.hase.soprafs23.entity.RoomCoordinator;
+import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs23.service.GameRoomService;
 import com.corundumstudio.socketio.SocketIOServer;
@@ -17,6 +18,7 @@ import com.corundumstudio.socketio.listener.DisconnectListener;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 
@@ -108,10 +110,16 @@ public class SocketController {
                 senderClient.joinRoom(roomCode);
                 logger.info("room is joined!");
                 logger.info(roomCode);
+
+                //prepare the response:
                 GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
                 logger.info("sending room data");
+                //sends the room info to the newly joined client
                 socketService.sendRoomData(roomCode, "room_is_joined", senderClient, DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(gameRoom));
-                socketService.notifyMembers(roomCode,senderClient, gameRoom);
+
+                //notifies all clients that are already joined that there is a new member
+                List<User> members = gameRoom.getMembers();
+                socketService.notifyMembers(roomCode,senderClient, members);
             }
             catch (Exception e) {
                 logger.info("room could not be joined, either room was null or no room with that code exists");
