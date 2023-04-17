@@ -34,7 +34,9 @@ public class SocketService {
         gameRoomService.throwForbiddenWhenNoBearerToken(bearerToken);
         try {
             GameRoom room = roomCoordinator.getRoomByCode(roomCode);
-            gameRoomService.addPlayerToGameRoom(room, userId);
+            if (room.getLeaderUserId() != userId ){ //only add the new member if the member is not the game leader (the leader is added upon creation)
+                gameRoomService.addPlayerToGameRoom(room, userId);
+            }
         }
         catch (NotFoundException e) {
             throw new RoomNotFoundException("Unable to find game room with code: " + roomCode, e);
