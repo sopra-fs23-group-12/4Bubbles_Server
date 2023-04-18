@@ -23,10 +23,35 @@ import java.util.logging.Logger;
 
 
 /*
-    server.addConnectListener(onConnected()) => triggering when someone connect to the socket
-    server.addDisconnectListener(onDisconnected()) => triggering when someone disconnect from the socket
-    server.addEventListener(“send_message”, Message.class, onChatReceived()) => it’s corresponding socket.on(“send_message”), which means you can handle events by given event name and object class.
+    server.addConnectListener(onConnected()) => triggers when someone connect to the socket
+    server.addDisconnectListener(onDisconnected()) => triggers when someone disconnect from the socket
+    server.addEventListener(“send_message”, Message.class, onChatReceived()) => triggers if an event with the correct event name happens
     senderClient.getNamespace().getBroadcastOperations().sendEvent(“get_message”, data.getMessage()) => sending data to all of the clients, includes yourself
+
+ How to add a server endpoint:
+
+ 1. Know the incoming data & eventName
+
+ 2. Register the EventListener in SocketController with the correct eventName, incoming object and the name of the method you want it to trigger
+
+         server.addEventListener(*"Event_Name"*, *receive this object*, *method call*);
+
+ 3. Specify the method in the SocketController class, you can extract functionalities and add them to SocketService when useful or use methods already defined in SocketService
+
+        private DataListener<Message> *method name*() {
+            return (senderClient, data, ackSender) -> {
+                TODO ...
+     }
+
+
+ How to send a message to a / many client(s):
+
+ 1. You need to know the SocketIOClient for sending to one client and one member of a namespace for sending a message to a namespace, the roomCode for both, and the eventName
+
+ 2. Use the methods specified in SocketService; sendMessage() for sending a string, and sendRoomData() for sending an unspecified object (currently used for sending GameRoomData)
+
+ 3. Make sure the client listens to the event in a useEffect hook, using socket.on() ...
+
  */
 
 @Slf4j
@@ -57,9 +82,17 @@ public class SocketController {
         server.addEventListener("start_game", Message.class, socketStartGame());
         server.addEventListener("start_timer", Message.class, startTimer());
         server.addEventListener("join_room", Message.class, joinRoom());
+        //server.addEventListener("get_members", Message.class, getMembers());
 
 
 
+
+    }
+
+    private DataListener<Message> getMembers() {
+        return (senderClient, data, ackSender) -> {
+            socketService.sendMemberArray(data.getRoomCode(), senderClient);
+        };
     }
 
 
@@ -118,8 +151,7 @@ public class SocketController {
                 socketService.sendRoomData(roomCode, "room_is_joined", senderClient, DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(gameRoom));
 
                 //notifies all clients that are already joined that there is a new member
-                List<User> members = gameRoom.getMembers();
-                socketService.notifyMembers(roomCode,senderClient, members);
+                socketService.sendMemberArray(roomCode,senderClient);
             }
             catch (Exception e) {
                 logger.info("room could not be joined, either room was null or no room with that code exists");

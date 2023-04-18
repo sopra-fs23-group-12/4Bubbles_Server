@@ -43,10 +43,18 @@ public class SocketService {
         }
     }
 
-    public void notifyMembers(String roomCode, SocketIOClient senderClient, List<User> members){
-        for ( SocketIOClient client : senderClient.getNamespace().getRoomOperations(roomCode).getClients()) {
-            client.sendEvent("new_player_joined", members);
+    //send a list of all members to all members in a gameroom
+    public void sendMemberArray(String roomCode, SocketIOClient senderClient){
+        try{
+            GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
+            List<User> members = gameRoom.getMembers();
+            for ( SocketIOClient client : senderClient.getNamespace().getRoomOperations(roomCode).getClients()) {
+                client.sendEvent("joined_players", members);
+            }
+        } catch (Exception e){
+            System.out.printf("Exception occurred while sending user array: %s", e);
         }
+
         }
 
 
