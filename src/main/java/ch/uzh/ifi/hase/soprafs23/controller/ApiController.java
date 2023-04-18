@@ -58,7 +58,7 @@ public class ApiController {
     @GetMapping("/questions")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<QuestionGetDTO> getQuestions(@RequestParam int roomCode, @RequestHeader(value = "Authorization", required = false) String bearerToken){
+    public List<QuestionGetDTO> getQuestions(@RequestParam String roomCode, @RequestHeader(value = "Authorization", required = false) String bearerToken){
         throwForbiddenWhenNoBearerToken(bearerToken);
         List<QuestionGetDTO> questions = new ArrayList<QuestionGetDTO>();
         GameRoom room = new GameRoom();
