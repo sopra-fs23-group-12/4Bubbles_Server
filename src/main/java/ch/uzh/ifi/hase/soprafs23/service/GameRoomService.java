@@ -16,7 +16,8 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Objects;
-import java.util.Random;
+import java.security.SecureRandom;
+
 import java.util.stream.Stream;
 
 @Service
@@ -25,6 +26,7 @@ public class GameRoomService {
     //private final Logger log = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
+    private SecureRandom random = new SecureRandom();
 
     @Autowired
     public GameRoomService(@Qualifier("userRepository") UserRepository userRepository) {
@@ -36,7 +38,8 @@ public class GameRoomService {
     }
 
     public void initGameRoom(GameRoom gameRoom) {
-        gameRoom.setRoomCode(String.valueOf(new Random().nextInt(100000, 1000000)));
+
+        gameRoom.setRoomCode(random.nextInt(100000, 1000000));
         //list unmodifiable -> every time pass a new one
         gameRoom.setMembers(List.of(gameRoom.getLeader()));
 
