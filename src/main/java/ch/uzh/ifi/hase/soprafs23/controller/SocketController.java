@@ -1,14 +1,14 @@
-package ch.uzh.ifi.hase.soprafs23;
+package ch.uzh.ifi.hase.soprafs23.controller;
 
 
 //class to control websockets
 //from https://medium.com/folksdev/spring-boot-netty-socket-io-example-3f21fcc1147d
 
 import ch.uzh.ifi.hase.soprafs23.Game.Game;
+import ch.uzh.ifi.hase.soprafs23.service.SocketService;
 import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
 import ch.uzh.ifi.hase.soprafs23.entity.Message;
 import ch.uzh.ifi.hase.soprafs23.entity.RoomCoordinator;
-import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs23.service.GameRoomService;
 import com.corundumstudio.socketio.SocketIOServer;
@@ -18,7 +18,6 @@ import com.corundumstudio.socketio.listener.DisconnectListener;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.logging.Logger;
 
 
@@ -49,6 +48,7 @@ import java.util.logging.Logger;
  1. You need to know the SocketIOClient for sending to one client and one member of a namespace for sending a message to a namespace, the roomCode for both, and the eventName
 
  2. Use the methods specified in SocketService; sendMessage() for sending a string, and sendRoomData() for sending an unspecified object (currently used for sending GameRoomData)
+ or you can specify how you want to send things yourself and use the client.sendEvent() method. The client is an objet of the SocketIOClient class. (for example look at the implementation of sendMessage)
 
  3. Make sure the client listens to the event in a useEffect hook, using socket.on() ...
 
@@ -82,22 +82,10 @@ public class SocketController {
         server.addEventListener("start_game", Message.class, socketStartGame());
         server.addEventListener("start_timer", Message.class, startTimer());
         server.addEventListener("join_room", Message.class, joinRoom());
-        //server.addEventListener("get_members", Message.class, getMembers());
-
-
-
-
-    }
-
-    private DataListener<Message> getMembers() {
-        return (senderClient, data, ackSender) -> {
-            socketService.sendMemberArray(data.getRoomCode(), senderClient);
-        };
     }
 
 
-
-//call this method to start the timer for the first question
+    //example implementation on /websockets, call this method to start the timer
     private DataListener<Message> startTimer() {
         return (senderClient, data, ackSender) -> {
             logger.info( "timer has been started:");
@@ -105,6 +93,7 @@ public class SocketController {
             socketService.timerExample(data.getRoomCode(), senderClient);
         };
     }
+
 
     private DataListener<Message> socketStartGame() {
         return (senderClient, data, ackSender) -> {
@@ -116,6 +105,7 @@ public class SocketController {
         };
     }
 
+    //great to use for debugging, sends a message to every member of a namespace upon receiving a message
     private DataListener<Message> onChatReceived() {
         return (senderClient, data, ackSender) -> {
             System.out.println("message received:");
@@ -123,13 +113,13 @@ public class SocketController {
             logger.info(data.getMessage());
             logger.info(String.valueOf(data.getRoomCode()));
             socketService.sendMessage(String.valueOf(data.getRoomCode()),"get_message", senderClient, "hello this is the server");
-            socketService.sendMessage(String.valueOf(data.getRoomCode()),"timer_message", senderClient, "your time has come");
 
         };
     }
 
 
     //this method is only called once the gameroom has been created.
+    //join a gameRoom and the socketio namespace with the same code
     private DataListener<Message> joinRoom() {
         return (senderClient, data, ackSender) -> {
 
@@ -139,7 +129,9 @@ public class SocketController {
 
             //if a room is specified (and exists) and passed with the url, you sign the user into the room. Otherwise, a room is created that has the name of the socket id
             try {
+                //join the gameRoom (server entitiy)
                 socketService.joinRoom(roomCode, userId, bearerToken);
+                //join the socket namespace
                 senderClient.joinRoom(roomCode);
                 logger.info("room is joined!");
                 logger.info(roomCode);

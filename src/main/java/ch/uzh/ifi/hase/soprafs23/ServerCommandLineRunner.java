@@ -1,6 +1,6 @@
 package ch.uzh.ifi.hase.soprafs23;
 
-//this clas is for the websockets
+//this class is for the websockets
 
 // class copied from https://github.com/jamesjieye/netty-socketio.spring
 // also mentioned in the tutorial https://medium.com/folksdev/spring-boot-netty-socket-io-example-3f21fcc1147d
