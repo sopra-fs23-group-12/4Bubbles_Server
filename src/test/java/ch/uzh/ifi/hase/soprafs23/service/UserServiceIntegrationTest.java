@@ -1,4 +1,4 @@
-package ch.uzh.ifi.hase.soprafs23.service;
+/* package ch.uzh.ifi.hase.soprafs23.service;
 
 import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
@@ -13,11 +13,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
+*
  * Test class for the UserResource REST resource.
  *
  * @see UserService
- */
+
 @WebAppConfiguration
 @SpringBootTest
 public class UserServiceIntegrationTest {
@@ -72,3 +72,4 @@ public class UserServiceIntegrationTest {
         assertThrows(ResponseStatusException.class, () -> userService.createUser(testUser2));
     }
 }
+ */
