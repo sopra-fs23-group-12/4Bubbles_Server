@@ -39,7 +39,7 @@ public class GameRoomService {
 
     public void initGameRoom(GameRoom gameRoom) {
 
-        gameRoom.setRoomCode(random.nextInt(100000, 1000000));
+        gameRoom.setRoomCode(Integer.toString(random.nextInt(100000, 1000000)));
         //list unmodifiable -> every time pass a new one
         gameRoom.setMembers(List.of(gameRoom.getLeader()));
 
