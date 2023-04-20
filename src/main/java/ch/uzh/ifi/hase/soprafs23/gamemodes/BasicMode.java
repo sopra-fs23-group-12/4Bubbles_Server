@@ -1,4 +1,4 @@
-package ch.uzh.ifi.hase.soprafs23.GameModes;
+package ch.uzh.ifi.hase.soprafs23.gamemodes;
 
 import java.util.HashMap;
 import java.util.List;

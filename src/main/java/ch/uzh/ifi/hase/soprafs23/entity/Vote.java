@@ -1,17 +1,18 @@
-package ch.uzh.ifi.hase.soprafs23.game.stateStorage;
+package ch.uzh.ifi.hase.soprafs23.entity;
+
 
 public class Vote {
 
-    private String playerName;
+    private long playerId;
     private String vote;
     private int time;
 
-    public String getPlayerName() {
-        return playerName;
+    public long getPlayerId() {
+        return playerId;
     }
 
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
+    public void setPlayerId(long playerId) {
+        this.playerId = playerId;
     }
 
     public String getVote() {
