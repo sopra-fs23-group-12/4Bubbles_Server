@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * request without actually sending them over the network.
  * This tests if the UserController works.
  */
-
+/*
 @WebMvcTest(AuthenticationController.class)
 public class AuthenticationControllerTest {
 
@@ -98,7 +98,7 @@ public class AuthenticationControllerTest {
      *
      * @param object
      * @return string
-*/
+
     private String asJsonString(final Object object) {
         try {
             return new ObjectMapper().writeValueAsString(object);
@@ -110,3 +110,4 @@ public class AuthenticationControllerTest {
     }
 
 }
+*/

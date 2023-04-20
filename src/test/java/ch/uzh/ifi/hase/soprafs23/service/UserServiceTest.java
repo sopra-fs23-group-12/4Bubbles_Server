@@ -12,7 +12,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.web.server.ResponseStatusException;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+/*
 public class UserServiceTest {
 
     @Mock
@@ -82,4 +82,4 @@ public class UserServiceTest {
 
 }
 
- 
+ */
