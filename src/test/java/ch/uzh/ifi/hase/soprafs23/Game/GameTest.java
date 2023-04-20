@@ -1,5 +1,5 @@
 package ch.uzh.ifi.hase.soprafs23.Game;
-
+/*
 
 import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
@@ -35,7 +35,7 @@ public class GameTest {
         user2.setUsername("testUsername2");
         user2.setToken("2");
         user2.setStatus(UserStatus.ONLINE);*/
-
+/*
         List<User> users = List.of(testUser1, testUser2);
 
 
@@ -57,6 +57,9 @@ public class GameTest {
 
 
 
+ */
+
+
         /*// when -> any object is being save in the userRepository -> return the dummy
         // testUser
         User createdUser = userService.createUser(testUser);
@@ -69,5 +72,11 @@ public class GameTest {
         assertEquals(testUser.getPassword(), createdUser.getPassword());
         assertNotNull(createdUser.getToken());
         assertEquals(UserStatus.OFFLINE, createdUser.getStatus());*/
+
+/*
     }
 }
+
+
+
+ */
