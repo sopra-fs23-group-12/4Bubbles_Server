@@ -1,8 +1,8 @@
-package ch.uzh.ifi.hase.soprafs23.Game;
-
-import ch.uzh.ifi.hase.soprafs23.Game.stateStorage.Question;
+package ch.uzh.ifi.hase.soprafs23.game;
 
 import java.util.List;
+
+import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
 
 public class MockTriviaCaller {
     //create 1 Mock Trivia Question

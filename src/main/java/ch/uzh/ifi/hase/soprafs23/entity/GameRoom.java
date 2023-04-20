@@ -2,7 +2,7 @@ package ch.uzh.ifi.hase.soprafs23.entity;
 
 import java.util.List;
 
-import ch.uzh.ifi.hase.soprafs23.Game.stateStorage.Question;
+import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
 
 public class GameRoom {
 

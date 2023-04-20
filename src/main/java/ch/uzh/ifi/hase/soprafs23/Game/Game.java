@@ -1,10 +1,11 @@
-package ch.uzh.ifi.hase.soprafs23.Game;
+package ch.uzh.ifi.hase.soprafs23.game;
 
-import ch.uzh.ifi.hase.soprafs23.Game.stateStorage.Question;
-import ch.uzh.ifi.hase.soprafs23.Game.stateStorage.Timer;
-import ch.uzh.ifi.hase.soprafs23.Game.stateStorage.TimerController;
-import ch.uzh.ifi.hase.soprafs23.Game.stateStorage.Vote;
 import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
+import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
+import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Timer;
+import ch.uzh.ifi.hase.soprafs23.game.stateStorage.TimerController;
+import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Vote;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,11 +13,10 @@ import java.util.List;
 
 public class Game {
     private GameRoom gameRoom;
+
     private List<Question> questions;
 
     private GameRanking ranking;
-
-    private MockTriviaCaller triviaCaller;
 
     private int roundCounter;
 
@@ -27,11 +27,10 @@ public class Game {
     public Game(GameRoom gameRoom){
         this.gameRoom = gameRoom;
         this.ranking  = new GameRanking(gameRoom.getMembers());
-        this.triviaCaller = new MockTriviaCaller();
-        this.questions = triviaCaller.getTriviaQuestions();
+        this.questions = this.gameRoom.getQuestions();
         this.timer = new TimerController();
         this.voting = new MockVoting(timer);
-        this.roundCounter = 1;
+        this.roundCounter = this.questions.size();
     }
 
 

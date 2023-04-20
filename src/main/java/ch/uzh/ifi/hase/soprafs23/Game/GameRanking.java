@@ -1,8 +1,8 @@
-package ch.uzh.ifi.hase.soprafs23.Game;
+package ch.uzh.ifi.hase.soprafs23.game;
 
-import ch.uzh.ifi.hase.soprafs23.Game.stateStorage.Question;
-import ch.uzh.ifi.hase.soprafs23.Game.stateStorage.Vote;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
+import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
+import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Vote;
 
 import java.util.HashMap;
 import java.util.List;

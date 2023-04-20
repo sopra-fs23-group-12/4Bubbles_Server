@@ -6,14 +6,14 @@ import java.util.List;
 import ch.uzh.ifi.hase.soprafs23.game.stateStorage.TimerController;
 import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Vote;
 
-public class MockVoting {
-        private List<Vote> votes = new ArrayList<Vote>();
+public class VoteController {
+    private List<Vote> votes = new ArrayList<Vote>();
 
         private boolean votingOpen = true;
 
         private TimerController timer;
 
-        public MockVoting(TimerController timer){
+        public VoteController(TimerController timer){
             this.timer = timer;
         }
 
@@ -53,9 +53,4 @@ public class MockVoting {
         public void resetVotes(){
             this.votes = new ArrayList<Vote>();
         }
-
-
-
-
-
 }

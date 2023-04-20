@@ -1,14 +1,11 @@
 package ch.uzh.ifi.hase.soprafs23.controller;
 
 
-//class to control websockets
-//from https://medium.com/folksdev/spring-boot-netty-socket-io-example-3f21fcc1147d
-
-import ch.uzh.ifi.hase.soprafs23.Game.Game;
 import ch.uzh.ifi.hase.soprafs23.service.SocketService;
 import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
 import ch.uzh.ifi.hase.soprafs23.entity.Message;
 import ch.uzh.ifi.hase.soprafs23.entity.RoomCoordinator;
+import ch.uzh.ifi.hase.soprafs23.game.Game;
 import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs23.service.GameRoomService;
 import com.corundumstudio.socketio.SocketIOServer;

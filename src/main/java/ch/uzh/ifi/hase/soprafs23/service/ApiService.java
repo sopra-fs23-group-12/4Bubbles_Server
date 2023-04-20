@@ -18,7 +18,7 @@ import org.json.JSONObject;
 
 import org.springframework.stereotype.Service;
 
-import ch.uzh.ifi.hase.soprafs23.Game.stateStorage.Question;
+import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.TopicGetDTO;
 
 
