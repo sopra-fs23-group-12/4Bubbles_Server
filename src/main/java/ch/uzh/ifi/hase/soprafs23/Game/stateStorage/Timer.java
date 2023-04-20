@@ -24,7 +24,6 @@ public class Timer {
                 System.out.println("Remaining time: " + (timeInSeconds-elapsedTimeInSeconds) + " seconds");
             }
         } catch (InterruptedException e) {
-            e.printStackTrace();
         }
         isRunning = false;
     }

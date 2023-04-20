@@ -1,6 +1,6 @@
 package ch.uzh.ifi.hase.soprafs23.controller;
 
-/*
+
 import java.util.Collections;
 import java.util.List;
 
@@ -60,7 +60,7 @@ public class ApiControllerTest {
     }
     }
 
- */
+
 
 
 
