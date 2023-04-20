@@ -2,9 +2,13 @@ package ch.uzh.ifi.hase.soprafs23.entity;
 
 import java.util.List;
 
+import ch.uzh.ifi.hase.soprafs23.Game.stateStorage.Question;
+
 public class GameRoom {
 
+    //Compare with GameRoomDTOs and check duplications
     private List<User> members;
+    private List<Question> questions;
     private User leader;
     private int numOfQuestions;
     private String questionTopic;
@@ -75,6 +79,14 @@ public class GameRoom {
 
     public void setMembers(List<User> members) {
         this.members = members;
+    }
+
+    public List<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
     }
 }
 

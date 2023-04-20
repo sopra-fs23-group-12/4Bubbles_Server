@@ -12,7 +12,7 @@ public class Question {
 
     private String question;
     private List<String> answers;
-    private int numOfCorrectAnswer;
+    private String correctAnswer;
 
 
     public String getQuestion() {
@@ -31,12 +31,12 @@ public class Question {
         this.answers = answers;
     }
 
-    public int getNumOfCorrectAnswer() {
-        return numOfCorrectAnswer;
+    public String getCorrectAnswer() {
+        return correctAnswer;
     }
 
-    public void setNumOfCorrectAnswer(int numOfCorrectAnswer) {
-        this.numOfCorrectAnswer = numOfCorrectAnswer;
+    public void setCorrectAnswer(String correctAnswer) {
+        this.correctAnswer = correctAnswer;
     }
 
 

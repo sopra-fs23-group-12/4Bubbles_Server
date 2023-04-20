@@ -8,16 +8,17 @@ import java.net.URL;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import org.springframework.stereotype.Service;
 
-
-import ch.uzh.ifi.hase.soprafs23.rest.dto.QuestionGetDTO;
+import ch.uzh.ifi.hase.soprafs23.Game.stateStorage.Question;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.TopicGetDTO;
 
 
@@ -40,14 +41,18 @@ public class ApiService {
         return topicList;
     }
 
-    public List<QuestionGetDTO> getQuestionsFromApi(String url) throws IOException {
+    public List<Question> getQuestionsFromApi(String url) throws IOException {
         JSONObject questions = getJSON(url);
-        List<QuestionGetDTO> questionList = new ArrayList<>();
+        List<Question> questionList = new ArrayList<>();
         for (Object q : questions.getJSONArray("results")) {
-            QuestionGetDTO question = new QuestionGetDTO();
+            Question question = new Question();
             question.setQuestion(((JSONObject) q).getString("question"));
-            question.setCorrectAnswer(((JSONObject) q).getString("correct_answer"));
-            question.setIncorrectAnswers(((JSONObject) q).getJSONArray("incorrect_answers").toList());
+            String correctAnswer = ((JSONObject) q).getString("correct_answer");
+            question.setCorrectAnswer(correctAnswer);
+            List<String> answers = turnToStrings(((JSONObject) q).getJSONArray("incorrect_answers"));
+            answers.add(correctAnswer);
+            Collections.shuffle(answers);
+            question.setAnswers(answers);
             questionList.add(question);
         }
 
@@ -75,10 +80,24 @@ public class ApiService {
         
     }
 
+    private List<String> turnToStrings(JSONArray jsonArray) {
+        List<String> list = new ArrayList<>();
+        for (Object o : jsonArray) {
+            list.add(o.toString());
+        }
+        return list;
+    }
 
-    /* public static void main(String[] args) throws IOException {
+
+    public static void main(String[] args) throws IOException {
         ApiService apiService = new ApiService();
-        System.out.println(apiService.getTQuestionsFromApi(10,9));
-    } */
+        String url = "https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple";
+        for (Question q : apiService.getQuestionsFromApi(url)) {
+            System.out.println(q.getQuestion());
+            System.out.println(q.getAnswers());
+            System.out.println(q.getCorrectAnswer());
+        }
+        //System.out.println(apiService.getQuestionsFromApi(url));
+    }
     
 }

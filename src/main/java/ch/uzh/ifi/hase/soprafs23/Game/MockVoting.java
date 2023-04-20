@@ -26,9 +26,9 @@ public class MockVoting {
             Thread thread = new Thread(() -> {
                 try {
                     Thread.sleep(3000);
-                    setVote("playerName1",2);
+                    setVote("playerName1","Nigeria");
                     Thread.sleep(2000);
-                    setVote("playerName2", 4);
+                    setVote("playerName2", "Ukraine");
                 }
                 catch (InterruptedException e) {
                     throw new RuntimeException(e);
@@ -39,11 +39,11 @@ public class MockVoting {
 
         //later transfer to post request
 
-        public void setVote(String playerName, int voteNum){
+        public void setVote(String playerName, String voteAnswer){
             if(timer.getTimer().isRunning()) {
                 Vote vote = new Vote();
                 vote.setTime(timer.getTimer().getRemainingTimeInSeconds());
-                vote.setVoteNum(voteNum);
+                vote.setVote(voteAnswer);
                 vote.setPlayerName(playerName);
                 votes.add(vote);
             }

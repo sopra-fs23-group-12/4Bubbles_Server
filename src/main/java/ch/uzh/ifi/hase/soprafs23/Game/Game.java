@@ -50,7 +50,7 @@ public class Game {
     //receive the votes and broadcast them to the other players
     //send the correct answers
     public void playRound(){
-        System.out.println(questions.get(roundCounter).getQuestion() + ": " + questions.get(roundCounter).getAnswers() + " " + questions.get(roundCounter).getNumOfCorrectAnswer());
+        System.out.println(questions.get(roundCounter).getQuestion() + ": " + questions.get(roundCounter).getAnswers() + " " + questions.get(roundCounter).getCorrectAnswer());
         //in a new thread allow to set votes
         voting.initMockVotes();
         timer.startTimer();

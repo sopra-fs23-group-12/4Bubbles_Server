@@ -3,7 +3,7 @@ package ch.uzh.ifi.hase.soprafs23.Game.stateStorage;
 public class Vote {
 
     private String playerName;
-    private int voteNum;
+    private String vote;
     private int time;
 
     public String getPlayerName() {
@@ -14,12 +14,12 @@ public class Vote {
         this.playerName = playerName;
     }
 
-    public int getVoteNum() {
-        return voteNum;
+    public String getVote() {
+        return vote;
     }
 
-    public void setVoteNum(int voteNum) {
-        this.voteNum = voteNum;
+    public void setVote(String vote) {
+        this.vote = vote;
     }
 
     public int getTime() {
