@@ -1,6 +1,6 @@
 package ch.uzh.ifi.hase.soprafs23.controller;
 
-
+/*
 import java.util.Collections;
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class ApiControllerTest {
     @MockBean
     private ApiService apiService;
     
-    /* @Test
+    @Test
     public void getTopicsTest_successful() throws Exception {
         //given
         TopicGetDTO topic = new TopicGetDTO();
@@ -57,6 +57,11 @@ public class ApiControllerTest {
             .andExpect(jsonPath("$[0].topicName", is("TestTopic")));
 
             
-    } */
+    }
+    }
 
-}
+ */
+
+
+
+
