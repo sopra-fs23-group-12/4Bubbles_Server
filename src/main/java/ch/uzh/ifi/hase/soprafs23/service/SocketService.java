@@ -7,8 +7,7 @@ import ch.uzh.ifi.hase.soprafs23.entity.Message;
 import ch.uzh.ifi.hase.soprafs23.entity.RoomCoordinator;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.exceptions.RoomNotFoundException;
-import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
-import ch.uzh.ifi.hase.soprafs23.service.GameRoomService;
+
 import com.corundumstudio.socketio.SocketIOClient;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -67,7 +66,20 @@ public class SocketService {
              //           new Message(MessageType.SERVER, message));
             client.sendEvent(eventName, new Message(MessageType.SERVER, message));
             }
+    }
+
+    public void sendAnswers(String roomCode, SocketIOClient senderClient, String answers) {
+        for ( SocketIOClient client : senderClient.getNamespace().getRoomOperations(roomCode).getClients()) {
+            client.sendEvent("send_Answers", new Message(MessageType.SERVER, answers));
         }
+    }
+
+    public void sendQuestion(String roomCode, SocketIOClient senderClient, String question) {
+        for ( SocketIOClient client : senderClient.getNamespace().getRoomOperations(roomCode).getClients()) {
+            client.sendEvent("send_Question", new Message(MessageType.SERVER, question));
+            }
+    }
+
 
         //this is used to send a data package for the data hook
     public void sendRoomData(String roomCode, String eventName, SocketIOClient senderClient, Object data) {
@@ -100,6 +112,7 @@ public class SocketService {
             counter--;
         }
         for (SocketIOClient client : senderClient.getNamespace().getRoomOperations(room).getClients()){
+            System.out.println("time over");
             client.sendEvent("timer_count", new Message(MessageType.SERVER, "time over"));
         }        }
     }

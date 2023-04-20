@@ -1,13 +1,15 @@
 package ch.uzh.ifi.hase.soprafs23.game;
 
 import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
+import ch.uzh.ifi.hase.soprafs23.entity.Vote;
 import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
-import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Timer;
-import ch.uzh.ifi.hase.soprafs23.game.stateStorage.TimerController;
-import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Vote;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import ch.uzh.ifi.hase.soprafs23.game.stateStorage.TimerController;
+import ch.uzh.ifi.hase.soprafs23.service.SocketService;
+
+import com.corundumstudio.socketio.SocketIOClient;
+import com.corundumstudio.socketio.SocketIOServer;
+
 
 import java.util.List;
 
@@ -20,17 +22,24 @@ public class Game {
 
     private int roundCounter;
 
-    private MockVoting voting;
+    private VoteController voting;
 
     private TimerController timer;
 
-    public Game(GameRoom gameRoom){
+    private SocketService socketService;
+
+    private SocketIOClient clients;
+
+    public Game(GameRoom gameRoom, SocketService socketService, SocketIOClient clients, SocketIOServer server){
         this.gameRoom = gameRoom;
+        this.socketService = socketService;
+        this.clients = clients;
         this.ranking  = new GameRanking(gameRoom.getMembers());
         this.questions = this.gameRoom.getQuestions();
         this.timer = new TimerController();
-        this.voting = new MockVoting(timer);
-        this.roundCounter = this.questions.size();
+        this.voting = new VoteController(timer, server);
+        this.roundCounter = this.gameRoom.getQuestions().size();
+
     }
 
 
@@ -49,20 +58,33 @@ public class Game {
     //receive the votes and broadcast them to the other players
     //send the correct answers
     public void playRound(){
-        System.out.println(questions.get(roundCounter).getQuestion() + ": " + questions.get(roundCounter).getAnswers() + " " + questions.get(roundCounter).getCorrectAnswer());
-        //in a new thread allow to set votes
-        voting.initMockVotes();
+        sendQuestion();
+        
+        sendAnswers();
         timer.startTimer();
         List<Vote> votes = voting.getVotes();
-        ranking.updateRanking(questions.get(roundCounter), votes);
+        socketService.sendMessage(this.gameRoom.getRoomCode(),"send_Ranking", clients,  ranking.updateRanking(questions.get(roundCounter-1), votes).values().toString());
+        timer.resetTimer();
+    }
+
+    private void sendQuestion(){
+        socketService.sendMessage(this.gameRoom.getRoomCode(),"send_Question", clients,  gameRoom.getQuestions().get(roundCounter-1).getQuestion());
+
+        timer.startQuestionTimer();
+        timer.resetQuestionTimer();
+    }
+
+
+    //list of answers is converted to a string to coply with constructor of Message Type
+    //must be converted back to list in frontend
+    private void sendAnswers(){
+        socketService.sendMessage(this.gameRoom.getRoomCode(),"send_Answers", clients,  gameRoom.getQuestions().get(roundCounter-1).getAnswers().toString());
+        
+        
     }
 
     public int getRemainingTime(){
         return this.timer.getTimer().getRemainingTimeInSeconds();
-    }
-
-    public MockVoting getVotingSystem(){
-        return this.voting;
     }
 
 

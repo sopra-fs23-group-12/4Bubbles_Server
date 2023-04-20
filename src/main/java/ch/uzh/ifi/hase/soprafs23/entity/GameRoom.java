@@ -29,6 +29,10 @@ public class GameRoom {
         return members;
     }
 
+    public void setMembers(List<User> members) {
+        this.members = members;
+    }
+
     public User getLeader() {
         return leader;
     }
@@ -75,10 +79,6 @@ public class GameRoom {
 
     public void setGameMode(String gameMode) {
         this.gameMode = gameMode;
-    }
-
-    public void setMembers(List<User> members) {
-        this.members = members;
     }
 
     public List<Question> getQuestions() {

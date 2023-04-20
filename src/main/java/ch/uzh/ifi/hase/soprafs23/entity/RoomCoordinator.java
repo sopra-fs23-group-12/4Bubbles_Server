@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 @Component
 public class RoomCoordinator {
-    ArrayList<GameRoom> rooms;
+    private final ArrayList<GameRoom> rooms;
     private static RoomCoordinator INSTANCE;
 
     public static RoomCoordinator getInstance() {

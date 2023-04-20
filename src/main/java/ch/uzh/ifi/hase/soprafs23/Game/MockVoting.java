@@ -1,10 +1,10 @@
-package ch.uzh.ifi.hase.soprafs23.game;
+/* package ch.uzh.ifi.hase.soprafs23.game;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.uzh.ifi.hase.soprafs23.entity.Vote;
 import ch.uzh.ifi.hase.soprafs23.game.stateStorage.TimerController;
-import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Vote;
 
 public class MockVoting {
         private List<Vote> votes = new ArrayList<Vote>();
@@ -41,7 +41,7 @@ public class MockVoting {
                 Vote vote = new Vote();
                 vote.setTime(timer.getTimer().getRemainingTimeInSeconds());
                 vote.setVote(voteAnswer);
-                vote.setPlayerName(playerName);
+                vote.setPlayerId(playerName);
                 votes.add(vote);
             }
         }
@@ -59,3 +59,4 @@ public class MockVoting {
 
 
 }
+ */

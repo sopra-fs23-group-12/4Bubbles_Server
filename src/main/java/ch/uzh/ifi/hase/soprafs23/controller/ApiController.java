@@ -31,7 +31,7 @@ public class ApiController {
 
     public ApiController(ApiService apiService, RoomCoordinator roomCoordinator) {
         this.apiService = apiService;
-        this.roomCoordinator = roomCoordinator;
+        this.roomCoordinator = RoomCoordinator.getInstance();
     }
 
 
@@ -65,6 +65,8 @@ public class ApiController {
         try {
             room = roomCoordinator.getRoomByCode(roomCode);
         } catch (NotFoundException e) {
+            //Handle error better in future
+            System.out.println("Room not found");
         }
         String apiURL = String.format(ApiUrls.QUESTIONS.url, room.getNumOfQuestions(), room.getQuestionTopicId());
         

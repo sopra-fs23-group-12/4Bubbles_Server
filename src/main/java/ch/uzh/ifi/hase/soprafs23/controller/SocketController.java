@@ -88,7 +88,7 @@ public class SocketController {
             logger.info( "timer has been started:");
             logger.info(data.getRoomCode());
             socketService.timerExample(data.getRoomCode(), senderClient);
-        };
+         };
     }
 
 
@@ -97,7 +97,7 @@ public class SocketController {
             GameRoom gameRoom = roomCoordinator.getRoomByCode(data.getRoomCode());
             logger.info( "This game was started:");
             logger.info(String.valueOf(data.getRoomCode()));
-            Game game = new Game(gameRoom);
+            Game game = new Game(gameRoom, this.socketService, senderClient, this.server);
             game.startGame();
         };
     }
@@ -109,6 +109,7 @@ public class SocketController {
             logger.info(senderClient.getHandshakeData().getHttpHeaders().toString());
             logger.info(data.getMessage());
             logger.info(String.valueOf(data.getRoomCode()));
+            logger.info(String.valueOf(data.getUserId()));
             socketService.sendMessage(String.valueOf(data.getRoomCode()),"get_message", senderClient, "hello this is the server");
 
         };

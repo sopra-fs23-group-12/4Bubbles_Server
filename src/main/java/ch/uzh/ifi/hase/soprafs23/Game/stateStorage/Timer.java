@@ -1,8 +1,5 @@
 package ch.uzh.ifi.hase.soprafs23.game.stateStorage;
 
-
-import org.springframework.stereotype.Component;
-
 public class Timer {
     private final int timeInSeconds;
     private int elapsedTimeInSeconds;
