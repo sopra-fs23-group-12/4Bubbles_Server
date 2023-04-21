@@ -1,8 +1,12 @@
 package ch.uzh.ifi.hase.soprafs23.game.stateStorage;
 
+
+import ch.uzh.ifi.hase.soprafs23.service.SocketBasics;
+
 public class Timer {
     private final int timeInSeconds;
     private int elapsedTimeInSeconds;
+    SocketBasics socketBasics = new SocketBasics();
 
     private boolean isRunning;
 
@@ -12,13 +16,23 @@ public class Timer {
         this.elapsedTimeInSeconds = 0;
     }
 
-    public void start() {
+    public void start(String roomCode) {
         try {
             for (int i = timeInSeconds; i > 0; i--) {
                 isRunning = true;
                 Thread.sleep(1000);
                 elapsedTimeInSeconds++;
                 System.out.println("Remaining time: " + (timeInSeconds-elapsedTimeInSeconds) + " seconds");
+                try {
+                    System.out.println("Remaining time: " + (timeInSeconds - elapsedTimeInSeconds) + " seconds");
+                   
+                    socketBasics.sendObject(roomCode, "timer_count", i);
+                    
+                }
+                catch (Exception e){
+                    System.out.print("room you want to set the timer in does not exist");
+                    
+                }
             }
         } catch (InterruptedException e) {
             e.printStackTrace();

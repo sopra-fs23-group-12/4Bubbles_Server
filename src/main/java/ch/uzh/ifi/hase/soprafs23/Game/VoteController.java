@@ -9,6 +9,7 @@ import com.corundumstudio.socketio.listener.DataListener;
 import ch.uzh.ifi.hase.soprafs23.entity.Vote;
 import ch.uzh.ifi.hase.soprafs23.game.stateStorage.TimerController;
 
+//set instance in socketController so that server does not need to be passed arround all the time
 public class VoteController {
     private List<Vote> votes = new ArrayList<Vote>();
 

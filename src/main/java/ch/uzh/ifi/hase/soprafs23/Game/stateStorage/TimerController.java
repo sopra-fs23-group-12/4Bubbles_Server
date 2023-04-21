@@ -13,12 +13,12 @@ public class TimerController {
         return timer;
     }
 
-    public void startTimer(){
-        timer.start();
+    public void startTimer(String roomCode){
+        timer.start(roomCode);
     }
 
-    public void startQuestionTimer(){
-        questionTimer.start();
+    public void startQuestionTimer(String roomCode){
+        questionTimer.start(roomCode);
     }
 
     public void resetQuestionTimer(){

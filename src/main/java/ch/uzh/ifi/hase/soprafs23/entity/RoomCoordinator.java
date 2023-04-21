@@ -18,7 +18,7 @@ public class RoomCoordinator {
         return INSTANCE;
     }
 
-    public RoomCoordinator() {
+    private RoomCoordinator() {
         this.rooms = new ArrayList<GameRoom>();
     }
 

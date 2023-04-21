@@ -97,7 +97,7 @@ public class SocketController {
             GameRoom gameRoom = roomCoordinator.getRoomByCode(data.getRoomCode());
             logger.info( "This game was started:");
             logger.info(String.valueOf(data.getRoomCode()));
-            Game game = new Game(gameRoom, this.socketService, senderClient, this.server);
+            Game game = new Game(gameRoom, this.server);
             game.startGame();
         };
     }
@@ -110,7 +110,7 @@ public class SocketController {
             logger.info(data.getMessage());
             logger.info(String.valueOf(data.getRoomCode()));
             logger.info(String.valueOf(data.getUserId()));
-            socketService.sendMessage(String.valueOf(data.getRoomCode()),"get_message", senderClient, "hello this is the server");
+            socketService.sendMessage(String.valueOf(data.getRoomCode()),"get_message", "hello this is the server");
 
         };
     }
@@ -128,7 +128,7 @@ public class SocketController {
             //if a room is specified (and exists) and passed with the url, you sign the user into the room. Otherwise, a room is created that has the name of the socket id
             try {
                 //join the gameRoom (server entitiy)
-                socketService.joinRoom(roomCode, userId, bearerToken);
+                socketService.joinRoom(roomCode, userId, bearerToken, senderClient);
                 //join the socket namespace
                 senderClient.joinRoom(roomCode);
                 logger.info("room is joined!");
@@ -138,7 +138,7 @@ public class SocketController {
                 GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
                 logger.info("sending room data");
                 //sends the room info to the newly joined client
-                socketService.sendRoomData(roomCode, "room_is_joined", senderClient, DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(gameRoom));
+                socketService.sendObject(roomCode, "room_is_joined", DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(gameRoom));
 
                 //notifies all clients that are already joined that there is a new member
                 socketService.sendMemberArray(roomCode,senderClient);
@@ -166,7 +166,7 @@ public class SocketController {
             logger.info("session id was made into a room");
             logger.info("Socket ID[{}]  Connected to socket");
             logger.info(roomCode);
-            socketService.sendMessage(roomCode, "get_message", senderClient, String.format("single namespace: joined room: %s", roomCode));
+            socketService.sendObject(roomCode, "get_message", String.format("single namespace: joined room: %s", roomCode));
 
         };
 

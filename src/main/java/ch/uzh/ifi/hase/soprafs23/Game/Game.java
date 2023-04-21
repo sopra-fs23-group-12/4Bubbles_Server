@@ -5,6 +5,7 @@ import ch.uzh.ifi.hase.soprafs23.entity.Vote;
 import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
 
 import ch.uzh.ifi.hase.soprafs23.game.stateStorage.TimerController;
+import ch.uzh.ifi.hase.soprafs23.service.SocketBasics;
 import ch.uzh.ifi.hase.soprafs23.service.SocketService;
 
 import com.corundumstudio.socketio.SocketIOClient;
@@ -26,14 +27,11 @@ public class Game {
 
     private TimerController timer;
 
-    private SocketService socketService;
+    private final SocketBasics socketBasics = new SocketBasics();
 
-    private SocketIOClient clients;
 
-    public Game(GameRoom gameRoom, SocketService socketService, SocketIOClient clients, SocketIOServer server){
+    public Game(GameRoom gameRoom, SocketIOServer server){
         this.gameRoom = gameRoom;
-        this.socketService = socketService;
-        this.clients = clients;
         this.ranking  = new GameRanking(gameRoom.getMembers());
         this.questions = this.gameRoom.getQuestions();
         this.timer = new TimerController();
@@ -46,6 +44,7 @@ public class Game {
 
     public void startGame(){
         //call triviaCaller with configs that are specified in gameRoom
+        socketBasics.sendObject(this.gameRoom.getRoomCode(),"game_started",  "");
         while(roundCounter > 0){
             System.out.println("Question" + roundCounter);
             playRound();
@@ -63,16 +62,16 @@ public class Game {
         
         
         sendAnswers();
-        timer.startTimer();
+        timer.startTimer(this.gameRoom.getRoomCode());
         List<Vote> votes = voting.getVotes();
-        socketService.sendMessage(this.gameRoom.getRoomCode(),"get_Ranking", clients,  ranking.updateRanking(questions.get(roundCounter-1), votes).values().toString());
+        socketBasics.sendObject(this.gameRoom.getRoomCode(),"get_Ranking",  ranking.updateRanking(questions.get(roundCounter-1), votes).values().toString());
         timer.resetTimer();
     }
 
     private void sendQuestion(){
-        socketService.sendMessage(this.gameRoom.getRoomCode(),"get_Question", clients,  gameRoom.getQuestions().get(roundCounter-1).getQuestion());
+        socketBasics.sendObject(this.gameRoom.getRoomCode(),"get_Question",  gameRoom.getQuestions().get(roundCounter-1).getQuestion());
 
-        timer.startQuestionTimer();
+        timer.startQuestionTimer(this.gameRoom.getRoomCode());
         timer.resetQuestionTimer();
     }
 
@@ -80,7 +79,7 @@ public class Game {
     //list of answers is converted to a string to coply with constructor of Message Type
     //must be converted back to list in frontend
     private void sendAnswers(){
-        socketService.sendMessage(this.gameRoom.getRoomCode(),"get_Answers", clients,  gameRoom.getQuestions().get(roundCounter-1).getAnswers().toString());
+        socketBasics.sendObject(this.gameRoom.getRoomCode(),"get_Answers",  gameRoom.getQuestions().get(roundCounter-1).getAnswers().toString());
         
         
     }
