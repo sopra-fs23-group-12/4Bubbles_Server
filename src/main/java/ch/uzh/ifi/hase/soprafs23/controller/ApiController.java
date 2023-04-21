@@ -19,7 +19,6 @@ import ch.uzh.ifi.hase.soprafs23.constant.ApiUrls;
 import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
 import ch.uzh.ifi.hase.soprafs23.entity.RoomCoordinator;
 import ch.uzh.ifi.hase.soprafs23.exceptions.ApiConnectionError;
-import ch.uzh.ifi.hase.soprafs23.rest.dto.QuestionGetDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.TopicGetDTO;
 import ch.uzh.ifi.hase.soprafs23.service.ApiService;
 import javassist.NotFoundException;

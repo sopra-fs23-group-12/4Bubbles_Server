@@ -2,12 +2,15 @@ package ch.uzh.ifi.hase.soprafs23.controller;
 
 
 import ch.uzh.ifi.hase.soprafs23.service.SocketService;
+import ch.uzh.ifi.hase.soprafs23.constant.EventNames;
 import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
 import ch.uzh.ifi.hase.soprafs23.entity.Message;
 import ch.uzh.ifi.hase.soprafs23.entity.RoomCoordinator;
 import ch.uzh.ifi.hase.soprafs23.game.Game;
 import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs23.service.GameRoomService;
+import ch.uzh.ifi.hase.soprafs23.service.SocketBasics;
+
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
@@ -65,6 +68,7 @@ public class SocketController {
     private final SocketIOServer server;
     private final SocketService socketService;
     private final GameRoomService gameRoomService;
+    private final SocketBasics socketBasics = new SocketBasics();
 
     private RoomCoordinator roomCoordinator = RoomCoordinator.getInstance();
 
@@ -75,10 +79,10 @@ public class SocketController {
 
         server.addConnectListener(onConnected());
         server.addDisconnectListener(onDisconnected());
-        server.addEventListener("send_message", Message.class, onChatReceived());
-        server.addEventListener("start_game", Message.class, socketStartGame());
-        server.addEventListener("start_timer", Message.class, startTimer());
-        server.addEventListener("join_room", Message.class, joinRoom());
+        server.addEventListener(EventNames.SEND_MESSAGE.eventName, Message.class, onChatReceived());
+        server.addEventListener(EventNames.START_GAME.eventName, Message.class, socketStartGame());
+        server.addEventListener(EventNames.START_TIMER.eventName, Message.class, startTimer());
+        server.addEventListener(EventNames.JOIN_ROOM.eventName, Message.class, joinRoom());
     }
 
 
@@ -87,7 +91,7 @@ public class SocketController {
         return (senderClient, data, ackSender) -> {
             logger.info( "timer has been started:");
             logger.info(data.getRoomCode());
-            socketService.timerExample(data.getRoomCode(), senderClient);
+            socketService.timerExample(data.getRoomCode());
          };
     }
 
@@ -110,7 +114,7 @@ public class SocketController {
             logger.info(data.getMessage());
             logger.info(String.valueOf(data.getRoomCode()));
             logger.info(String.valueOf(data.getUserId()));
-            socketService.sendMessage(String.valueOf(data.getRoomCode()),"get_message", "hello this is the server");
+            socketBasics.sendObject(data.getRoomCode(),EventNames.GET_MESSAGE.eventName, "hello this is the server");
 
         };
     }
@@ -138,7 +142,7 @@ public class SocketController {
                 GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
                 logger.info("sending room data");
                 //sends the room info to the newly joined client
-                socketService.sendObject(roomCode, "room_is_joined", DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(gameRoom));
+                socketBasics.sendObject(roomCode, EventNames.ROOM_IS_JOINED.eventName, DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(gameRoom));
 
                 //notifies all clients that are already joined that there is a new member
                 socketService.sendMemberArray(roomCode,senderClient);
@@ -166,7 +170,7 @@ public class SocketController {
             logger.info("session id was made into a room");
             logger.info("Socket ID[{}]  Connected to socket");
             logger.info(roomCode);
-            socketService.sendObject(roomCode, "get_message", String.format("single namespace: joined room: %s", roomCode));
+            socketService.sendObject(roomCode, EventNames.GET_MESSAGE.eventName, String.format("single namespace: joined room: %s", roomCode));
 
         };
 

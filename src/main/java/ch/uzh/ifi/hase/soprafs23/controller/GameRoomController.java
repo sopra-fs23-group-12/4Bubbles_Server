@@ -10,9 +10,7 @@ import ch.uzh.ifi.hase.soprafs23.service.UserService;
 import javassist.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Objects;
 
 @RestController
 public class GameRoomController {

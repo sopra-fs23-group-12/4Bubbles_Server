@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs23.service;
 
 
+import ch.uzh.ifi.hase.soprafs23.constant.EventNames;
 import ch.uzh.ifi.hase.soprafs23.constant.MessageType;
 import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
 import ch.uzh.ifi.hase.soprafs23.entity.Message;
@@ -55,9 +56,7 @@ public class SocketService {
         try{
             GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
             List<User> members = gameRoom.getMembers();
-            for ( SocketIOClient client : senderClient.getNamespace().getRoomOperations(roomCode).getClients()) {
-                client.sendEvent("joined_players", members);
-            }
+            socketBasics.sendObject(roomCode, EventNames.JOINED_PLAYERS.eventName, members);
         } catch (Exception e){
             System.out.printf("Exception occurred while sending user array: %s", e);
         }
@@ -71,15 +70,12 @@ public class SocketService {
     }
 
     public void sendAnswers(String roomCode, SocketIOClient senderClient, String answers) {
-        for ( SocketIOClient client : senderClient.getNamespace().getRoomOperations(roomCode).getClients()) {
-            client.sendEvent("send_Answers", new Message(MessageType.SERVER, answers));
-        }
+        socketBasics.sendObject(roomCode, EventNames.GET_ANSWERS.eventName, new Message(MessageType.SERVER, answers));
+        
     }
 
     public void sendQuestion(String roomCode, SocketIOClient senderClient, String question) {
-        for ( SocketIOClient client : senderClient.getNamespace().getRoomOperations(roomCode).getClients()) {
-            client.sendEvent("send_Question", new Message(MessageType.SERVER, question));
-            }
+        socketBasics.sendObject(roomCode, EventNames.GET_QUESTION.eventName, new Message(MessageType.SERVER, question));
     }
 
 
@@ -89,7 +85,7 @@ public class SocketService {
     }
 
     //this will not be used later on 
-    public void timerExample(String roomCode, SocketIOClient senderClient ){
+    public void timerExample(String roomCode){
 
         int counter = 40;
 
@@ -98,19 +94,14 @@ public class SocketService {
                 Thread.sleep(1000);
                 System.out.println(counter);
 
-                for (SocketIOClient client : senderClient.getNamespace().getRoomOperations(roomCode).getClients()){
-                    client.sendEvent("timer_count", new Message(MessageType.SERVER, String.valueOf(counter)));
-                }
+                socketBasics.sendObject(roomCode, EventNames.TIMER_COUNT.eventName, new Message(MessageType.SERVER, String.valueOf(counter)));
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             counter--;
         }
-        for (SocketIOClient client : senderClient.getNamespace().getRoomOperations(roomCode).getClients()){
-            System.out.println("time over");
-            client.sendEvent("timer_count", new Message(MessageType.SERVER, "time over"));
-        }        
+        socketBasics.sendObject(roomCode, EventNames.TIMER_COUNT.eventName, new Message(MessageType.SERVER, "time over"));      
     }
 
     }

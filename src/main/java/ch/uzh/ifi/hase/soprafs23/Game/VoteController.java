@@ -6,6 +6,7 @@ import java.util.List;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.DataListener;
 
+import ch.uzh.ifi.hase.soprafs23.constant.EventNames;
 import ch.uzh.ifi.hase.soprafs23.entity.Vote;
 import ch.uzh.ifi.hase.soprafs23.game.stateStorage.TimerController;
 
@@ -23,7 +24,11 @@ public class VoteController {
         this.timer = timer;
         this.server = server;
 
-        server.addEventListener("send_vote", Vote.class, onVoteReceived());
+
+        Thread thread = new Thread(() -> {
+        server.addEventListener(EventNames.SEND_VOTE.eventName, Vote.class, onVoteReceived());
+        });
+        thread.start();
 
     }
 
@@ -50,16 +55,16 @@ public class VoteController {
             vote.setTime(timer.getTimer().getRemainingTimeInSeconds());
             vote.setVote(voteAnswer);
             vote.setPlayerId(userId);
+            System.out.println(vote.getVote());
+            System.out.println(vote.getPlayerId());
             votes.add(vote);
         }
     }
 
     private DataListener<Vote> onVoteReceived(){
         return (senderClient, data, ackSender) -> {
-            System.out.println("vote received:");
-    
-            setVote(data.getPlayerId(),data.getVote());
-
+        setVote(data.getPlayerId(),data.getVote());
+        System.out.println("vote received:");
         };
     }
 
