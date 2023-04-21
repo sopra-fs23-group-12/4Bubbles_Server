@@ -46,7 +46,8 @@ public class Game {
 
     public void startGame(){
         //call triviaCaller with configs that are specified in gameRoom
-        while(roundCounter >= 0){
+        while(roundCounter > 0){
+            System.out.println("Question" + roundCounter);
             playRound();
             this.voting.resetVotes();
             roundCounter--;
@@ -60,15 +61,16 @@ public class Game {
     public void playRound(){
         sendQuestion();
         
+        
         sendAnswers();
         timer.startTimer();
         List<Vote> votes = voting.getVotes();
-        socketService.sendMessage(this.gameRoom.getRoomCode(),"send_Ranking", clients,  ranking.updateRanking(questions.get(roundCounter-1), votes).values().toString());
+        socketService.sendMessage(this.gameRoom.getRoomCode(),"get_Ranking", clients,  ranking.updateRanking(questions.get(roundCounter-1), votes).values().toString());
         timer.resetTimer();
     }
 
     private void sendQuestion(){
-        socketService.sendMessage(this.gameRoom.getRoomCode(),"send_Question", clients,  gameRoom.getQuestions().get(roundCounter-1).getQuestion());
+        socketService.sendMessage(this.gameRoom.getRoomCode(),"get_Question", clients,  gameRoom.getQuestions().get(roundCounter-1).getQuestion());
 
         timer.startQuestionTimer();
         timer.resetQuestionTimer();
@@ -78,7 +80,7 @@ public class Game {
     //list of answers is converted to a string to coply with constructor of Message Type
     //must be converted back to list in frontend
     private void sendAnswers(){
-        socketService.sendMessage(this.gameRoom.getRoomCode(),"send_Answers", clients,  gameRoom.getQuestions().get(roundCounter-1).getAnswers().toString());
+        socketService.sendMessage(this.gameRoom.getRoomCode(),"get_Answers", clients,  gameRoom.getQuestions().get(roundCounter-1).getAnswers().toString());
         
         
     }
