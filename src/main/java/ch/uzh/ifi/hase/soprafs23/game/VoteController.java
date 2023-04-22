@@ -24,11 +24,8 @@ public class VoteController {
         this.timer = timer;
         this.server = server;
 
-
-        Thread thread = new Thread(() -> {
-        server.addEventListener(EventNames.SEND_VOTE.eventName, Vote.class, onVoteReceived());
-        });
-        thread.start();
+        this.server.addEventListener(EventNames.SEND_VOTE.eventName, Vote.class, onVoteReceived());
+        
 
     }
 

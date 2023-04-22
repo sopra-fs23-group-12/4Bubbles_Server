@@ -9,6 +9,7 @@ public enum EventNames {
     JOINED_PLAYERS("joined_players"),
     ROOM_IS_JOINED("room_is_joined"),
     TIMER_COUNT("timer_count"),
+    GAME_STARTED("game_started"),
 
     
     //event listeners

@@ -35,7 +35,7 @@ public class Timer {
                 }
             }
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         isRunning = false;
     }

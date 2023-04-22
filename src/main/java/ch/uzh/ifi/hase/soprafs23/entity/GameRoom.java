@@ -3,7 +3,6 @@ package ch.uzh.ifi.hase.soprafs23.entity;
 import java.util.List;
 
 import com.corundumstudio.socketio.SocketIONamespace;
-import com.corundumstudio.socketio.SocketIONamespace;
 
 import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
 
