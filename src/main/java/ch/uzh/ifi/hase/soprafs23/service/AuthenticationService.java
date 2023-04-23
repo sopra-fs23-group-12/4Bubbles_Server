@@ -15,7 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Transactional
-public class AuthenticationService {
+public class AuthenticationService{
 
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 

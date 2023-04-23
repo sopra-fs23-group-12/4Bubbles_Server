@@ -25,8 +25,6 @@ public class VoteController {
         this.server = server;
 
         this.server.addEventListener(EventNames.SEND_VOTE.eventName, Vote.class, onVoteReceived());
-        
-
     }
 
     /* public void initVotes(){
@@ -49,7 +47,7 @@ public class VoteController {
     public void setVote(long userId, String voteAnswer){
         if(timer.getTimer().isRunning()) {
             Vote vote = new Vote();
-            vote.setTime(timer.getTimer().getRemainingTimeInSeconds());
+            vote.setRemainingTime(timer.getTimer().getRemainingTimeInSeconds());
             vote.setVote(voteAnswer);
             vote.setPlayerId(userId);
             System.out.println(vote.getVote());

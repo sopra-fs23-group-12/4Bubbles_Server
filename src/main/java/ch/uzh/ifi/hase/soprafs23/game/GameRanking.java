@@ -18,13 +18,12 @@ public class GameRanking {
         }
     }
 
-
     public Map<Long, Integer> updateRanking(Question question, List<Vote> votes) {
         for(Vote vote : votes){
             int oldPoints = rankingDict.get(vote.getPlayerId());
             int addPoints = 0;
             if (vote.getVote() == question.getCorrectAnswer()){
-                addPoints = vote.getTime()*10;
+                addPoints = vote.getRemainingTime()*10;
             }
             rankingDict.put(vote.getPlayerId(), oldPoints + addPoints);
         }

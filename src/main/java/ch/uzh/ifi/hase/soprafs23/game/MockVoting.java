@@ -1,4 +1,4 @@
-/* package ch.uzh.ifi.hase.soprafs23.game;
+package ch.uzh.ifi.hase.soprafs23.game;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +8,6 @@ import ch.uzh.ifi.hase.soprafs23.game.stateStorage.TimerController;
 
 public class MockVoting {
         private List<Vote> votes = new ArrayList<Vote>();
-
-        private boolean votingOpen = true;
 
         private TimerController timer;
 
@@ -23,9 +21,9 @@ public class MockVoting {
             Thread thread = new Thread(() -> {
                 try {
                     Thread.sleep(3000);
-                    setVote("playerName1","Nigeria");
+                    setVote(1,"Nigeria");
                     Thread.sleep(2000);
-                    setVote("playerName2", "Ukraine");
+                    setVote(2, "Ukraine");
                 }
                 catch (InterruptedException e) {
                     throw new RuntimeException(e);
@@ -36,12 +34,12 @@ public class MockVoting {
 
         //later transfer to post request
 
-        public void setVote(String playerName, String voteAnswer){
+        public void setVote(long playerId, String voteAnswer){
             if(timer.getTimer().isRunning()) {
                 Vote vote = new Vote();
-                vote.setTime(timer.getTimer().getRemainingTimeInSeconds());
+                vote.setRemainingTime(timer.getTimer().getRemainingTimeInSeconds());
                 vote.setVote(voteAnswer);
-                vote.setPlayerId(playerName);
+                vote.setPlayerId(playerId);
                 votes.add(vote);
             }
         }
@@ -59,4 +57,3 @@ public class MockVoting {
 
 
 }
- */

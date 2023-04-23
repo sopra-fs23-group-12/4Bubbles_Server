@@ -5,7 +5,7 @@ public class Vote {
 
     private long playerId;
     private String vote;
-    private int time;
+    private int remainingTime;
 
     public long getPlayerId() {
         return playerId;
@@ -23,11 +23,11 @@ public class Vote {
         this.vote = vote;
     }
 
-    public int getTime() {
-        return time;
+    public int getRemainingTime() {
+        return remainingTime;
     }
 
-    public void setTime(int time) {
-        this.time = time;
+    public void setRemainingTime(int remainingTime) {
+        this.remainingTime = remainingTime;
     }
 }

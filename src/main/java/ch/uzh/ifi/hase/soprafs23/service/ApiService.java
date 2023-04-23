@@ -24,10 +24,7 @@ import ch.uzh.ifi.hase.soprafs23.rest.dto.TopicGetDTO;
 
 @Service
 @Transactional
-public class ApiService {
-
-
-
+public class ApiService implements TriviaCaller{
     //returns a list of topics from the api
     public List<TopicGetDTO> getTopicsFromApi(String apiURL) throws IOException {
         JSONObject topics = getJSON(apiURL);

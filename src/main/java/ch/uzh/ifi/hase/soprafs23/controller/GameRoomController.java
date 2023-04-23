@@ -50,6 +50,4 @@ public class GameRoomController {
             throw new RoomNotFoundException("Unable to find game room with code: " + GameRoomPutDTO.getRoomCode(), e);
         }
     }
-
-
 }

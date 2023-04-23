@@ -36,14 +36,13 @@ public class Game {
         this.timer = new TimerController();
         this.voting = new VoteController(timer, server);
         this.roundCounter = this.gameRoom.getQuestions().size();
-
     }
 
 
 
     public void startGame(){
         
-        //maybe trun this in to a timer before the first question is sent
+        //maybe turn this in to a timer before the first question is sent
         socketBasics.sendObject(this.gameRoom.getRoomCode(),EventNames.GAME_STARTED.eventName,  "");
         while(roundCounter > 0){
             System.out.println("Question" + roundCounter);
@@ -66,6 +65,8 @@ public class Game {
         timer.resetTimer();
     }
 
+
+
     private void sendQuestion(){
         socketBasics.sendObject(this.gameRoom.getRoomCode(),EventNames.GET_QUESTION.eventName,  gameRoom.getQuestions().get(roundCounter-1).getQuestion());
 
@@ -86,6 +87,7 @@ public class Game {
         return this.timer.getTimer().getRemainingTimeInSeconds();
     }
 
+    public int getRoundCounter(){return this.roundCounter;}
 
 
 }
