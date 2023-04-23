@@ -24,27 +24,32 @@ public class Game {
 
     private VoteController voting;
 
-    private TimerController timer;
+    private TimerController timerController;
+    private String roomCode;
 
     private final SocketBasics socketBasics = new SocketBasics();
 
 
-    public Game(GameRoom gameRoom, SocketIOServer server){
+    public Game(GameRoom gameRoom){
         this.gameRoom = gameRoom;
         this.ranking  = new GameRanking(gameRoom.getMembers());
         this.questions = this.gameRoom.getQuestions();
-        this.timer = new TimerController();
-        this.voting = new VoteController(timer, server);
         this.roundCounter = this.gameRoom.getQuestions().size();
+        this.roomCode = this.gameRoom.getRoomCode();
+        this.timerController = new TimerController();
 
     }
 
-
+    //needs to be called when a new game is created by the socketController upon starting
+    //the game such that game and SocketController have access to the same voteController instance
+     public void setVoteController(VoteController voteController){
+            this.voting = voteController;
+     }
 
     public void startGame(){
         
-        //maybe trun this in to a timer before the first question is sent
-        socketBasics.sendObject(this.gameRoom.getRoomCode(),EventNames.GAME_STARTED.eventName,  "");
+        //maybe turn this in to a timer before the first question is sent
+        socketBasics.sendObject(roomCode,EventNames.GAME_STARTED.eventName,  "");
         while(roundCounter > 0){
             System.out.println("Question" + roundCounter);
             playRound();
@@ -58,34 +63,46 @@ public class Game {
     //send the correct answers
     public void playRound(){
         sendQuestion();
+
+        timerController.startQuestionTimer(roomCode);
+        timerController.resetQuestionTimer();
         
         sendAnswers();
-        timer.startTimer(this.gameRoom.getRoomCode());
+        timerController.startTimer(roomCode);
+        //you need access to the votes that would be set in socketservice or socketcontroller
+
+        //why access votes here? Just to send them all to the client?
+        // is this necessary or can everything regarding the votes just be handled by the votecontroller?
+
+        //since the line after the next is the only line where ranking is used in this class, we could simply instantiate this in the votecontroller instead and do the work there
         List<Vote> votes = voting.getVotes();
-        socketBasics.sendObject(this.gameRoom.getRoomCode(),EventNames.GET_RANKING.eventName, ranking.updateRanking(questions.get(roundCounter-1), votes).values().toString());
-        timer.resetTimer();
+        String currentRanking = ranking.updateRanking(questions.get(roundCounter-1), votes).values().toString();
+        socketBasics.sendObject(roomCode,EventNames.RECEIVE_VOTING.eventName, currentRanking);
+        timerController.resetTimer();
     }
 
     private void sendQuestion(){
-        socketBasics.sendObject(this.gameRoom.getRoomCode(),EventNames.GET_QUESTION.eventName,  gameRoom.getQuestions().get(roundCounter-1).getQuestion());
+        socketBasics.sendObject(roomCode,EventNames.GET_QUESTION.eventName,  gameRoom.getQuestions().get(roundCounter-1).getQuestion());
 
-        timer.startQuestionTimer(this.gameRoom.getRoomCode());
-        timer.resetQuestionTimer();
     }
 
 
-    //list of answers is converted to a string to coply with constructor of Message Type
+    //list of answers is converted to a string to comply with constructor of Message Type
     //must be converted back to list in frontend
     private void sendAnswers(){
-        socketBasics.sendObject(this.gameRoom.getRoomCode(),EventNames.GET_ANSWERS.eventName,  gameRoom.getQuestions().get(roundCounter-1).getAnswers().toString());
+        socketBasics.sendObject(roomCode,EventNames.GET_ANSWERS.eventName,  gameRoom.getQuestions().get(roundCounter-1).getAnswers().toString());
         
         
     }
+
+    /*
 
     public int getRemainingTime(){
         return this.timer.getTimer().getRemainingTimeInSeconds();
     }
 
 
+
+     */
 
 }

@@ -1,5 +1,6 @@
 package ch.uzh.ifi.hase.soprafs23.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.corundumstudio.socketio.SocketIONamespace;
@@ -18,6 +19,7 @@ public class GameRoom {
     private String roomCode;
     private String gameMode;
     private long leaderUserId;
+
 
     private SocketIONamespace namespace = null;
 

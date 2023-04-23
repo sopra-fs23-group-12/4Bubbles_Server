@@ -23,8 +23,8 @@ public class GameRanking {
         for(Vote vote : votes){
             int oldPoints = rankingDict.get(vote.getPlayerId());
             int addPoints = 0;
-            if (vote.getVote() == question.getCorrectAnswer()){
-                addPoints = vote.getTime()*10;
+            if (vote.getVote().equals(question.getCorrectAnswer())){
+                addPoints = vote.getRemainingTime()*10;
             }
             rankingDict.put(vote.getPlayerId(), oldPoints + addPoints);
         }

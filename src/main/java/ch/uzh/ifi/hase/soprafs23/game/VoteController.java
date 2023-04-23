@@ -10,7 +10,7 @@ import ch.uzh.ifi.hase.soprafs23.constant.EventNames;
 import ch.uzh.ifi.hase.soprafs23.entity.Vote;
 import ch.uzh.ifi.hase.soprafs23.game.stateStorage.TimerController;
 
-//set instance in socketController so that server does not need to be passed arround all the time
+//set instance in socketController so that server does not need to be passed around all the time
 public class VoteController {
     private List<Vote> votes = new ArrayList<Vote>();
 
@@ -20,11 +20,10 @@ public class VoteController {
 
     private SocketIOServer server;
 
-    public VoteController(TimerController timer, SocketIOServer server){
-        this.timer = timer;
+    public VoteController(){
         this.server = server;
 
-        this.server.addEventListener(EventNames.SEND_VOTE.eventName, Vote.class, onVoteReceived());
+        //this.server.addEventListener(EventNames.SEND_VOTE.eventName, Vote.class, onVoteReceived());
         
 
     }
@@ -46,24 +45,31 @@ public class VoteController {
 
     //later transfer to post request
 
-    public void setVote(long userId, String voteAnswer){
-        if(timer.getTimer().isRunning()) {
+    public void setVote(long userId, String voteAnswer, int remainingTime){
             Vote vote = new Vote();
-            vote.setTime(timer.getTimer().getRemainingTimeInSeconds());
+            vote.setRemainingTime(remainingTime);
             vote.setVote(voteAnswer);
             vote.setPlayerId(userId);
             System.out.println(vote.getVote());
             System.out.println(vote.getPlayerId());
+            System.out.println(vote.getRemainingTime());
             votes.add(vote);
-        }
     }
 
+    /*
     private DataListener<Vote> onVoteReceived(){
         return (senderClient, data, ackSender) -> {
+            System.out.println("data listener in votecontroller");
+            /*
         setVote(data.getPlayerId(),data.getVote());
         System.out.println("vote received:");
+        */
+/*
         };
-    }
+
+
+
+    }*/
 
     public List<Vote> getVotes(){
         return votes;

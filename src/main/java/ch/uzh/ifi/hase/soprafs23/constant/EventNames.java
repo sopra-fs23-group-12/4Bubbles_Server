@@ -4,12 +4,12 @@ public enum EventNames {
     //send events
     GET_ANSWERS("get_answers"),
     GET_QUESTION("get_question"),
-    GET_RANKING("get_ranking"),
     GET_MESSAGE("get_message"),
     JOINED_PLAYERS("joined_players"),
     ROOM_IS_JOINED("room_is_joined"),
     TIMER_COUNT("timer_count"),
     GAME_STARTED("game_started"),
+    RECEIVE_VOTING("receive_voting"),
 
     
     //event listeners

@@ -1,6 +1,10 @@
 package ch.uzh.ifi.hase.soprafs23.controller;
 
 
+import ch.uzh.ifi.hase.soprafs23.entity.VoteMessage;
+import ch.uzh.ifi.hase.soprafs23.game.VoteController;
+import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
+import ch.uzh.ifi.hase.soprafs23.game.stateStorage.TimerController;
 import ch.uzh.ifi.hase.soprafs23.service.SocketService;
 import ch.uzh.ifi.hase.soprafs23.constant.EventNames;
 import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
@@ -18,6 +22,8 @@ import com.corundumstudio.socketio.listener.DisconnectListener;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Logger;
 
 
@@ -72,6 +78,8 @@ public class SocketController {
 
     private RoomCoordinator roomCoordinator = RoomCoordinator.getInstance();
 
+    private HashMap<String, VoteController> voteControllerHashMap = new HashMap<>();
+
     public SocketController(SocketIOServer server, SocketService socketService, GameRoomService gameRoomService) {
         this.server = server;
         this.socketService = socketService;
@@ -83,7 +91,22 @@ public class SocketController {
         server.addEventListener(EventNames.START_GAME.eventName, Message.class, socketStartGame());
         server.addEventListener(EventNames.START_TIMER.eventName, Message.class, startTimer());
         server.addEventListener(EventNames.JOIN_ROOM.eventName, Message.class, joinRoom());
+        server.addEventListener(EventNames.SEND_VOTE.eventName, VoteMessage.class, updateVote());
+
     }
+
+
+    private DataListener<VoteMessage> updateVote(){
+        return (senderClient, data, ackSender) -> {
+            System.out.println("data listener in socketcontroller");
+            VoteController voteController = voteControllerHashMap.get(data.getRoomCode());
+            if (data.getRemainingTime() > 0)
+                System.out.printf("userid : %s \n", data.getUserId());
+                voteController.setVote(Long.valueOf(data.getUserId()), data.getMessage(), data.getRemainingTime());
+        };
+        }
+
+
 
 
     //example implementation on /websockets, call this method to start the timer
@@ -101,7 +124,28 @@ public class SocketController {
             GameRoom gameRoom = roomCoordinator.getRoomByCode(data.getRoomCode());
             logger.info( "This game was started:");
             logger.info(String.valueOf(data.getRoomCode()));
-            Game game = new Game(gameRoom, this.server);
+            VoteController voteController = new VoteController();
+            voteControllerHashMap.put(data.getRoomCode(), voteController);
+            //next part is hard coded questions until the question API call is modified such that the questions are stored in gameroom
+            ArrayList<Question> questions = new ArrayList<Question>();
+            ArrayList<String> answers = new ArrayList<String>();
+            answers.add("question1");
+            answers.add("question2");
+            Question question1 = new Question();
+            question1.setQuestion("first sample question");
+            question1.setCorrectAnswer("question1");
+            question1.setAnswers(answers);
+            Question question2 = new Question();
+            question2.setQuestion("second sample question");
+            question2.setCorrectAnswer("question2");
+            question2.setAnswers(answers);
+            questions.add(question1);
+            questions.add(question2);
+            gameRoom.setQuestions(questions);
+
+
+            Game game = new Game(gameRoom);
+            game.setVoteController(voteController);
             game.startGame();
         };
     }
