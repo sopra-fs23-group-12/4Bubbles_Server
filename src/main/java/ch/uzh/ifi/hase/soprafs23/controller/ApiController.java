@@ -19,7 +19,6 @@ import ch.uzh.ifi.hase.soprafs23.constant.ApiUrls;
 import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
 import ch.uzh.ifi.hase.soprafs23.entity.RoomCoordinator;
 import ch.uzh.ifi.hase.soprafs23.exceptions.ApiConnectionError;
-import ch.uzh.ifi.hase.soprafs23.rest.dto.QuestionGetDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.TopicGetDTO;
 import ch.uzh.ifi.hase.soprafs23.service.ApiService;
 import javassist.NotFoundException;
@@ -31,7 +30,7 @@ public class ApiController {
 
     public ApiController(ApiService apiService, RoomCoordinator roomCoordinator) {
         this.apiService = apiService;
-        this.roomCoordinator = roomCoordinator;
+        this.roomCoordinator = RoomCoordinator.getInstance();
     }
 
 
@@ -58,23 +57,25 @@ public class ApiController {
     @GetMapping("/questions")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<QuestionGetDTO> getQuestions(@RequestParam int roomCode, @RequestHeader(value = "Authorization", required = false) String bearerToken){
+    public void getQuestions(@RequestParam String roomCode, @RequestHeader(value = "Authorization", required = false) String bearerToken){
         throwForbiddenWhenNoBearerToken(bearerToken);
-        List<QuestionGetDTO> questions = new ArrayList<QuestionGetDTO>();
+
         GameRoom room = new GameRoom();
         try {
             room = roomCoordinator.getRoomByCode(roomCode);
         } catch (NotFoundException e) {
+            //Handle error better in future
+            System.out.println("Room not found");
         }
         String apiURL = String.format(ApiUrls.QUESTIONS.url, room.getNumOfQuestions(), room.getQuestionTopicId());
         
         try {
-            questions = apiService.getQuestionsFromApi(apiURL);
+            room.setQuestions(apiService.getQuestionsFromApi(apiURL));
         } catch (IOException e) {
             throw new ApiConnectionError("Something went wrong while accessing the API", e);
         }
         
-        return questions;
+        
     }
 
     //Helper method that throws a 403 error when no bearer token is present

@@ -7,10 +7,18 @@ import java.util.ArrayList;
 
 @Component
 public class RoomCoordinator {
-    ArrayList<GameRoom> rooms;
+    private final ArrayList<GameRoom> rooms;
+    private static RoomCoordinator INSTANCE;
 
+    public static RoomCoordinator getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new RoomCoordinator();
+        }
 
-    public RoomCoordinator() {
+        return INSTANCE;
+    }
+
+    private RoomCoordinator() {
         this.rooms = new ArrayList<GameRoom>();
     }
 
@@ -18,9 +26,9 @@ public class RoomCoordinator {
         this.rooms.add(gameRoom);
     }
 
-    public GameRoom getRoomByCode(int roomId) throws NotFoundException {
+    public GameRoom getRoomByCode(String roomId) throws NotFoundException {
         for (GameRoom room : rooms) {
-            if (room.getRoomCode() == roomId) {
+            if (room.getRoomCode().equals(roomId)) {
                 return room;
             }
         }

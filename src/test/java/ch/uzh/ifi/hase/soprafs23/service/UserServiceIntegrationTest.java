@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @see UserService
  */
+//@Disabled
 @WebAppConfiguration
 @SpringBootTest
 public class UserServiceIntegrationTest {
@@ -34,6 +35,7 @@ public class UserServiceIntegrationTest {
         userRepository.deleteAll();
     }
 
+    //@Disabled
     @Test
     public void createUser_validInputs_success() {
         // given
@@ -52,7 +54,7 @@ public class UserServiceIntegrationTest {
         assertNotNull(createdUser.getToken());
         assertEquals(UserStatus.OFFLINE, createdUser.getStatus());
     }
-
+    //@Disabled
     @Test
     public void createUser_duplicateUsername_throwsException() {
         assertNull(userRepository.findByUsername("testUsername"));

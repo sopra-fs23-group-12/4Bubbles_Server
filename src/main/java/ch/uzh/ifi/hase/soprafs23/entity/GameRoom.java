@@ -1,17 +1,27 @@
 package ch.uzh.ifi.hase.soprafs23.entity;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.corundumstudio.socketio.SocketIONamespace;
+
+import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
 
 public class GameRoom {
 
+    //Compare with GameRoomDTOs and check duplications
     private List<User> members;
+    private List<Question> questions;
     private User leader;
     private int numOfQuestions;
     private String questionTopic;
     private int questionTopicId;
-    private int roomCode;
+    private String roomCode;
     private String gameMode;
     private long leaderUserId;
+
+
+    private SocketIONamespace namespace = null;
 
     public long getLeaderUserId() {
         return leaderUserId;
@@ -23,6 +33,18 @@ public class GameRoom {
 
     public List<User> getMembers() {
         return members;
+    }
+
+    public void setMembers(List<User> members) {
+        this.members = members;
+    }
+
+    public void setNamespace(SocketIONamespace namespace){
+        this.namespace = namespace;
+    }
+
+    public SocketIONamespace getNamespace(){
+        return namespace;
     }
 
     public User getLeader() {
@@ -57,11 +79,11 @@ public class GameRoom {
         this.questionTopicId = questionTopicId;
     }
 
-    public int getRoomCode() {
+    public String getRoomCode() {
         return roomCode;
     }
 
-    public void setRoomCode(int roomCode) {
+    public void setRoomCode(String roomCode) {
         this.roomCode = roomCode;
     }
 
@@ -73,8 +95,12 @@ public class GameRoom {
         this.gameMode = gameMode;
     }
 
-    public void setMembers(List<User> members) {
-        this.members = members;
+    public List<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
     }
 }
 

@@ -2,14 +2,14 @@ package ch.uzh.ifi.hase.soprafs23.rest.dto;
 
 public class GameRoomPutDTO {
 
-    private int roomCode;
+    private String roomCode;
     private int userId;
 
-    public int getRoomCode() {
+    public String getRoomCode() {
         return roomCode;
     }
 
-    public void setRoomCode(int roomCode) {
+    public void setRoomCode(String roomCode) {
         this.roomCode = roomCode;
     }
 
