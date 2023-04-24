@@ -113,7 +113,7 @@ public class SocketController {
         return (senderClient, data, ackSender) -> {
             logger.info( "timer has been started:");
             logger.info(data.getRoomCode());
-            socketService.timerExample(data.getRoomCode());
+            //socketService.timerExample(data.getRoomCode());
          };
     }
 

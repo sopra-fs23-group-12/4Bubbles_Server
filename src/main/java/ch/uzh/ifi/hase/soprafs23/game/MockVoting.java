@@ -26,7 +26,9 @@ public class MockVoting {
                     setVote(2, "Ukraine");
                 }
                 catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                     throw new RuntimeException(e);
+                    
                 }
             });
             thread.start();

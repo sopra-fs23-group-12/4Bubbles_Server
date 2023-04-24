@@ -84,7 +84,8 @@ public class SocketService {
         socketBasics.sendObject(roomCode, eventName, data);
     }
 
-    //this will not be used later on 
+    
+    /* no longer needed 
     public void timerExample(String roomCode){
 
         int counter = 40;
@@ -97,12 +98,12 @@ public class SocketService {
                 socketBasics.sendObject(roomCode, EventNames.TIMER_COUNT.eventName, new Message(MessageType.SERVER, String.valueOf(counter)));
 
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
             counter--;
         }
         socketBasics.sendObject(roomCode, EventNames.TIMER_COUNT.eventName, new Message(MessageType.SERVER, "time over"));      
-    }
+    } */
 
     }
 
