@@ -11,7 +11,7 @@ import ch.uzh.ifi.hase.soprafs23.entity.Message;
 import ch.uzh.ifi.hase.soprafs23.entity.RoomCoordinator;
 import ch.uzh.ifi.hase.soprafs23.game.Game;
 import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
-import ch.uzh.ifi.hase.soprafs23.service.GameRoomService;
+
 import ch.uzh.ifi.hase.soprafs23.service.SocketBasics;
 
 import com.corundumstudio.socketio.SocketIOServer;
@@ -72,17 +72,15 @@ public class SocketController {
 
     private final SocketIOServer server;
     private final SocketService socketService;
-    private final GameRoomService gameRoomService;
     private final SocketBasics socketBasics = new SocketBasics();
 
     private RoomCoordinator roomCoordinator = RoomCoordinator.getInstance();
 
     private HashMap<String, VoteController> voteControllerHashMap = new HashMap<>();
 
-    public SocketController(SocketIOServer server, SocketService socketService, GameRoomService gameRoomService) {
+    public SocketController(SocketIOServer server, SocketService socketService) {
         this.server = server;
         this.socketService = socketService;
-        this.gameRoomService = gameRoomService;
 
         server.addConnectListener(onConnected());
         server.addDisconnectListener(onDisconnected());

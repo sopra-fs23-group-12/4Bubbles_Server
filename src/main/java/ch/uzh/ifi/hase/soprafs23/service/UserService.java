@@ -62,12 +62,12 @@ public class UserService {
         }
 
         // check if new username is not empty
-        if (newUser.getUsername() == "") {
+        if (newUser.getUsername().equals("")) {
             String baseErrorMessage = "Oups, your request is wrong. The username cannot be empty! ";
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     String.format(baseErrorMessage));
         }
-
+        
         User user = this.userRepository.findById(id).get();
 
         if (!newUser.getUsername().equals(user.getUsername()) && newUser.getUsername() != null) {
