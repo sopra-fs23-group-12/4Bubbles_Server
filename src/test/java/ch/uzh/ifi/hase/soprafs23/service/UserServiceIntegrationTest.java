@@ -4,7 +4,6 @@ import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -19,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @see UserService
  */
+//@Disabled
 @WebAppConfiguration
 @SpringBootTest
 public class UserServiceIntegrationTest {
@@ -34,7 +34,8 @@ public class UserServiceIntegrationTest {
     public void setup() {
         userRepository.deleteAll();
     }
-    @Disabled
+
+    //@Disabled
     @Test
     public void createUser_validInputs_success() {
         // given
@@ -53,7 +54,7 @@ public class UserServiceIntegrationTest {
         assertNotNull(createdUser.getToken());
         assertEquals(UserStatus.OFFLINE, createdUser.getStatus());
     }
-    @Disabled
+    //@Disabled
     @Test
     public void createUser_duplicateUsername_throwsException() {
         assertNull(userRepository.findByUsername("testUsername"));
