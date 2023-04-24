@@ -1,6 +1,5 @@
 package ch.uzh.ifi.hase.soprafs23.entity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.corundumstudio.socketio.SocketIONamespace;

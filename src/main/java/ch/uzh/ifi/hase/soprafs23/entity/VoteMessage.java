@@ -1,8 +1,6 @@
 package ch.uzh.ifi.hase.soprafs23.entity;
 
 import ch.uzh.ifi.hase.soprafs23.constant.MessageType;
-import lombok.Data;
-
 public class VoteMessage {
 
         private MessageType type;
