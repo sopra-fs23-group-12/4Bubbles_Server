@@ -18,7 +18,6 @@ public class GameRanking {
         }
     }
 
-
     public Map<Long, Integer> updateRanking(Question question, List<Vote> votes) {
         for(Vote vote : votes){
             int oldPoints = rankingDict.get(vote.getPlayerId());

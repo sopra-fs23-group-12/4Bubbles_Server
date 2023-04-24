@@ -2,29 +2,29 @@ package ch.uzh.ifi.hase.soprafs23.Game;
 
 import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
-
+import ch.uzh.ifi.hase.soprafs23.entity.Vote;
 import ch.uzh.ifi.hase.soprafs23.game.Game;
-import ch.uzh.ifi.hase.soprafs23.game.VoteController;
+import ch.uzh.ifi.hase.soprafs23.game.GameRanking;
 import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
-
+import ch.uzh.ifi.hase.soprafs23.service.GameRoomService;
+import ch.uzh.ifi.hase.soprafs23.service.SocketService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-
-public class GameTest {
-
+public class GameRankingTest {
     private GameRoom gameRoom;
-    private List<Question> questions;
-    private Game game;
-    
+    private GameRanking ranking;
 
+    private List<Question> questions;
+
+    private List<Vote> votes;
 
     @BeforeEach
     public void setup() {
@@ -61,51 +61,50 @@ public class GameTest {
         triviaQuestion2.setAnswers(List.of("Germany", "Ukraine", "Spain", "Finland"));
         triviaQuestion2.setCorrectAnswer("Ukraine");
         this.questions = List.of(triviaQuestion1, triviaQuestion2);
-        gameRoom.setQuestions(this.questions);
 
-        game = new Game(gameRoom/* , mockServer */);
-        game.setVoteController(new VoteController());
+        this.votes = new ArrayList<Vote>();
+        Vote vote1 = new Vote();
+        vote1.setRemainingTime(8);
+        vote1.setVote("Nigeria");
+        vote1.setPlayerId(1L);
+        votes.add(vote1);
+
+        Vote vote2 = new Vote();
+        vote2.setRemainingTime(6);
+        vote2.setVote("Kenia");
+        vote2.setPlayerId(2L);
+        votes.add(vote2);
     }
 
     @Test
-    public void testRoundCounterDecreases() {
-        //SocketIOServer mockServer = mock(SocketIOServer.class, Answers.RETURNS_DEFAULTS);
-       
+    public void testCorrectVotingGivesPoints() {
+        this.ranking  = new GameRanking(this.gameRoom.getMembers());
 
-        assertEquals(2,game.getRoundCounter());
-        game.startGame();
-        assertEquals(0,game.getRoundCounter());
+        Map<Long,Integer> newRanking = ranking.updateRanking(this.questions.get(0), this.votes);
+
+        assertEquals(80,newRanking.get(1L));
+
     }
 
+
     @Test
-    public void testTimerStartedAndReset() {
-        /* SocketIOServer mockServer = mock(SocketIOServer.class, Answers.RETURNS_DEFAULTS);
-        Game game = new Game(gameRoom, mockServer); */
-        assertEquals(10,game.getRemainingTime());
+    public void testFalseVotingGivesNoPoints() {
+        this.ranking  = new GameRanking(this.gameRoom.getMembers());
 
-        game.playRound();
+        Map<Long,Integer> newRanking = ranking.updateRanking(this.questions.get(0), this.votes);
 
-        assertEquals(10,game.getRemainingTime());
+        assertEquals(0,newRanking.get(2L));
+
     }
 
+
     @Test
-    public void testTimerRunning() {
-        /* SocketIOServer mockServer = mock(SocketIOServer.class, Answers.RETURNS_DEFAULTS);
-        Game game = new Game(gameRoom, mockServer); */
-        assertEquals(10,game.getRemainingTime());
+    public void testNoVotingGivesNoPoints() {
+        this.ranking  = new GameRanking(this.gameRoom.getMembers());
 
-        game.playRound();
+        Map<Long,Integer> newRanking = ranking.updateRanking(this.questions.get(0), this.votes);
 
-        Thread thread = new Thread(() -> {
-            try {
-                Thread.sleep(2000); // wait for 2 seconds
-                // call the function here
-                assertTrue(9 > game.getRoundCounter());
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        });
+        assertEquals(0,newRanking.get(3L));
 
-        thread.start();
     }
 }

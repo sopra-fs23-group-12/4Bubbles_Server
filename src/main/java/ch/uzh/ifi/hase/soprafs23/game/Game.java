@@ -8,8 +8,6 @@ import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
 import ch.uzh.ifi.hase.soprafs23.game.stateStorage.TimerController;
 import ch.uzh.ifi.hase.soprafs23.service.SocketBasics;
 
-import com.corundumstudio.socketio.SocketIOServer;
-
 
 import java.util.List;
 
@@ -49,7 +47,7 @@ public class Game {
     public void startGame(){
         
         //maybe turn this in to a timer before the first question is sent
-        socketBasics.sendObject(roomCode,EventNames.GAME_STARTED.eventName,  "");
+        socketBasics.sendObject(this.gameRoom.getRoomCode(),EventNames.GAME_STARTED.eventName,  "");
         while(roundCounter > 0){
             System.out.println("Question" + roundCounter);
             playRound();
@@ -81,6 +79,8 @@ public class Game {
         timerController.resetTimer();
     }
 
+
+
     private void sendQuestion(){
         socketBasics.sendObject(roomCode,EventNames.GET_QUESTION.eventName,  gameRoom.getQuestions().get(roundCounter-1).getQuestion());
 
@@ -95,14 +95,15 @@ public class Game {
         
     }
 
-    /*
+    
 
     public int getRemainingTime(){
-        return this.timer.getTimer().getRemainingTimeInSeconds();
+        return this.timerController.getTimer().getRemainingTimeInSeconds();
     }
 
+    public int getRoundCounter(){return this.roundCounter;}
 
 
-     */
+    
 
 }

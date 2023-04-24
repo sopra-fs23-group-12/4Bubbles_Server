@@ -4,7 +4,6 @@ package ch.uzh.ifi.hase.soprafs23.controller;
 import ch.uzh.ifi.hase.soprafs23.entity.VoteMessage;
 import ch.uzh.ifi.hase.soprafs23.game.VoteController;
 import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
-import ch.uzh.ifi.hase.soprafs23.game.stateStorage.TimerController;
 import ch.uzh.ifi.hase.soprafs23.service.SocketService;
 import ch.uzh.ifi.hase.soprafs23.constant.EventNames;
 import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
