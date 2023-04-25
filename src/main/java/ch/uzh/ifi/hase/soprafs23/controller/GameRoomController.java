@@ -13,6 +13,7 @@ import ch.uzh.ifi.hase.soprafs23.service.UserService;
 import javassist.NotFoundException;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,6 +65,7 @@ public class GameRoomController {
         String apiURL = String.format(ApiUrls.QUESTIONS.url, gameRoom.getNumOfQuestions(), gameRoom.getQuestionTopicId(), gameRoom.getGameMode());
         try{
             gameRoom.setQuestions(apiService.getQuestionsFromApi(apiURL));
+            gameRoom.getQuestions().forEach(question -> System.out.println(question.getQuestion()));
         } catch (IOException e) {
             throw new ApiConnectionError("Something went wrong while accessing the API", e);
         }
