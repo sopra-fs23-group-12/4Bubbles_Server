@@ -68,7 +68,7 @@ public class AuthenticationController {
 
         // Bearer Token --> check if User is allowed to get this Resource
         String token = authorization.replace("Bearer ", "");
-
+        System.out.println("Token: " + token);
         authenticationService.logout(token);
 
     }

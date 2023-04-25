@@ -25,6 +25,6 @@ public class ServerCommandLineRunner implements CommandLineRunner {
         server.startAsync();
         /* server.start();
         Thread.sleep(Integer.MAX_VALUE);
-        server.stop(); */
+        server.stop();  */
     }
 }

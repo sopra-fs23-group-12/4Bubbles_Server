@@ -3,7 +3,6 @@ package ch.uzh.ifi.hase.soprafs23.controller;
 
 import ch.uzh.ifi.hase.soprafs23.entity.VoteMessage;
 import ch.uzh.ifi.hase.soprafs23.game.VoteController;
-import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
 import ch.uzh.ifi.hase.soprafs23.service.SocketService;
 import ch.uzh.ifi.hase.soprafs23.constant.EventNames;
 import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
@@ -21,7 +20,6 @@ import com.corundumstudio.socketio.listener.DisconnectListener;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
@@ -123,24 +121,6 @@ public class SocketController {
             logger.info(String.valueOf(data.getRoomCode()));
             VoteController voteController = new VoteController();
             voteControllerHashMap.put(data.getRoomCode(), voteController);
-            //next part is hard coded questions until the question API call is modified such that the questions are stored in gameroom
-            ArrayList<Question> questions = new ArrayList<Question>();
-            ArrayList<String> answers = new ArrayList<String>();
-            answers.add("question1");
-            answers.add("question2");
-            Question question1 = new Question();
-            question1.setQuestion("first sample question");
-            question1.setCorrectAnswer("question1");
-            question1.setAnswers(answers);
-            Question question2 = new Question();
-            question2.setQuestion("second sample question");
-            question2.setCorrectAnswer("question2");
-            question2.setAnswers(answers);
-            questions.add(question1);
-            questions.add(question2);
-            gameRoom.setQuestions(questions);
-
-
             Game game = new Game(gameRoom);
             game.setVoteController(voteController);
             game.startGame();
@@ -155,7 +135,7 @@ public class SocketController {
             logger.info(data.getMessage());
             logger.info(String.valueOf(data.getRoomCode()));
             logger.info(String.valueOf(data.getUserId()));
-            socketBasics.sendObject(data.getRoomCode(),EventNames.GET_MESSAGE.eventName, "hello this is the server");
+            socketBasics.sendObject(EventNames.GET_MESSAGE.eventName, "hello this is the server", senderClient);
 
         };
     }
@@ -183,7 +163,7 @@ public class SocketController {
                 GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
                 logger.info("sending room data");
                 //sends the room info to the newly joined client
-                socketBasics.sendObject(roomCode, EventNames.ROOM_IS_JOINED.eventName, DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(gameRoom));
+                socketBasics.sendObjectToRoom(roomCode, EventNames.ROOM_IS_JOINED.eventName, DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(gameRoom));
 
                 //notifies all clients that are already joined that there is a new member
                 socketService.sendMemberArray(roomCode,senderClient);
@@ -211,7 +191,7 @@ public class SocketController {
             logger.info("session id was made into a room");
             logger.info("Socket ID[{}]  Connected to socket");
             logger.info(roomCode);
-            socketService.sendObject(roomCode, EventNames.GET_MESSAGE.eventName, String.format("single namespace: joined room: %s", roomCode));
+            socketService.sendObject(senderClient, EventNames.GET_MESSAGE.eventName, String.format("single namespace: joined room: %s", roomCode));
 
         };
 
