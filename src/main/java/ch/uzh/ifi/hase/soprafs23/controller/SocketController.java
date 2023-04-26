@@ -1,14 +1,12 @@
 package ch.uzh.ifi.hase.soprafs23.controller;
 
 
-import ch.uzh.ifi.hase.soprafs23.entity.VoteMessage;
+import ch.uzh.ifi.hase.soprafs23.entity.*;
+import ch.uzh.ifi.hase.soprafs23.game.GameRanking;
 import ch.uzh.ifi.hase.soprafs23.game.VoteController;
 import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
 import ch.uzh.ifi.hase.soprafs23.service.SocketService;
 import ch.uzh.ifi.hase.soprafs23.constant.EventNames;
-import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
-import ch.uzh.ifi.hase.soprafs23.entity.Message;
-import ch.uzh.ifi.hase.soprafs23.entity.RoomCoordinator;
 import ch.uzh.ifi.hase.soprafs23.game.Game;
 import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
 
@@ -23,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Logger;
 
 
@@ -76,8 +75,6 @@ public class SocketController {
 
     private RoomCoordinator roomCoordinator = RoomCoordinator.getInstance();
 
-    private HashMap<String, VoteController> voteControllerHashMap = new HashMap<>();
-
     public SocketController(SocketIOServer server, SocketService socketService) {
         this.server = server;
         this.socketService = socketService;
@@ -89,19 +86,45 @@ public class SocketController {
         server.addEventListener(EventNames.START_TIMER.eventName, Message.class, startTimer());
         server.addEventListener(EventNames.JOIN_ROOM.eventName, Message.class, joinRoom());
         server.addEventListener(EventNames.SEND_VOTE.eventName, VoteMessage.class, updateVote());
-
+        server.addEventListener(EventNames.REQUEST_RANKING.eventName, Message.class, requestRanking());
     }
 
 
     private DataListener<VoteMessage> updateVote(){
         return (senderClient, data, ackSender) -> {
-            System.out.println("data listener in socketcontroller");
-            VoteController voteController = voteControllerHashMap.get(data.getRoomCode());
-            if (data.getRemainingTime() > 0)
-                System.out.printf("userid : %s \n", data.getUserId());
-                voteController.setVote(Long.valueOf(data.getUserId()), data.getMessage(), data.getRemainingTime());
+            long userId = Long.parseLong(data.getUserId());
+            String message = data.getMessage();
+            int remainingTime = data.getRemainingTime();
+            String roomCode = data.getRoomCode();
+            if (data.getRemainingTime() > 0){
+                GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
+                VoteController voteController = gameRoom.getVoteController();
+                Game game = gameRoom.getCurrentGame();
+                game.setVoteGame(userId, message, remainingTime);
+                List<Vote> votes = voteController.getVotes();
+                HashMap<String, Integer> votesHash = socketService.votesListAsMap(votes);
+                System.out.println(votesHash);
+                socketBasics.sendObject(roomCode, EventNames.SOMEBODY_VOTED.eventName, votesHash);
+
+            }
         };
         }
+
+
+    private DataListener<Message> requestRanking(){
+        return (senderClient, data, ackSender) -> {
+            String roomCode = data.getRoomCode();
+            int round = data.getRound();
+            GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
+            VoteController voteController = gameRoom.getVoteController();
+            List<Vote> votes = voteController.getVotes();
+            GameRanking gameRanking = new GameRanking(gameRoom.getMembers());
+
+            //send ranking as a dict
+            String currentRanking = gameRanking.updateRanking(gameRoom.getQuestions().get(round-1), votes).values().toString();
+            socketBasics.sendObject(roomCode,EventNames.GET_RANKING.eventName, currentRanking);
+        };
+    }
 
 
 
@@ -121,8 +144,7 @@ public class SocketController {
             GameRoom gameRoom = roomCoordinator.getRoomByCode(data.getRoomCode());
             logger.info( "This game was started:");
             logger.info(String.valueOf(data.getRoomCode()));
-            VoteController voteController = new VoteController();
-            voteControllerHashMap.put(data.getRoomCode(), voteController);
+            /*
             //next part is hard coded questions until the question API call is modified such that the questions are stored in gameroom
             ArrayList<Question> questions = new ArrayList<Question>();
             ArrayList<String> answers = new ArrayList<String>();
@@ -139,10 +161,10 @@ public class SocketController {
             questions.add(question1);
             questions.add(question2);
             gameRoom.setQuestions(questions);
-
+             */
 
             Game game = new Game(gameRoom);
-            game.setVoteController(voteController);
+            gameRoom.setCurrentGame(game);
             game.startGame();
         };
     }

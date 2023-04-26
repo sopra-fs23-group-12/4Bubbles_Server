@@ -11,13 +11,18 @@ public enum EventNames {
     GAME_STARTED("game_started"),
     RECEIVE_VOTING("receive_voting"),
 
+    SOMEBODY_VOTED("somebody_voted"),
+    GET_RANKING("get_ranking"),
+
     
     //event listeners
     SEND_VOTE("send_vote"),
     START_GAME("start_game"),
     START_TIMER("start_timer"),
     JOIN_ROOM("join_room"),
-    SEND_MESSAGE("send_message");
+    SEND_MESSAGE("send_message"),
+    REQUEST_RANKING("request_ranking");
+
 
     public String eventName;
 

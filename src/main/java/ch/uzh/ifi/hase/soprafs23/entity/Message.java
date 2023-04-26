@@ -15,6 +15,7 @@ public class Message {
     private String userId;
 
     private String bearerToken;
+    private int round;
 
     public Message() {
     }
@@ -38,6 +39,8 @@ public class Message {
     public String getUserId(){return this.userId;}
 
     public String getBearerToken() {return this.bearerToken;}
+
+    public int getRound(){return this.round;}
 }
 
 

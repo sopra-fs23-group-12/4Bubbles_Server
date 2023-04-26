@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs23.game;
 
 import java.util.ArrayList;
+import java.util.Dictionary;
 import java.util.List;
 
 import ch.uzh.ifi.hase.soprafs23.entity.Vote;
@@ -32,6 +33,7 @@ public class VoteController {
     public List<Vote> getVotes(){
         return votes;
     }
+
 
     public void resetVotes(){
         this.votes = new ArrayList<Vote>();

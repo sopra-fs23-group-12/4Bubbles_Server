@@ -20,12 +20,12 @@ public class Game {
 
     private int roundCounter;
 
-    private VoteController voting;
-
     private TimerController timerController;
     private String roomCode;
 
-    private final SocketBasics socketBasics = new SocketBasics();
+    private final SocketBasics socketBasics;
+
+    private VoteController voteController;
 
 
     public Game(GameRoom gameRoom){
@@ -34,26 +34,43 @@ public class Game {
         this.questions = this.gameRoom.getQuestions();
         this.roundCounter = this.gameRoom.getQuestions().size();
         this.roomCode = this.gameRoom.getRoomCode();
+        this.voteController = this.gameRoom.getVoteController();
         this.timerController = new TimerController();
+        this.socketBasics =  new SocketBasics();
+
 
     }
-
-    //needs to be called when a new game is created by the socketController upon starting
-    //the game such that game and SocketController have access to the same voteController instance
-     public void setVoteController(VoteController voteController){
-            this.voting = voteController;
-     }
 
     public void startGame(){
         
         //maybe turn this in to a timer before the first question is sent
         socketBasics.sendObject(this.gameRoom.getRoomCode(),EventNames.GAME_STARTED.eventName,  "");
+
+        //have 5 second timer before the game starts, then send the question, then have 3 second timer
+        timerController.setTimer(5);
+        timerController.startTimer(roomCode);
+
+        sendQuestion();
+
+        timerController.setTimer(3);
+        timerController.startTimer(roomCode);
+        sendAnswers();
+
+        /*
+        can no longer be automated because the timer now runs in the frontend
         while(roundCounter > 0){
             System.out.println("Question" + roundCounter);
             playRound();
             this.voting.resetVotes();
             roundCounter--;
-        }
+        }*/
+    }
+
+    public void setVoteGame(long userId, String message, int remainingTime){
+        voteController.setVote(userId, message,remainingTime);
+        List<Vote> votes = voteController.getVotes();
+        System.out.print(votes);
+
     }
 
     //send the timer pings
@@ -62,21 +79,17 @@ public class Game {
     public void playRound(){
         sendQuestion();
 
-        timerController.startQuestionTimer(roomCode);
-        timerController.resetQuestionTimer();
-        
-        sendAnswers();
+        timerController.setTimer(3);
         timerController.startTimer(roomCode);
-        //you need access to the votes that would be set in socketservice or socketcontroller
 
-        //why access votes here? Just to send them all to the client?
-        // is this necessary or can everything regarding the votes just be handled by the votecontroller?
+        sendAnswers();
+        timerController.setTimer(10);
+        timerController.startTimer(roomCode);
 
-        //since the line after the next is the only line where ranking is used in this class, we could simply instantiate this in the votecontroller instead and do the work there
-        List<Vote> votes = voting.getVotes();
+        List<Vote> votes = voteController.getVotes();
         String currentRanking = ranking.updateRanking(questions.get(roundCounter-1), votes).values().toString();
         socketBasics.sendObject(roomCode,EventNames.RECEIVE_VOTING.eventName, currentRanking);
-        timerController.resetTimer();
+
     }
 
 
