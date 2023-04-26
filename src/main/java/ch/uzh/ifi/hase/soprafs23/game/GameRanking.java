@@ -3,13 +3,16 @@ package ch.uzh.ifi.hase.soprafs23.game;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.entity.Vote;
 import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
+import ch.uzh.ifi.hase.soprafs23.service.UserService;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class GameRanking {
     private Map<Long, Integer> rankingDict;
+
 
     public GameRanking(List<User> members) {
         rankingDict = new HashMap<>();
@@ -29,4 +32,14 @@ public class GameRanking {
         }
         return rankingDict;
     }
+
+    /*
+    public Map<Long, Integer> rankingWithUsername(Map<Long,Integer> ranking){
+        HashMap<String, Integer> rankingNames = new HashMap<>();
+        for (Map.Entry<Long, Integer> entry : ranking.entrySet()){
+            rankingNames.put(userService.getentry.getKey())
+        }
+    }
+
+     */
 }

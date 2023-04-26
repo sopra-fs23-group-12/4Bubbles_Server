@@ -16,12 +16,15 @@ import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
+import jdk.jfr.Event;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 
@@ -87,6 +90,19 @@ public class SocketController {
         server.addEventListener(EventNames.JOIN_ROOM.eventName, Message.class, joinRoom());
         server.addEventListener(EventNames.SEND_VOTE.eventName, VoteMessage.class, updateVote());
         server.addEventListener(EventNames.REQUEST_RANKING.eventName, Message.class, requestRanking());
+        server.addEventListener(EventNames.END_OF_QUESTION.eventName, Message.class, sendRightAnswer());
+
+    }
+
+    private DataListener<Message> sendRightAnswer() {
+        return (senderClient, data, ackSender) -> {
+            String roomCode = data.getRoomCode();
+            GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
+            String correctAnswer = gameRoom.getQuestions().get(gameRoom.getCurrentGame().getRoundCounter()).getCorrectAnswer();
+            socketBasics.sendObject(roomCode, EventNames.GET_RIGHT_ANSWER.eventName, correctAnswer);
+
+        };
+
     }
 
 
@@ -120,9 +136,11 @@ public class SocketController {
             List<Vote> votes = voteController.getVotes();
             GameRanking gameRanking = new GameRanking(gameRoom.getMembers());
 
-            //send ranking as a dict
-            String currentRanking = gameRanking.updateRanking(gameRoom.getQuestions().get(round-1), votes).values().toString();
-            socketBasics.sendObject(roomCode,EventNames.GET_RANKING.eventName, currentRanking);
+            //send ranking as a json
+            Map currentRanking = gameRanking.updateRanking(gameRoom.getQuestions().get(round-1), votes);
+            JSONObject json = new JSONObject(currentRanking);
+            System.out.println( json);
+            socketBasics.sendObject(roomCode,EventNames.GET_RANKING.eventName, json);
         };
     }
 

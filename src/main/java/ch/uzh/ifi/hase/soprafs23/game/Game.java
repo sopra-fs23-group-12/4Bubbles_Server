@@ -56,6 +56,8 @@ public class Game {
         timerController.startTimer(roomCode);
         sendAnswers();
 
+        roundCounter--;
+
         /*
         can no longer be automated because the timer now runs in the frontend
         while(roundCounter > 0){
