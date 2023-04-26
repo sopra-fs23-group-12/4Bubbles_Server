@@ -50,6 +50,8 @@ dependencies {
     implementation 'com.corundumstudio.socketio:netty-socketio:1.7.23'
 
     implementation 'org.json:json:20230227'
+    implementation 'org.unbescape:unbescape:1.1.6.RELEASE'
+
     implementation 'org.mapstruct:mapstruct:1.3.1.Final'
     implementation 'org.projectlombok:lombok:1.18.22'
     implementation 'org.projectlombok:lombok:1.18.22'
