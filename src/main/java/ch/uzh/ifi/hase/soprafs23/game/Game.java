@@ -47,7 +47,7 @@ public class Game {
     public void startGame(){
         
         //maybe turn this in to a timer before the first question is sent
-        socketBasics.sendObject(this.gameRoom.getRoomCode(),EventNames.GAME_STARTED.eventName,  "");
+        socketBasics.sendObjectToRoom(this.gameRoom.getRoomCode(),EventNames.GAME_STARTED.eventName,  "");
         while(roundCounter > 0){
             System.out.println("Question" + roundCounter);
             playRound();
@@ -75,14 +75,14 @@ public class Game {
         //since the line after the next is the only line where ranking is used in this class, we could simply instantiate this in the votecontroller instead and do the work there
         List<Vote> votes = voting.getVotes();
         String currentRanking = ranking.updateRanking(questions.get(roundCounter-1), votes).values().toString();
-        socketBasics.sendObject(roomCode,EventNames.RECEIVE_VOTING.eventName, currentRanking);
+        socketBasics.sendObjectToRoom(roomCode,EventNames.RECEIVE_VOTING.eventName, currentRanking);
         timerController.resetTimer();
     }
 
 
 
     private void sendQuestion(){
-        socketBasics.sendObject(roomCode,EventNames.GET_QUESTION.eventName,  gameRoom.getQuestions().get(roundCounter-1).getQuestion());
+        socketBasics.sendObjectToRoom(roomCode,EventNames.GET_QUESTION.eventName,  gameRoom.getQuestions().get(roundCounter-1).getQuestion());
 
     }
 
@@ -90,7 +90,7 @@ public class Game {
     //list of answers is converted to a string to comply with constructor of Message Type
     //must be converted back to list in frontend
     private void sendAnswers(){
-        socketBasics.sendObject(roomCode,EventNames.GET_ANSWERS.eventName,  gameRoom.getQuestions().get(roundCounter-1).getAnswers().toString());
+        socketBasics.sendObjectToRoom(roomCode,EventNames.GET_ANSWERS.eventName,  gameRoom.getQuestions().get(roundCounter-1).getAnswers().toString());
         
         
     }
