@@ -64,7 +64,7 @@ public class GameTest {
         gameRoom.setQuestions(this.questions);
 
         game = new Game(gameRoom/* , mockServer */);
-        game.setVoteController(new VoteController());
+        //game.setVoteController(new VoteController());
     }
 
     @Test
