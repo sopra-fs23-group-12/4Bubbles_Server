@@ -74,7 +74,7 @@ class GameRoomServiceTest {
         gameRoomService.initGameRoom(testRoom);
 
         assertNotNull(testRoom.getRoomCode());
-        assertTrue(testRoom.getRoomCode().length() == 6);
+        assertEquals(testRoom.getRoomCode().length(), 6);
         assertEquals(testRoom.getMembers(), testList);
 
     }
