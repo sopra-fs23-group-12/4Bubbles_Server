@@ -44,9 +44,9 @@ public class GameRoomService {
 
     public void setLeaderFromRepo(GameRoom gameRoom){
         Long leaderId = gameRoom.getLeaderUserId();
-        User leader = userRepository.findById(leaderId).orElseThrow(
-                () -> new EntityNotFoundException("User not found with ID: " + leaderId));
+        User leader = userRepository.findByid(leaderId);
         gameRoom.setLeader(leader);
+        
     }
 
     public GameRoom addPlayerToGameRoom(GameRoom gameRoom, long userId) {
