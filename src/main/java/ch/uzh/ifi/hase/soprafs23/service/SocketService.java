@@ -3,10 +3,7 @@ package ch.uzh.ifi.hase.soprafs23.service;
 
 import ch.uzh.ifi.hase.soprafs23.constant.EventNames;
 import ch.uzh.ifi.hase.soprafs23.constant.MessageType;
-import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
-import ch.uzh.ifi.hase.soprafs23.entity.Message;
-import ch.uzh.ifi.hase.soprafs23.entity.RoomCoordinator;
-import ch.uzh.ifi.hase.soprafs23.entity.User;
+import ch.uzh.ifi.hase.soprafs23.entity.*;
 import ch.uzh.ifi.hase.soprafs23.exceptions.RoomNotFoundException;
 
 import com.corundumstudio.socketio.SocketIOClient;
@@ -14,6 +11,9 @@ import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 
 //this is for the websockets
@@ -84,6 +84,16 @@ public class SocketService {
         socketBasics.sendObject(eventName, data, client);
     }
 
+
+    public HashMap<String, Integer> votesListAsMap(List<Vote> votes) {
+        HashMap<String, Integer> votesDict = new HashMap<String, Integer>();
+        for(Vote entry : votes) {
+            Integer i = votesDict.get(entry.getVote());
+            if(i == null) {votesDict.put(entry.getVote(), 1);}
+            else votesDict.put(entry.getVote(), i + 1);
+        }
+        return votesDict;
+    }
     
     /* no longer needed 
     public void timerExample(String roomCode){

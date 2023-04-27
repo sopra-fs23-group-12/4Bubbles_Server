@@ -2,6 +2,8 @@ package ch.uzh.ifi.hase.soprafs23.entity;
 
 import java.util.List;
 
+import ch.uzh.ifi.hase.soprafs23.game.Game;
+import ch.uzh.ifi.hase.soprafs23.game.VoteController;
 import com.corundumstudio.socketio.SocketIONamespace;
 
 import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
@@ -19,7 +21,9 @@ public class GameRoom {
     private String gameMode;
     private long leaderUserId;
 
+    private final VoteController voteController = new VoteController();
 
+    private Game currentGame;
     private SocketIONamespace namespace = null;
 
     public long getLeaderUserId() {
@@ -101,5 +105,14 @@ public class GameRoom {
     public void setQuestions(List<Question> questions) {
         this.questions = questions;
     }
+
+    public VoteController getVoteController() {
+        return voteController;
+    }
+
+    public Game getCurrentGame(){return this.currentGame;}
+
+    public void setCurrentGame(Game currentGame){ this.currentGame = currentGame;}
+
 }
 
