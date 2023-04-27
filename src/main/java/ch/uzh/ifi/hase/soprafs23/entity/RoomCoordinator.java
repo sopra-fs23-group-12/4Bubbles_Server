@@ -1,5 +1,6 @@
 package ch.uzh.ifi.hase.soprafs23.entity;
 
+import ch.uzh.ifi.hase.soprafs23.game.Game;
 import javassist.NotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -33,5 +34,14 @@ public class RoomCoordinator {
             }
         }
         throw new NotFoundException("Room with given room code could not be found");
+    }
+
+    public void deleteRoom(String roomCode){
+        try{ GameRoom gameRoom = getRoomByCode(roomCode);
+            this.rooms.remove(gameRoom);
+        } catch (Exception e){
+            System.out.println("room could not be deleted because it wasn't found");
+        }
+
     }
 }

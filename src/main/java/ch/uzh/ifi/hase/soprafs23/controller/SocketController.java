@@ -100,7 +100,7 @@ public class SocketController {
             GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
             String correctAnswer = gameRoom.getQuestions().get(gameRoom.getCurrentGame().getRoundCounter()).getCorrectAnswer();
             socketBasics.sendObject(roomCode, EventNames.GET_RIGHT_ANSWER.eventName, correctAnswer);
-
+            requestRanking();
         };
 
     }
@@ -130,17 +130,30 @@ public class SocketController {
     private DataListener<Message> requestRanking(){
         return (senderClient, data, ackSender) -> {
             String roomCode = data.getRoomCode();
-            int round = data.getRound();
+
+            //change this round to currentRoundCounter in game
             GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
             VoteController voteController = gameRoom.getVoteController();
             List<Vote> votes = voteController.getVotes();
+            int round = gameRoom.getCurrentGame().getRoundCounter();
             GameRanking gameRanking = new GameRanking(gameRoom.getMembers());
 
             //send ranking as a json
             Map currentRanking = gameRanking.updateRanking(gameRoom.getQuestions().get(round-1), votes);
             JSONObject json = new JSONObject(currentRanking);
+
+            boolean finalRound = false;
+            if (gameRoom.getCurrentGame().getRoundCounter() == 0){
+                finalRound = true;
+            }
+            json.append("final round", finalRound);
+            //append with append method the boolean on whether it is final
             System.out.println( json);
             socketBasics.sendObject(roomCode,EventNames.GET_RANKING.eventName, json);
+
+            if (!finalRound) gameRoom.getCurrentGame().startGame();
+            else if (finalRound) roomCoordinator.deleteRoom(roomCode);
+
         };
     }
 
@@ -162,27 +175,10 @@ public class SocketController {
             GameRoom gameRoom = roomCoordinator.getRoomByCode(data.getRoomCode());
             logger.info( "This game was started:");
             logger.info(String.valueOf(data.getRoomCode()));
-            /*
-            //next part is hard coded questions until the question API call is modified such that the questions are stored in gameroom
-            ArrayList<Question> questions = new ArrayList<Question>();
-            ArrayList<String> answers = new ArrayList<String>();
-            answers.add("question1");
-            answers.add("question2");
-            Question question1 = new Question();
-            question1.setQuestion("first sample question");
-            question1.setCorrectAnswer("question1");
-            question1.setAnswers(answers);
-            Question question2 = new Question();
-            question2.setQuestion("second sample question");
-            question2.setCorrectAnswer("question2");
-            question2.setAnswers(answers);
-            questions.add(question1);
-            questions.add(question2);
-            gameRoom.setQuestions(questions);
-             */
 
             Game game = new Game(gameRoom);
             gameRoom.setCurrentGame(game);
+            game.startPreGame();
             game.startGame();
         };
     }

@@ -41,19 +41,24 @@ public class Game {
 
     }
 
-    public void startGame(){
-        
-        //maybe turn this in to a timer before the first question is sent
+    //called upon startGame, does the things that only need to happen before the first question is started
+    public void startPreGame(){
+
         socketBasics.sendObject(this.gameRoom.getRoomCode(),EventNames.GAME_STARTED.eventName,  "");
 
         //have 5 second timer before the game starts, then send the question, then have 3 second timer
         timerController.setTimer(5);
         timerController.startTimer(roomCode);
+    }
+
+    //one iteration of a question
+    public void startGame(){
 
         sendQuestion();
 
         timerController.setTimer(3);
         timerController.startTimer(roomCode);
+
         sendAnswers();
 
         roundCounter--;
@@ -118,7 +123,9 @@ public class Game {
 
     public int getRoundCounter(){return this.roundCounter;}
 
-
+    public void incrementRoundCounter(){
+        this.roundCounter --;
+    }
     
 
 }
