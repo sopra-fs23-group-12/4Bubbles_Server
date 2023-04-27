@@ -74,18 +74,19 @@ class GameRoomServiceTest {
         gameRoomService.initGameRoom(testRoom);
 
         assertNotNull(testRoom.getRoomCode());
+        assertTrue(testRoom.getRoomCode().length() == 6);
         assertEquals(testRoom.getMembers(), testList);
 
     }
 
     @Test
-    void setLeaderFromRepoSuccessTest() {
+    void setLeaderFromRepoTest() {
         GameRoom testRoom = new GameRoom();
         testRoom.setLeaderUserId(testUser.getId());
         gameRoomService.setLeaderFromRepo(testRoom);
         Mockito.when(userRepository.findByid(Mockito.any())).thenReturn(testUser);
 
-        assertEquals(testRoom.getLeader(),testUser);
+        assertEquals(testRoom.getLeader(), testUser);
     }
 
 
