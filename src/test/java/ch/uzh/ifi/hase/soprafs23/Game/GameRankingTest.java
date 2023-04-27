@@ -65,7 +65,7 @@ public class GameRankingTest {
         this.votes = new ArrayList<Vote>();
         Vote vote1 = new Vote();
         vote1.setRemainingTime(8);
-        vote1.setVote("Nigeria");
+        vote1.setVote(" Nigeria");
         vote1.setPlayerId(1L);
         votes.add(vote1);
 
