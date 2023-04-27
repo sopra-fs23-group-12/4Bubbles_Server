@@ -43,16 +43,16 @@ public class UserService {
         return this.userRepository.findAll();
     }
 
-    public User getUser(Long id, String bearerToken) {
+    public User getUser(Long Id, String bearerToken) {
         authenticateUser(bearerToken);
-        checkIfExists(id);
-        return this.userRepository.findById(id).get();
+        checkIfExists(Id);
+        return this.userRepository.findById(Id).get();
     }
 
-    public User updateUser(Long id, String bearerToken, User newUser) {
+    public User updateUser(Long Id, String bearerToken, User newUser) {
 
         authenticateUser(bearerToken);
-        checkIfExists(id);
+        checkIfExists(Id);
 
         // if no body is set throw bad request
         if (newUser.getUsername() == null && newUser.getBirthday() == null) {
@@ -68,7 +68,7 @@ public class UserService {
                     String.format(baseErrorMessage));
         }
         
-        User user = this.userRepository.findById(id).get();
+        User user = this.userRepository.findById(Id).get();
 
         if (!newUser.getUsername().equals(user.getUsername()) && newUser.getUsername() != null) {
             checkIfUsernameIsUnique(newUser);

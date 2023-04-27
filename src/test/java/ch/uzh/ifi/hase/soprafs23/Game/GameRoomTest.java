@@ -16,6 +16,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -55,9 +56,9 @@ public class GameRoomTest {
 
         // when -> any object is being save in the userRepository -> return the dummy
         // testUser
-        Mockito.when(userRepository.findByid(1L)).thenReturn(testUser1);
-        Mockito.when(userRepository.findByid(2L)).thenReturn(testUser2);
-        Mockito.when(userRepository.findByid(3L)).thenReturn(testUser3);
+        Mockito.when(userRepository.findById(1L)).thenReturn(Optional.ofNullable((testUser1)));
+        Mockito.when(userRepository.findById(2L)).thenReturn(Optional.ofNullable(testUser2));
+        Mockito.when(userRepository.findById(3L)).thenReturn(Optional.ofNullable(testUser3));
 
         this.roomService =  new GameRoomService(userRepository);
     }
