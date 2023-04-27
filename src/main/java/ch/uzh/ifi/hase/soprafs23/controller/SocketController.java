@@ -134,25 +134,28 @@ public class SocketController {
             // send ranking as a json
             Map currentRanking = gameRanking.updateRanking(gameRoom.getQuestions().get(round), votes);
             JSONObject json = new JSONObject(currentRanking);
+            JSONObject response = new JSONObject();
+            response.append("ranking", json);
 
             boolean finalRound = false;
             if (gameRoom.getCurrentGame().getRoundCounter() == 0) {
                 finalRound = true;
             }
-            json.append("final round", finalRound);
+            response.append("final_round", finalRound);
             // append with append method the boolean on whether it is final
-            System.out.println(json);
-            socketBasics.sendObjectToRoom(roomCode, EventNames.GET_RANKING.eventName, json.toString());
+            System.out.println(response);
+            socketBasics.sendObjectToRoom(roomCode, EventNames.GET_RANKING.eventName, response.toString());
 
-            if (finalRound) roomCoordinator.deleteRoom(roomCode);
-            else if (!finalRound){
-                //start game after 5 seconds of ranking (get_question will then automatically let the client know the game continues)
+            if (finalRound)
+                roomCoordinator.deleteRoom(roomCode);
+            else if (!finalRound) {
+                // start game after 5 seconds of ranking (get_question will then automatically
+                // let the client know the game continues)
                 TimerController timerController = new TimerController();
                 timerController.setTimer(5);
                 timerController.startTimer(roomCode);
                 gameRoom.getCurrentGame().startGame();
             }
-
 
         };
     }
