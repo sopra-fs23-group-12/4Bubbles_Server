@@ -10,18 +10,18 @@ import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 
 public class UserPutDTO {
 
-    private Long id;
+    private Long Id;
     private String username;
     private UserStatus status;
     private Date creationDate;
     private Date birthday;
 
     public Long getId() {
-        return id;
+        return Id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(Long Id) {
+        this.Id = Id;
     }
 
     public String getUsername() {
