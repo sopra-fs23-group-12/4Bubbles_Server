@@ -1,6 +1,5 @@
 package ch.uzh.ifi.hase.soprafs23.controller;
 
-
 import ch.uzh.ifi.hase.soprafs23.entity.*;
 import ch.uzh.ifi.hase.soprafs23.game.GameRanking;
 import ch.uzh.ifi.hase.soprafs23.game.VoteController;
@@ -24,7 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-
 
 /*
     server.addConnectListener(onConnected()) => triggers when someone connect to the socket
@@ -63,12 +61,9 @@ import java.util.logging.Logger;
 @Component
 public class SocketController {
 
-
     // Create a Logger debugging
-    Logger logger
-            = Logger.getLogger(
+    Logger logger = Logger.getLogger(
             SocketController.class.getName());
-
 
     private final SocketIOServer server;
     private final SocketService socketService;
@@ -96,21 +91,21 @@ public class SocketController {
         return (senderClient, data, ackSender) -> {
             String roomCode = data.getRoomCode();
             GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
-            String correctAnswer = gameRoom.getQuestions().get(gameRoom.getCurrentGame().getRoundCounter()).getCorrectAnswer();
+            String correctAnswer = gameRoom.getQuestions().get(gameRoom.getCurrentGame().getRoundCounter())
+                    .getCorrectAnswer();
             socketBasics.sendObjectToRoom(roomCode, EventNames.GET_RIGHT_ANSWER.eventName, correctAnswer);
             requestRanking();
         };
 
     }
 
-
-    private DataListener<VoteMessage> updateVote(){
+    private DataListener<VoteMessage> updateVote() {
         return (senderClient, data, ackSender) -> {
             long userId = Long.parseLong(data.getUserId());
             String message = data.getMessage();
             int remainingTime = data.getRemainingTime();
             String roomCode = data.getRoomCode();
-            if (data.getRemainingTime() > 0){
+            if (data.getRemainingTime() > 0) {
                 GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
                 VoteController voteController = gameRoom.getVoteController();
                 Game game = gameRoom.getCurrentGame();
@@ -122,56 +117,53 @@ public class SocketController {
 
             }
         };
-        }
+    }
 
-
-    private DataListener<Message> requestRanking(){
+    private DataListener<Message> requestRanking() {
         return (senderClient, data, ackSender) -> {
             String roomCode = data.getRoomCode();
 
-            //change this round to currentRoundCounter in game
+            // change this round to currentRoundCounter in game
             GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
             VoteController voteController = gameRoom.getVoteController();
             List<Vote> votes = voteController.getVotes();
             int round = gameRoom.getCurrentGame().getRoundCounter();
             GameRanking gameRanking = new GameRanking(gameRoom.getMembers());
 
-            //send ranking as a json
-            Map currentRanking = gameRanking.updateRanking(gameRoom.getQuestions().get(round-1), votes);
+            // send ranking as a json
+            Map currentRanking = gameRanking.updateRanking(gameRoom.getQuestions().get(round - 1), votes);
             JSONObject json = new JSONObject(currentRanking);
 
             boolean finalRound = false;
-            if (gameRoom.getCurrentGame().getRoundCounter() == 0){
+            if (gameRoom.getCurrentGame().getRoundCounter() == 0) {
                 finalRound = true;
             }
             json.append("final round", finalRound);
-            //append with append method the boolean on whether it is final
-            System.out.println( json);
-            socketBasics.sendObjectToRoom(roomCode,EventNames.GET_RANKING.eventName, json);
+            // append with append method the boolean on whether it is final
+            System.out.println(json);
+            socketBasics.sendObjectToRoom(roomCode, EventNames.GET_RANKING.eventName, json.toString());
 
-            if (!finalRound) gameRoom.getCurrentGame().startGame();
-            else if (finalRound) roomCoordinator.deleteRoom(roomCode);
+            if (!finalRound)
+                gameRoom.getCurrentGame().startGame();
+            else if (finalRound)
+                roomCoordinator.deleteRoom(roomCode);
 
         };
     }
 
-
-
-
-    //example implementation on /websockets, call this method to start the timer
+    // example implementation on /websockets, call this method to start the timer
     private DataListener<Message> startTimer() {
         return (senderClient, data, ackSender) -> {
-            logger.info( "timer has been started:");
+            logger.info("timer has been started:");
             logger.info(data.getRoomCode());
-            //socketService.timerExample(data.getRoomCode());
-         };
+            // socketService.timerExample(data.getRoomCode());
+        };
     }
-
 
     private DataListener<Message> socketStartGame() {
         return (senderClient, data, ackSender) -> {
             GameRoom gameRoom = roomCoordinator.getRoomByCode(data.getRoomCode());
-            logger.info( "This game was started:");
+            logger.info("This game was started:");
             logger.info(String.valueOf(data.getRoomCode()));
             Game game = new Game(gameRoom);
             gameRoom.setCurrentGame(game);
@@ -180,7 +172,8 @@ public class SocketController {
         };
     }
 
-    //great to use for debugging, sends a message to every member of a namespace upon receiving a message
+    // great to use for debugging, sends a message to every member of a namespace
+    // upon receiving a message
     private DataListener<Message> onChatReceived() {
         return (senderClient, data, ackSender) -> {
             System.out.println("message received:");
@@ -193,9 +186,8 @@ public class SocketController {
         };
     }
 
-
-    //this method is only called once the gameroom has been created.
-    //join a gameRoom and the socketio namespace with the same code
+    // this method is only called once the gameroom has been created.
+    // join a gameRoom and the socketio namespace with the same code
     private DataListener<Message> joinRoom() {
         return (senderClient, data, ackSender) -> {
 
@@ -203,25 +195,27 @@ public class SocketController {
             Long userId = Long.parseLong(data.getUserId());
             String bearerToken = data.getBearerToken();
 
-            //if a room is specified (and exists) and passed with the url, you sign the user into the room. Otherwise, a room is created that has the name of the socket id
+            // if a room is specified (and exists) and passed with the url, you sign the
+            // user into the room. Otherwise, a room is created that has the name of the
+            // socket id
             try {
-                //join the gameRoom (server entitiy)
+                // join the gameRoom (server entitiy)
                 socketService.joinRoom(roomCode, userId, bearerToken, senderClient);
-                //join the socket namespace
+                // join the socket namespace
                 senderClient.joinRoom(roomCode);
                 logger.info("room is joined!");
                 logger.info(roomCode);
 
-                //prepare the response:
+                // prepare the response:
                 GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
                 logger.info("sending room data");
-                //sends the room info to the newly joined client
-                socketBasics.sendObjectToRoom(roomCode, EventNames.ROOM_IS_JOINED.eventName, DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(gameRoom));
+                // sends the room info to the newly joined client
+                socketBasics.sendObjectToRoom(roomCode, EventNames.ROOM_IS_JOINED.eventName,
+                        DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(gameRoom));
 
-                //notifies all clients that are already joined that there is a new member
-                socketService.sendMemberArray(roomCode,senderClient);
-            }
-            catch (Exception e) {
+                // notifies all clients that are already joined that there is a new member
+                socketService.sendMemberArray(roomCode, senderClient);
+            } catch (Exception e) {
                 logger.info("room could not be joined, either room was null or no room with that code exists");
                 logger.info(e.toString());
 
@@ -231,12 +225,10 @@ public class SocketController {
         };
     }
 
-
-
     private ConnectListener onConnected() {
         return (senderClient) -> {
             String roomCode = senderClient.getHandshakeData().getSingleUrlParam("roomCode");
-            if (roomCode != null){
+            if (roomCode != null) {
                 senderClient.joinRoom(roomCode);
             }
             roomCode = (senderClient.getSessionId().toString());
@@ -244,7 +236,8 @@ public class SocketController {
             logger.info("session id was made into a room");
             logger.info("Socket ID[{}]  Connected to socket");
             logger.info(roomCode);
-            socketService.sendObject(senderClient, EventNames.GET_MESSAGE.eventName, String.format("single namespace: joined room: %s", roomCode));
+            socketService.sendObject(senderClient, EventNames.GET_MESSAGE.eventName,
+                    String.format("single namespace: joined room: %s", roomCode));
 
         };
 
@@ -259,4 +252,3 @@ public class SocketController {
     }
 
 }
-
