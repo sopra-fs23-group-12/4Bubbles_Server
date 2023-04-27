@@ -104,7 +104,7 @@ public class Game {
 
     private void sendQuestion(){
         socketBasics.sendObjectToRoom(roomCode,EventNames.GET_QUESTION.eventName,  gameRoom.getQuestions().get(roundCounter-1).getQuestion());
-        
+
     }
 
 
