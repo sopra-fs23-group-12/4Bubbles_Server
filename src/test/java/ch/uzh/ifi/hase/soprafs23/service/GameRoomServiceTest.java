@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs23.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -72,7 +73,7 @@ class GameRoomServiceTest {
         testList.add(testUser);
         gameRoomService.initGameRoom(testRoom);
 
-        assertTrue(testRoom.getRoomCode() != null);
+        assertNotNull(testRoom.getRoomCode());
         assertEquals(testRoom.getMembers(), testList);
 
     }
@@ -84,7 +85,7 @@ class GameRoomServiceTest {
         gameRoomService.setLeaderFromRepo(testRoom);
         Mockito.when(userRepository.findByid(Mockito.any())).thenReturn(testUser);
 
-        assertTrue(testRoom.getLeader().equals(testUser));
+        assertEquals(testRoom.getLeader(),testUser);
     }
 
 
