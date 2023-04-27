@@ -95,14 +95,14 @@ public class Game {
 
         List<Vote> votes = voteController.getVotes();
         String currentRanking = ranking.updateRanking(questions.get(roundCounter-1), votes).values().toString();
-        socketBasics.sendObject(roomCode,EventNames.RECEIVE_VOTING.eventName, currentRanking);
-
+        socketBasics.sendObjectToRoom(roomCode,EventNames.RECEIVE_VOTING.eventName, currentRanking);
+        
     }
 
 
 
     private void sendQuestion(){
-        socketBasics.sendObject(roomCode,EventNames.GET_QUESTION.eventName,  gameRoom.getQuestions().get(roundCounter-1).getQuestion());
+        socketBasics.sendObjectToRoom(roomCode,EventNames.GET_QUESTION.eventName,  gameRoom.getQuestions().get(roundCounter-1).getQuestion());
 
     }
 
@@ -110,7 +110,7 @@ public class Game {
     //list of answers is converted to a string to comply with constructor of Message Type
     //must be converted back to list in frontend
     private void sendAnswers(){
-        socketBasics.sendObject(roomCode,EventNames.GET_ANSWERS.eventName,  gameRoom.getQuestions().get(roundCounter-1).getAnswers().toString());
+        socketBasics.sendObjectToRoom(roomCode,EventNames.GET_ANSWERS.eventName,  gameRoom.getQuestions().get(roundCounter-1).getAnswers().toString());
         
         
     }

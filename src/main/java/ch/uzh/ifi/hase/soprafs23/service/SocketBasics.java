@@ -10,7 +10,7 @@ public class SocketBasics {
 
 
     //one generic method to send anything you want without having to instantiate SocketService
-    public void sendObject(String roomCode, String eventName, Object message) {
+    public void sendObjectToRoom(String roomCode, String eventName, Object message) {
         try {
             GameRoom room = roomCoordinator.getRoomByCode(roomCode);
             for (SocketIOClient client : room.getNamespace().getRoomOperations(roomCode).getClients()) {
@@ -19,6 +19,10 @@ public class SocketBasics {
         } catch (Exception e){
             System.out.printf("\n \n room not found in SocketBasics %s", roomCode);
         }
+    }
+
+    public void sendObject(String eventName, Object message, SocketIOClient client) {
+        client.sendEvent(eventName, message);
     }
 
 }

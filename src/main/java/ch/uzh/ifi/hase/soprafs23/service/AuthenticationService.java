@@ -38,11 +38,11 @@ public class AuthenticationService{
         user.setStatus(UserStatus.ONLINE);
         return user;
     }
-
-    public User logout(String token) {
+    //changedt to void as there is no return value needed
+    public void logout(String token) {
         User user = this.userRepository.findByToken(token);
         user.setStatus(UserStatus.OFFLINE);
-        return user;
+        //return user;
     }
 
 }

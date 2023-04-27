@@ -24,9 +24,8 @@ public class Timer {
                 elapsedTimeInSeconds++;
                 System.out.println("Remaining time: " + (timeInSeconds-elapsedTimeInSeconds) + " seconds");
                 try {
-                    System.out.println("Remaining time: " + (timeInSeconds - elapsedTimeInSeconds) + " seconds");
                    
-                    socketBasics.sendObject(roomCode, "timer_count", i);
+                    socketBasics.sendObjectToRoom(roomCode, "timer_count", i);
                     
                 }
                 catch (Exception e){

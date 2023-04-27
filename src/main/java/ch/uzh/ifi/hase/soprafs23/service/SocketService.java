@@ -56,7 +56,7 @@ public class SocketService {
         try{
             GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
             List<User> members = gameRoom.getMembers();
-            socketBasics.sendObject(roomCode, EventNames.JOINED_PLAYERS.eventName, members);
+            socketBasics.sendObjectToRoom(roomCode, EventNames.JOINED_PLAYERS.eventName, members);
         } catch (Exception e){
             System.out.printf("Exception occurred while sending user array: %s", e);
         }
@@ -65,23 +65,23 @@ public class SocketService {
 
 
     // i got the dependency from here:  https://mvnrepository.com/artifact/com.corundumstudio.socketio/netty-socketio/1.5.0
-    public void sendMessage(String roomCode, String eventName, String message) {
-        socketBasics.sendObject(roomCode, eventName, message);
+    public void sendMessage(SocketIOClient client, String eventName, String message) {
+        socketBasics.sendObject(eventName, message, client);
     }
 
     public void sendAnswers(String roomCode, SocketIOClient senderClient, String answers) {
-        socketBasics.sendObject(roomCode, EventNames.GET_ANSWERS.eventName, new Message(MessageType.SERVER, answers));
+        socketBasics.sendObjectToRoom(roomCode, EventNames.GET_ANSWERS.eventName, new Message(MessageType.SERVER, answers));
         
     }
 
     public void sendQuestion(String roomCode, SocketIOClient senderClient, String question) {
-        socketBasics.sendObject(roomCode, EventNames.GET_QUESTION.eventName, new Message(MessageType.SERVER, question));
+        socketBasics.sendObjectToRoom(roomCode, EventNames.GET_QUESTION.eventName, new Message(MessageType.SERVER, question));
     }
 
 
     //this is used to send a data package for the data hook
-    public void sendObject(String roomCode, String eventName, Object data) {
-        socketBasics.sendObject(roomCode, eventName, data);
+    public void sendObject(SocketIOClient client, String eventName, Object data) {
+        socketBasics.sendObject(eventName, data, client);
     }
 
 

@@ -4,7 +4,6 @@ package ch.uzh.ifi.hase.soprafs23.controller;
 import ch.uzh.ifi.hase.soprafs23.entity.*;
 import ch.uzh.ifi.hase.soprafs23.game.GameRanking;
 import ch.uzh.ifi.hase.soprafs23.game.VoteController;
-import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
 import ch.uzh.ifi.hase.soprafs23.service.SocketService;
 import ch.uzh.ifi.hase.soprafs23.constant.EventNames;
 import ch.uzh.ifi.hase.soprafs23.game.Game;
@@ -21,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -175,7 +173,6 @@ public class SocketController {
             GameRoom gameRoom = roomCoordinator.getRoomByCode(data.getRoomCode());
             logger.info( "This game was started:");
             logger.info(String.valueOf(data.getRoomCode()));
-
             Game game = new Game(gameRoom);
             gameRoom.setCurrentGame(game);
             game.startPreGame();
@@ -191,7 +188,7 @@ public class SocketController {
             logger.info(data.getMessage());
             logger.info(String.valueOf(data.getRoomCode()));
             logger.info(String.valueOf(data.getUserId()));
-            socketBasics.sendObject(data.getRoomCode(),EventNames.GET_MESSAGE.eventName, "hello this is the server");
+            socketBasics.sendObject(EventNames.GET_MESSAGE.eventName, "hello this is the server", senderClient);
 
         };
     }
@@ -219,7 +216,7 @@ public class SocketController {
                 GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
                 logger.info("sending room data");
                 //sends the room info to the newly joined client
-                socketBasics.sendObject(roomCode, EventNames.ROOM_IS_JOINED.eventName, DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(gameRoom));
+                socketBasics.sendObjectToRoom(roomCode, EventNames.ROOM_IS_JOINED.eventName, DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(gameRoom));
 
                 //notifies all clients that are already joined that there is a new member
                 socketService.sendMemberArray(roomCode,senderClient);
@@ -247,7 +244,7 @@ public class SocketController {
             logger.info("session id was made into a room");
             logger.info("Socket ID[{}]  Connected to socket");
             logger.info(roomCode);
-            socketService.sendObject(roomCode, EventNames.GET_MESSAGE.eventName, String.format("single namespace: joined room: %s", roomCode));
+            socketService.sendObject(senderClient, EventNames.GET_MESSAGE.eventName, String.format("single namespace: joined room: %s", roomCode));
 
         };
 

@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.net.*;
 
 import javax.transaction.Transactional;
 
@@ -17,6 +18,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import org.springframework.stereotype.Service;
+import org.unbescape.html.HtmlEscape;
 
 import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.TopicGetDTO;
@@ -43,8 +45,8 @@ public class ApiService implements TriviaCaller{
         List<Question> questionList = new ArrayList<>();
         for (Object q : questions.getJSONArray("results")) {
             Question question = new Question();
-            question.setQuestion(((JSONObject) q).getString("question"));
-            String correctAnswer = ((JSONObject) q).getString("correct_answer");
+            question.setQuestion(HtmlEscape.unescapeHtml(((JSONObject) q).getString("question")));
+            String correctAnswer = (HtmlEscape.unescapeHtml(((JSONObject) q).getString("correct_answer")));
             question.setCorrectAnswer(correctAnswer);
             List<String> answers = turnToStrings(((JSONObject) q).getJSONArray("incorrect_answers"));
             answers.add(correctAnswer);
@@ -80,21 +82,9 @@ public class ApiService implements TriviaCaller{
     private List<String> turnToStrings(JSONArray jsonArray) {
         List<String> list = new ArrayList<>();
         for (Object o : jsonArray) {
-            list.add(o.toString());
+            list.add(HtmlEscape.unescapeHtml(o.toString()));
         }
         return list;
-    }
-
-
-    public static void main(String[] args) throws IOException {
-        ApiService apiService = new ApiService();
-        String url = "https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple";
-        for (Question q : apiService.getQuestionsFromApi(url)) {
-            System.out.println(q.getQuestion());
-            System.out.println(q.getAnswers());
-            System.out.println(q.getCorrectAnswer());
-        }
-        //System.out.println(apiService.getQuestionsFromApi(url));
     }
     
 }
