@@ -51,7 +51,7 @@ im project board fehlen für week 3 und 4 je ein task
 ### Dario Küffer
 
 ###### Week 1
-- [x] [#4] (https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/4)
+- [x] [#13] (https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/13)
 - [x] [#16] (https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/16)
 ###### Week 2
 - [x] [#34] (https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/34)
