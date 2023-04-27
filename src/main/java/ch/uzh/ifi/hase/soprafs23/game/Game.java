@@ -44,6 +44,7 @@ public class Game {
     //called upon startGame, does the things that only need to happen before the first question is started
     public void startPreGame(){
 
+
         socketBasics.sendObjectToRoom(this.gameRoom.getRoomCode(),EventNames.GAME_STARTED.eventName,  "");
 
         //have 5 second timer before the game starts, then send the question, then have 3 second timer
@@ -104,6 +105,7 @@ public class Game {
     private void sendQuestion(){
         socketBasics.sendObjectToRoom(roomCode,EventNames.GET_QUESTION.eventName,  gameRoom.getQuestions().get(roundCounter-1).getQuestion());
 
+        System.out.printf("correct answer: %s \n", gameRoom.getQuestions().get(roundCounter-1).getCorrectAnswer());
     }
 
 
@@ -126,6 +128,8 @@ public class Game {
     public void incrementRoundCounter(){
         this.roundCounter --;
     }
+
+    public GameRanking getRanking(){return this.ranking;}
     
 
 }

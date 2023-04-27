@@ -128,11 +128,15 @@ public class SocketController {
             GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
             VoteController voteController = gameRoom.getVoteController();
             List<Vote> votes = voteController.getVotes();
-            int round = gameRoom.getCurrentGame().getRoundCounter();
-            GameRanking gameRanking = new GameRanking(gameRoom.getMembers());
+            Game game = gameRoom.getCurrentGame();
+            int round = game.getRoundCounter();
+            GameRanking gameRanking = game.getRanking();
+
 
             // send ranking as a json
             Map currentRanking = gameRanking.updateRanking(gameRoom.getQuestions().get(round), votes);
+            voteController.resetVotes();
+
             JSONObject json = new JSONObject(currentRanking);
             JSONObject response = new JSONObject();
             response.append("ranking", json);
