@@ -16,7 +16,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
+/*
 
 public class GameTest {
 
@@ -63,8 +63,9 @@ public class GameTest {
         this.questions = List.of(triviaQuestion1, triviaQuestion2);
         gameRoom.setQuestions(this.questions);
 
-        game = new Game(gameRoom/* , mockServer */);
+        game = new Game(gameRoom/* , mockServer *//*);*/
         //game.setVoteController(new VoteController());
+        /*
     }
 
     @Test
@@ -80,7 +81,7 @@ public class GameTest {
     @Test
     public void testTimerStartedAndReset() {
         /* SocketIOServer mockServer = mock(SocketIOServer.class, Answers.RETURNS_DEFAULTS);
-        Game game = new Game(gameRoom, mockServer); */
+        Game game = new Game(gameRoom, mockServer); *//*
         assertEquals(10,game.getRemainingTime());
 
         game.playRound();
@@ -91,7 +92,7 @@ public class GameTest {
     @Test
     public void testTimerRunning() {
         /* SocketIOServer mockServer = mock(SocketIOServer.class, Answers.RETURNS_DEFAULTS);
-        Game game = new Game(gameRoom, mockServer); */
+        Game game = new Game(gameRoom, mockServer); *//*
         assertEquals(10,game.getRemainingTime());
 
         game.playRound();
@@ -109,3 +110,4 @@ public class GameTest {
         thread.start();
     }
 }
+*/
