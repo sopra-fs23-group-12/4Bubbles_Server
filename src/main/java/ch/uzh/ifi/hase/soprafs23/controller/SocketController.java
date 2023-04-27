@@ -3,6 +3,7 @@ package ch.uzh.ifi.hase.soprafs23.controller;
 import ch.uzh.ifi.hase.soprafs23.entity.*;
 import ch.uzh.ifi.hase.soprafs23.game.GameRanking;
 import ch.uzh.ifi.hase.soprafs23.game.VoteController;
+import ch.uzh.ifi.hase.soprafs23.game.stateStorage.TimerController;
 import ch.uzh.ifi.hase.soprafs23.service.SocketService;
 import ch.uzh.ifi.hase.soprafs23.constant.EventNames;
 import ch.uzh.ifi.hase.soprafs23.game.Game;
@@ -143,10 +144,15 @@ public class SocketController {
             System.out.println(json);
             socketBasics.sendObjectToRoom(roomCode, EventNames.GET_RANKING.eventName, json.toString());
 
-            if (!finalRound)
+            if (finalRound) roomCoordinator.deleteRoom(roomCode);
+            else if (!finalRound){
+                //start game after 5 seconds of ranking (get_question will then automatically let the client know the game continues)
+                TimerController timerController = new TimerController();
+                timerController.setTimer(5);
+                timerController.startTimer(roomCode);
                 gameRoom.getCurrentGame().startGame();
-            else if (finalRound)
-                roomCoordinator.deleteRoom(roomCode);
+            }
+
 
         };
     }
