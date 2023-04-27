@@ -131,7 +131,7 @@ public class SocketController {
             GameRanking gameRanking = new GameRanking(gameRoom.getMembers());
 
             // send ranking as a json
-            Map currentRanking = gameRanking.updateRanking(gameRoom.getQuestions().get(round - 1), votes);
+            Map currentRanking = gameRanking.updateRanking(gameRoom.getQuestions().get(round), votes);
             JSONObject json = new JSONObject(currentRanking);
 
             boolean finalRound = false;
