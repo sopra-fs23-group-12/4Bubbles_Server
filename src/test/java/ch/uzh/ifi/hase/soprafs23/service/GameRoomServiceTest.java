@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityNotFoundException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +20,7 @@ import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.repository.UserRepository;
 
-public class GameRoomServiceTest {
+class GameRoomServiceTest {
 
     @Mock
     private UserRepository userRepository;
@@ -36,7 +35,7 @@ public class GameRoomServiceTest {
     
     
     @BeforeEach
-    public void setup() {
+    void setup() {
         MockitoAnnotations.openMocks(this);      
         // given
         long id = 1L;
@@ -55,7 +54,7 @@ public class GameRoomServiceTest {
     }
     
     @Test
-    public void retrieveUserFromRepoTest() {
+    void retrieveUserFromRepoTest() {
         //given
         userService.createUser(testUser);
 
@@ -66,7 +65,7 @@ public class GameRoomServiceTest {
     }
 
     @Test
-    public void initGameRoomTest() {
+    void initGameRoomTest() {
         GameRoom testRoom = new GameRoom();
         testRoom.setLeader(testUser);
         List<User> testList = new ArrayList<>();
@@ -79,7 +78,7 @@ public class GameRoomServiceTest {
     }
 
     @Test
-    public void setLeaderFromRepoSuccessTest() {
+    void setLeaderFromRepoSuccessTest() {
         GameRoom testRoom = new GameRoom();
         testRoom.setLeaderUserId(testUser.getId());
         gameRoomService.setLeaderFromRepo(testRoom);
@@ -90,7 +89,7 @@ public class GameRoomServiceTest {
 
 
     @Test
-    public void addPlayerToGameRoomTest() {
+    void addPlayerToGameRoomTest() {
         GameRoom testRoom = new GameRoom();
         List<User> memberList = new ArrayList<>();
         List<User> memberList2 = new ArrayList<>();
@@ -103,7 +102,7 @@ public class GameRoomServiceTest {
     }
 
     @Test
-    public void throwForbiddenWhenNoBearerTokenTest() {
+    void throwForbiddenWhenNoBearerTokenTest() {
         String testToken = null;
 
         assertThrows(ResponseStatusException.class, () -> gameRoomService.throwForbiddenWhenNoBearerToken(testToken));
