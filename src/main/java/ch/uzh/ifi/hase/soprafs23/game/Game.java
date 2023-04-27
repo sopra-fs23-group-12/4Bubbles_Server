@@ -44,7 +44,7 @@ public class Game {
     //called upon startGame, does the things that only need to happen before the first question is started
     public void startPreGame(){
 
-        socketBasics.sendObject(this.gameRoom.getRoomCode(),EventNames.GAME_STARTED.eventName,  "");
+        socketBasics.sendObjectToRoom(this.gameRoom.getRoomCode(),EventNames.GAME_STARTED.eventName,  "");
 
         //have 5 second timer before the game starts, then send the question, then have 3 second timer
         timerController.setTimer(5);

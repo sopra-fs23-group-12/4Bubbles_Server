@@ -97,7 +97,7 @@ public class SocketController {
             String roomCode = data.getRoomCode();
             GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
             String correctAnswer = gameRoom.getQuestions().get(gameRoom.getCurrentGame().getRoundCounter()).getCorrectAnswer();
-            socketBasics.sendObject(roomCode, EventNames.GET_RIGHT_ANSWER.eventName, correctAnswer);
+            socketBasics.sendObjectToRoom(roomCode, EventNames.GET_RIGHT_ANSWER.eventName, correctAnswer);
             requestRanking();
         };
 
@@ -118,7 +118,7 @@ public class SocketController {
                 List<Vote> votes = voteController.getVotes();
                 HashMap<String, Integer> votesHash = socketService.votesListAsMap(votes);
                 System.out.println(votesHash);
-                socketBasics.sendObject(roomCode, EventNames.SOMEBODY_VOTED.eventName, votesHash);
+                socketBasics.sendObjectToRoom(roomCode, EventNames.SOMEBODY_VOTED.eventName, votesHash);
 
             }
         };
@@ -147,7 +147,7 @@ public class SocketController {
             json.append("final round", finalRound);
             //append with append method the boolean on whether it is final
             System.out.println( json);
-            socketBasics.sendObject(roomCode,EventNames.GET_RANKING.eventName, json);
+            socketBasics.sendObjectToRoom(roomCode,EventNames.GET_RANKING.eventName, json);
 
             if (!finalRound) gameRoom.getCurrentGame().startGame();
             else if (finalRound) roomCoordinator.deleteRoom(roomCode);
