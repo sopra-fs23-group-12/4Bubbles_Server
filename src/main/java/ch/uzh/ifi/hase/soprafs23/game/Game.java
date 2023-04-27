@@ -124,11 +124,13 @@ public class Game {
 
     public int getRoundCounter(){return this.roundCounter;}
 
-    public void incrementRoundCounter(){
-        this.roundCounter --;
-    }
-
     public GameRanking getRanking(){return this.ranking;}
     
+    public String getRoomCode(){return this.roomCode;}
 
+    public List<Question> getQuestions(){return this.questions;}
+
+    public VoteController getVoteController() {
+        return voteController;
+    }
 }
