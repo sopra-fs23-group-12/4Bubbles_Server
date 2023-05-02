@@ -102,4 +102,7 @@ Definition of week dates:
 - [x] [#72](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/72)
 ###### Week 5
 - [x] [#81](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/81)
-- [ ] [#86](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/86)
+- [x] [#86](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/86)
+###### Week 6
+- [ ] [#117](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/117)
+- [ ] [#116](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/116)
