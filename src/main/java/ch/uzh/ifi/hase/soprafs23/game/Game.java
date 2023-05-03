@@ -44,7 +44,6 @@ public class Game {
     //called upon startGame, does the things that only need to happen before the first question is started
     public void startPreGame(){
 
-
         socketBasics.sendObjectToRoom(this.gameRoom.getRoomCode(),EventNames.GAME_STARTED.eventName,  "");
 
         //have 5 second timer before the game starts, then send the question, then have 3 second timer
@@ -59,19 +58,18 @@ public class Game {
 
         timerController.setTimer(3);
         timerController.startTimer(roomCode);
+        sendAnswers();//send all answers as well as correct answer
 
-        sendAnswers();
+        Thread timerThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                timerController.setTimer(10);
+                timerController.startTimer(roomCode);
+            }
+        });
+        timerThread.start();
 
         roundCounter--;
-
-        /*
-        can no longer be automated because the timer now runs in the frontend
-        while(roundCounter > 0){
-            System.out.println("Question" + roundCounter);
-            playRound();
-            this.voting.resetVotes();
-            roundCounter--;
-        }*/
     }
 
     public void setVoteGame(long userId, String message, int remainingTime){
@@ -84,6 +82,7 @@ public class Game {
     //send the timer pings
     //receive the votes and broadcast them to the other players
     //send the correct answers
+    //not needed atm
     public void playRound(){
         sendQuestion();
 

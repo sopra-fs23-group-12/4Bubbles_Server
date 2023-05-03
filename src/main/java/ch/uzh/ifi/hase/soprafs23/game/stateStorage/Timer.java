@@ -17,27 +17,22 @@ public class Timer {
     }
 
     public void start(String roomCode) {
+        
         try {
             for (int i = timeInSeconds; i > 0; i--) {
                 isRunning = true;
                 Thread.sleep(1000);
                 elapsedTimeInSeconds++;
+                socketBasics.sendObjectToRoom(roomCode, "timer_count", i);
                 System.out.println("Remaining time: " + (timeInSeconds-elapsedTimeInSeconds) + " seconds");
-                try {
-                   
-                    socketBasics.sendObjectToRoom(roomCode, "timer_count", i);
-                    
+                 
                 }
-                catch (Exception e){
-                    System.out.print("room you want to set the timer in does not exist");
-                    
-                }
-            }
-        } catch (InterruptedException e) {
-            //e.printStackTrace();
-            Thread.currentThread().interrupt();
+        }catch (InterruptedException e) {
+            
         }
+
         isRunning = false;
+        
     }
 
     public int getTimeInSeconds() {
@@ -52,7 +47,29 @@ public class Timer {
         return isRunning;
     }
 
+    public void setIsRunning(boolean isRunning) {
+        this.isRunning = isRunning;
+    }
+
     public int getRemainingTimeInSeconds() {
         return timeInSeconds-elapsedTimeInSeconds;
     }
+
+    /* public static void main(String[] args) {
+        
+        Thread thread = new Thread(new Runnable() {
+            Timer timer = new Timer(5);
+            @Override
+            public void run() {
+                //Timer timer = new Timer(5);
+                timer.setIsRunning(true);
+                timer.start("test");
+            }
+        });
+        thread.start();
+        while (thread.isAlive()) {
+            System.out.println("Timer is running");
+        }
+
+    } */
 }
