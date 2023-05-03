@@ -13,7 +13,6 @@ import ch.uzh.ifi.hase.soprafs23.service.UserService;
 import javassist.NotFoundException;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 

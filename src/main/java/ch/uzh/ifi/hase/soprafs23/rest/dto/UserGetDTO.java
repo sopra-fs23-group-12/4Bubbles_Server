@@ -11,6 +11,12 @@ public class UserGetDTO {
     private Date creationDate;
     private UserStatus status;
     private Date birthday;
+    private int totalPoints;
+    private int totalGamesPlayed;
+
+    /* 
+     * Only getters and setters below this point
+     */
 
     public Long getId() {
         return id;
@@ -50,5 +56,21 @@ public class UserGetDTO {
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
+    }
+
+    public int getTotalPoints() {
+        return totalPoints;
+    }
+
+    public void setTotalPoints(int totalPoints) {
+        this.totalPoints = totalPoints;
+    }
+
+    public int getTotalGamesPlayed() {
+        return totalGamesPlayed;
+    }
+
+    public void setTotalGamesPlayed(int totalGamesPlayed) {
+        this.totalGamesPlayed = totalGamesPlayed;
     }
 }

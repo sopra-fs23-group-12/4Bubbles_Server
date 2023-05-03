@@ -4,6 +4,7 @@ import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.UserGetDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.UserPostDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.UserPutDTO;
+import ch.uzh.ifi.hase.soprafs23.rest.dto.UserStatisticsGetDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs23.service.UserService;
 
@@ -100,6 +101,18 @@ public class UserController {
 
         userService.updateUser(id, bearerToken, userInput);
 
+    }
+
+    @GetMapping("/users/{id}/Statistics")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public UserStatisticsGetDTO getStats(@PathVariable Long id, @RequestHeader(value = "Authorization", required = false) String bearerToken) {
+
+        throwForbiddenWhenNoBearerToken(bearerToken);
+
+        User user = userService.getUser(id, bearerToken);
+
+        return DTOMapper.INSTANCE.convertEntityToUserStatisticsGetDTO(user);
     }
 
     public void throwForbiddenWhenNoBearerToken(String bearerToken) {
