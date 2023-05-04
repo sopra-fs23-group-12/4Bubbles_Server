@@ -14,7 +14,7 @@ public class GameRoomPostDTO {
         return leaderId;
     }
 
-    public void setleaderId(long leaderId) {
+    public void setLeaderId(long leaderId) {
         this.leaderId = leaderId;
     }
 

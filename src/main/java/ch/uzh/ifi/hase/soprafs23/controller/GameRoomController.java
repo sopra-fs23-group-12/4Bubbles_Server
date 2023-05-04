@@ -17,6 +17,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,6 @@ public class GameRoomController {
     private final GameRoomService gameRoomService;
     private final RoomCoordinator roomCoordinator;
     private final ApiService apiService;
-
 
     GameRoomController(UserService userService, GameRoomService gameRoomService, RoomCoordinator roomCoordinator, ApiService apiService) {
         this.gameRoomService = gameRoomService;
