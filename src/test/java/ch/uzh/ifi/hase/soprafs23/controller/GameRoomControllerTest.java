@@ -168,6 +168,18 @@ public class GameRoomControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("members[1].username", Matchers.is("playerName2")));
     }
 
+    @Test
+    public void testGetTopics() throws Exception {
+        doNothing().when(gameRoomServiceMock).throwForbiddenWhenNoBearerToken(any());
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/categories")
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+
+
     private String asJsonString(final Object object) {
         try {
             return new ObjectMapper().writeValueAsString(object);
@@ -180,39 +192,4 @@ public class GameRoomControllerTest {
 }
 
 
-
-    /*gameRoomService.throwForbiddenWhenNoBearerToken(bearerToken);
-    GameRoom gameRoom = DTOMapper.INSTANCE.convertGameRoomPostDTOtoEntity(gameRoomPostDTO);
-        gameRoomService.setLeaderFromRepo(gameRoom);
-        gameRoomService.initGameRoom(gameRoom);
-    String apiURL = String.format(ApiUrls.QUESTIONS.url, gameRoom.getNumOfQuestions(), gameRoom.getQuestionTopicId(), gameRoom.getGameMode());
-        try{
-        gameRoom.setQuestions(apiService.getQuestionsFromApi(apiURL));
-        gameRoom.getQuestions().forEach(question -> System.out.println(question.getQuestion()));
-    } catch (
-    IOException e) {
-        throw new ApiConnectionError("Something went wrong while accessing the API", e);
-    }
-        roomCoordinator.addRoom(gameRoom);
-
-        return DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(gameRoom);
-     */
-
-    //setup GameRoom
-    /*testUser1 = new User();
-        testUser1.setId(1L);
-        testUser1.setPassword("password1");
-        testUser1.setUsername("playerName1");
-
-    GameRoom gameRoom = new GameRoom();
-        gameRoom.setRoomCode("123456");
-        gameRoom.setLeader(testUser1);
-        gameRoom.setMembers(List.of(testUser1));
-
-    GameRoomPostDTO gameRoomPostDTO = new GameRoomPostDTO();
-        gameRoomPostDTO.setLeaderId(1L);
-        gameRoomPostDTO.setQuestionTopic("Geography");
-        gameRoomPostDTO.setGameMode("Basic");
-        gameRoomPostDTO.setNumOfQuestions(5);
-        gameRoomPostDTO.setQuestionTopicId(3);*/
 
