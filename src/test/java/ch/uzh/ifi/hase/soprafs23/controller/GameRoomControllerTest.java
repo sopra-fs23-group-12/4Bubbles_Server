@@ -70,16 +70,14 @@ public class GameRoomControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-
-
-    @MockBean
-    private GameRoomService gameRoomServiceMock;
-
     @MockBean
     private RoomCoordinator roomCoordinatorMock;
 
-    @Mock
+    @MockBean
     UserRepository userRepository;
+
+    @MockBean
+    private GameRoomService gameRoomServiceMock;
 
     @MockBean
     UserService userService;
@@ -101,6 +99,42 @@ public class GameRoomControllerTest {
     }
 
     @Test
+    public void testCreateRoom() throws Exception {
+        given(userRepository.findByid(1L)).willReturn(testUser1);
+        given(userRepository.findById(1L)).willReturn(Optional.ofNullable(testUser1));
+        gameRoomServiceMock = new GameRoomService(userRepository);
+
+        GameRoomPostDTO gameRoomPostDTO = new GameRoomPostDTO();
+        gameRoomPostDTO.setLeaderId(1L);
+        gameRoomPostDTO.setQuestionTopic("Geography");
+        gameRoomPostDTO.setGameMode("Basic");
+        gameRoomPostDTO.setNumOfQuestions(5);
+        gameRoomPostDTO.setQuestionTopicId(3);
+
+        //doNothing().when(gameRoomServiceMock).throwForbiddenWhenNoBearerToken(Mockito.any());
+        //doNothing().when(gameRoomServiceMock).setLeaderFromRepo(Mockito.any());
+        //doNothing().when(gameRoomServiceMock).initGameRoom(Mockito.any());
+        //given(apiService.getQuestionsFromApi(Mockito.any())).willReturn(Collections.emptyList());
+        //doNothing().when(roomCoordinatorMock).addRoom(Mockito.any());
+
+        //given(gameRoomServiceMock.retrieveUserFromRepo(1L)).willReturn(testUser2);
+        //doNothing().when(gameRoomServiceMock).throwForbiddenWhenNoBearerToken(any());
+        ;
+        //GameRoom gameRoom = RoomCoordinator.getInstance().getRoomByCode("123456");
+        //given(.setLeaderFromRepo(gameRoom)).thenCallRealMethod();
+        //doCallRealMethod().when(gameRoomServiceMock).setLeaderFromRepo(any());
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/createRoom")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(gameRoomPostDTO))
+                ).andExpect(MockMvcResultMatchers.status().isCreated());
+                //.andExpect(MockMvcResultMatchers.jsonPath("roomCode", Matchers.is("123456")))
+                //.andExpect(MockMvcResultMatchers.jsonPath("members[0].username", Matchers.is("playerName1")));
+
+    }
+
+    @Test
     public void testJoinRoom() throws Exception {
 
         testUser1 = new User();
@@ -117,23 +151,12 @@ public class GameRoomControllerTest {
         gameRoomPutDTO.setRoomCode("123456");
         gameRoomPutDTO.setUserId(2);
 
-        RoomCoordinator roomCoordinatorSpy = spy(RoomCoordinator.getInstance());
-
-        roomCoordinatorSpy.addRoom(gameRoom);
-
-        /*GameRoomService gameRoomServiceMock = spy(new GameRoomService(userRepository));
-
-        doReturn(testUser2).when(gameRoomServiceMock).retrieveUserFromRepo(2L);
-
-        verify(gameRoomServiceMock).retrieveUserFromRepo(2L);*/
+        RoomCoordinator roomCoordinator = RoomCoordinator.getInstance();
+        roomCoordinator.addRoom(gameRoom);
 
         given(gameRoomServiceMock.retrieveUserFromRepo(2L)).willReturn(testUser2);
-        given(roomCoordinatorSpy.getRoomByCode("123456")).willReturn(gameRoom);
         doNothing().when(gameRoomServiceMock).throwForbiddenWhenNoBearerToken(any());
         when(gameRoomServiceMock.addPlayerToGameRoom(gameRoom,2L)).thenCallRealMethod();
-
-
-
 
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -143,12 +166,6 @@ public class GameRoomControllerTest {
                 ).andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("roomCode", Matchers.is("123456")))
                 .andExpect(MockMvcResultMatchers.jsonPath("members[1].username", Matchers.is("playerName2")));
-
-        //verify(gameRoomServiceMock).retrieveUserFromRepo(2L);
-        //.andExpect(MockMvcResultMatchers.header().string("roomCode", Matchers.containsString("1234562")));
-                /*.andExpect((ResultMatcher) jsonPath("$.roomCode", gameRoom.getRoomCode()))
-                .andExpect((ResultMatcher) jsonPath("$.leader", gameRoom.getLeader()))
-                .andExpect(jsonPath("$.members", hasSize(1)));*/
     }
 
     private String asJsonString(final Object object) {
@@ -162,27 +179,7 @@ public class GameRoomControllerTest {
     }
 }
 
-    /*@Test
-    public void testCreateRoom() throws Exception {
-        //Mockito.when(userRepository.findById(1L)).thenReturn(Optional.ofNullable((testUser1)));
-        //this.gameRoomService =  new GameRoomService(userRepository);
 
-        doNothing().when(gameRoomService).throwForbiddenWhenNoBearerToken(Mockito.any());
-        doNothing().when(gameRoomService).setLeaderFromRepo(Mockito.any());
-        doNothing().when(gameRoomService).initGameRoom(Mockito.any());
-        given(apiService.getQuestionsFromApi(Mockito.any())).willReturn(Collections.emptyList());
-        doNothing().when(roomCoordinator).addRoom(Mockito.any());
-
-        MockHttpServletRequestBuilder postRequest = post("/createRoom")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(gameRoomPostDTO));
-
-        mockMvc.perform(postRequest)
-                .andExpect(status().isCreated());
-                *//*.andExpect(jsonPath("$.roomCode", is(String.class)))
-                .andExpect((ResultMatcher) jsonPath("$.leader", gameRoom.getLeader()))
-                .andExpect(jsonPath("$.members", hasSize(1)));*//*
-    }*/
 
     /*gameRoomService.throwForbiddenWhenNoBearerToken(bearerToken);
     GameRoom gameRoom = DTOMapper.INSTANCE.convertGameRoomPostDTOtoEntity(gameRoomPostDTO);
