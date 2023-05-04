@@ -80,4 +80,9 @@ public class UserServiceTest {
         assertThrows(ResponseStatusException.class, () -> userService.createUser(testUser));
     }
 
+    @Test
+    public void updateUserStatsTest(){
+        
+    }
+
 }
