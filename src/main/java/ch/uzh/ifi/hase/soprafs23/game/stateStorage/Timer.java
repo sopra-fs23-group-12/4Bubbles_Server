@@ -30,7 +30,6 @@ public class Timer {
         }catch (InterruptedException e) {
             
         }
-
         isRunning = false;
         
     }

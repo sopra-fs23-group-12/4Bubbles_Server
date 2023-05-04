@@ -65,6 +65,7 @@ public class Game {
             public void run() {
                 timerController.setTimer(10);
                 timerController.startTimer(roomCode);
+                socketBasics.sendObjectToRoom(roomCode, "end_of_question", 0);
             }
         });
         timerThread.start();
@@ -83,7 +84,7 @@ public class Game {
     //receive the votes and broadcast them to the other players
     //send the correct answers
     //not needed atm
-    public void playRound(){
+    /* public void playRound(){
         sendQuestion();
 
         timerController.setTimer(3);
@@ -97,7 +98,7 @@ public class Game {
         String currentRanking = ranking.updateRanking(questions.get(roundCounter-1), votes).values().toString();
         socketBasics.sendObjectToRoom(roomCode,EventNames.RECEIVE_VOTING.eventName, currentRanking);
         
-    }
+    } */
 
 
 
@@ -110,7 +111,7 @@ public class Game {
     //list of answers is converted to a string to comply with constructor of Message Type
     //must be converted back to list in frontend
     private void sendAnswers(){
-        socketBasics.sendObjectToRoom(roomCode,EventNames.GET_ANSWERS.eventName,  gameRoom.getQuestions().get(roundCounter-1).getAnswers().toString());
+        socketBasics.sendObjectToRoom(roomCode,EventNames.GET_ANSWERS.eventName,  gameRoom.getQuestions().get(roundCounter-1).getAnswers());
         
         
     }
