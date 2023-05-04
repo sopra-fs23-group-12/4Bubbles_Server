@@ -138,7 +138,7 @@ public class SocketController {
 
 
             // send ranking as a json
-            Map currentRanking = gameRanking.updateRanking(gameRoom.getQuestions().get(round), votes);
+            Map<Long, Integer> currentRanking = gameRanking.updateRanking(gameRoom.getQuestions().get(round), votes);
             voteController.resetVotes();
 
             JSONObject json = new JSONObject(currentRanking);
@@ -154,8 +154,9 @@ public class SocketController {
             System.out.println(response);
             socketBasics.sendObjectToRoom(roomCode, EventNames.GET_RANKING.eventName, response.toString());
 
-            if (finalRound)
+            if (finalRound){
                 roomCoordinator.deleteRoom(roomCode);
+            }
             else if (!finalRound) {
                 // start game after 5 seconds of ranking (get_question will then automatically
                 // let the client know the game continues)

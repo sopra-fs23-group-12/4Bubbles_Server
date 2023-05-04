@@ -44,10 +44,10 @@ public class User implements Serializable {
     @Column(nullable = false)
     private UserStatus status;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private int totalPoints;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private int totalGamesPlayed;
 
     /* 
@@ -114,15 +114,23 @@ public class User implements Serializable {
         return totalPoints;
     }
 
-    public void setTotalPoints(int totalPoints) {
-        this.totalPoints = totalPoints;
+    public void increaseTotalPoints(int points) {
+        this.totalPoints += points;
     }
+
+    /* public void setTotalPoints(int totalPoints) {
+        this.totalPoints = totalPoints;
+    } */
 
     public int getTotalGamesPlayed() {
         return totalGamesPlayed;
     }
 
-    public void setTotalGamesPlayed(int totalGamesPlayed) {
-        this.totalGamesPlayed = totalGamesPlayed;
+    public void increaseTotalGamesPlayed() {
+        this.totalGamesPlayed += 1;
     }
+
+    /* public void setTotalGamesPlayed(int totalGamesPlayed) {
+        this.totalGamesPlayed = totalGamesPlayed;
+    } */
 }
