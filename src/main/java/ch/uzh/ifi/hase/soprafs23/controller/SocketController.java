@@ -15,7 +15,6 @@ import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
-import jdk.jfr.Event;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
@@ -84,7 +83,9 @@ public class SocketController {
         server.addEventListener(EventNames.JOIN_ROOM.eventName, Message.class, joinRoom());
         server.addEventListener(EventNames.SEND_VOTE.eventName, VoteMessage.class, updateVote());
         server.addEventListener(EventNames.REQUEST_RANKING.eventName, Message.class, requestRanking());
-        server.addEventListener(EventNames.END_OF_QUESTION.eventName, Message.class, sendRightAnswer());
+        server.addEventListener(EventNames.END_OF_QUESTION.eventName, Message.class, sendRightAnswer()); 
+        //will be removed as the server will send the right answer to the client at the beginnging of every question
+        //send right answer with the answer arry at same time just append it 
 
     }
 
