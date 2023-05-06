@@ -53,12 +53,12 @@ public class Game {
 
     //one iteration of a question
     public void startGame(){
-
+        sendAnswers();//send all answers as well as correct answer
         sendQuestion();
 
         timerController.setTimer(3);
         timerController.startTimer(roomCode);
-        sendAnswers();//send all answers as well as correct answer
+        
 
         Thread timerThread = new Thread(new Runnable() {
             @Override
@@ -80,26 +80,6 @@ public class Game {
 
     }
 
-    //send the timer pings
-    //receive the votes and broadcast them to the other players
-    //send the correct answers
-    //not needed atm
-    /* public void playRound(){
-        sendQuestion();
-
-        timerController.setTimer(3);
-        timerController.startTimer(roomCode);
-
-        sendAnswers();
-        timerController.setTimer(10);
-        timerController.startTimer(roomCode);
-
-        List<Vote> votes = voteController.getVotes();
-        String currentRanking = ranking.updateRanking(questions.get(roundCounter-1), votes).values().toString();
-        socketBasics.sendObjectToRoom(roomCode,EventNames.RECEIVE_VOTING.eventName, currentRanking);
-        
-    } */
-
 
 
     private void sendQuestion(){
@@ -111,6 +91,7 @@ public class Game {
     //list of answers is converted to a string to comply with constructor of Message Type
     //must be converted back to list in frontend
     private void sendAnswers(){
+        socketBasics.sendObjectToRoom(roomCode, EventNames.GET_RIGHT_ANSWER.eventName, gameRoom.getQuestions().get(roundCounter-1).getCorrectAnswer());
         socketBasics.sendObjectToRoom(roomCode,EventNames.GET_ANSWERS.eventName,  gameRoom.getQuestions().get(roundCounter-1).getAnswers());
         
         

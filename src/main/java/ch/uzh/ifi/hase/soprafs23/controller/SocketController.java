@@ -96,7 +96,6 @@ public class SocketController {
             String correctAnswer = gameRoom.getQuestions().get(gameRoom.getCurrentGame().getRoundCounter())
                     .getCorrectAnswer();
             socketBasics.sendObjectToRoom(roomCode, EventNames.GET_RIGHT_ANSWER.eventName, correctAnswer);
-            //requestRanking();
         };
 
     }
