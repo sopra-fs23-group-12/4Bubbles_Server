@@ -85,7 +85,6 @@ public class SocketController {
         server.addEventListener(EventNames.REQUEST_RANKING.eventName, Message.class, requestRanking());
         server.addEventListener(EventNames.END_OF_QUESTION.eventName, Message.class, sendRightAnswer()); 
         //will be removed as the server will send the right answer to the client at the beginnging of every question
-        //send right answer with the answer arry at same time just append it 
 
     }
 
@@ -134,7 +133,7 @@ public class SocketController {
 
 
             // send ranking as a json
-            Map currentRanking = gameRanking.updateRanking(gameRoom.getQuestions().get(round), votes);
+            Map<Long, Integer> currentRanking = gameRanking.updateRanking(gameRoom.getQuestions().get(round), votes);
             voteController.resetVotes();
 
             JSONObject json = new JSONObject(currentRanking);
@@ -169,7 +168,6 @@ public class SocketController {
         return (senderClient, data, ackSender) -> {
             logger.info("timer has been started:");
             logger.info(data.getRoomCode());
-            // socketService.timerExample(data.getRoomCode());
         };
     }
 
