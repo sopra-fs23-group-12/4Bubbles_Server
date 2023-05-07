@@ -15,7 +15,6 @@ import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
-import jdk.jfr.Event;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.stereotype.Component;
@@ -76,6 +75,10 @@ public class SocketController {
         this.server = server;
         this.socketService = socketService;
 
+        addEventListeners(server);
+    }
+
+    public void addEventListeners(SocketIOServer server) {
         server.addConnectListener(onConnected());
         server.addDisconnectListener(onDisconnected());
         server.addEventListener(EventNames.SEND_MESSAGE.eventName, Message.class, onChatReceived());
@@ -85,7 +88,6 @@ public class SocketController {
         server.addEventListener(EventNames.SEND_VOTE.eventName, VoteMessage.class, updateVote());
         server.addEventListener(EventNames.REQUEST_RANKING.eventName, Message.class, requestRanking());
         server.addEventListener(EventNames.END_OF_QUESTION.eventName, Message.class, sendRightAnswer());
-
     }
 
     private DataListener<Message> sendRightAnswer() {
@@ -97,7 +99,6 @@ public class SocketController {
             socketBasics.sendObjectToRoom(roomCode, EventNames.GET_RIGHT_ANSWER.eventName, correctAnswer);
             requestRanking();
         };
-
     }
 
     private DataListener<VoteMessage> updateVote() {

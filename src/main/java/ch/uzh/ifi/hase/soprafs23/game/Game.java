@@ -21,6 +21,7 @@ public class Game {
     private int roundCounter;
 
     private TimerController timerController;
+
     private String roomCode;
 
     private final SocketBasics socketBasics;
@@ -37,14 +38,11 @@ public class Game {
         this.voteController = this.gameRoom.getVoteController();
         this.timerController = new TimerController();
         this.socketBasics =  new SocketBasics();
-
-
     }
 
     //called upon startGame, does the things that only need to happen before the first question is started
     public void startPreGame(){
         socketBasics.sendObjectToRoom(this.gameRoom.getRoomCode(),EventNames.GAME_STARTED.eventName,  "");
-
         //have 5 second timer before the game starts, then send the question, then have 3 second timer
         timerController.setTimer(5);
         timerController.startTimer(roomCode);
@@ -99,22 +97,16 @@ public class Game {
     }
 
 
-
     private void sendQuestion(){
         socketBasics.sendObjectToRoom(roomCode,EventNames.GET_QUESTION.eventName,  gameRoom.getQuestions().get(roundCounter-1).getQuestion());
-
     }
-
 
     //list of answers is converted to a string to comply with constructor of Message Type
     //must be converted back to list in frontend
     private void sendAnswers(){
         socketBasics.sendObjectToRoom(roomCode,EventNames.GET_ANSWERS.eventName,  gameRoom.getQuestions().get(roundCounter-1).getAnswers().toString());
-        
-        
     }
 
-    
 
     public int getRemainingTime(){
         return this.timerController.getTimer().getRemainingTimeInSeconds();

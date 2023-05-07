@@ -93,27 +93,26 @@ public class GameRoomControllerUnitTests {
 
     @Test
     public void testJoinRoom() throws Exception {
-        GameRoomGetDTO gameRoomGetDTO = gameRoomController.joinGameRoom(gameRoomPutDTO, null);
-        verify(gameRoomService, times(1)).throwForbiddenWhenNoBearerToken(any());
-        verify(roomCoordinator, times(1)).getRoomByCode(any());
+        GameRoomGetDTO gameRoomGetDTO = gameRoomController.joinGameRoom(gameRoomPutDTO, "bearer");
+        verify(gameRoomService, times(1)).throwForbiddenWhenNoBearerToken("bearer");
+        verify(roomCoordinator, times(1)).getRoomByCode(eq(gameRoomPutDTO.getRoomCode()));
         verify(gameRoomService, times(1)).addPlayerToGameRoom(any(),any(Long.class));
+
+        //when roomCoordinator then return fake room
+        //assert conversion
+
+        assertDoesNotThrow(() -> {
+            gameRoomController.joinGameRoom(gameRoomPutDTO, null);
+        });
     }
 
     @Test
-    public void joinCreateRoom_roomNotFoundException() throws Exception{
+    public void joinRoom_roomNotFoundException() throws Exception{
         when(roomCoordinator.getRoomByCode( any())).thenThrow(new NotFoundException("Room with given room code could not be found"));
         RoomNotFoundException roomNotFoundException = assertThrows(RoomNotFoundException.class, () -> {
             gameRoomController.joinGameRoom(gameRoomPutDTO, null);
         });
         assertEquals("Unable to find game room with code: 123456", roomNotFoundException.getMessage());
-    }
-
-    @Test
-    public void joinCreateRoom_roomFound() throws Exception{
-        when(roomCoordinator.getRoomByCode(any())).thenReturn(any());
-        assertDoesNotThrow(() -> {
-            gameRoomController.joinGameRoom(gameRoomPutDTO, null);
-        });
     }
 
     @Test

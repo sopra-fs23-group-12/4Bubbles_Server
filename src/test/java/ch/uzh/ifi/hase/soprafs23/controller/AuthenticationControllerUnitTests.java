@@ -100,7 +100,7 @@ public class AuthenticationControllerUnitTests {
         ResponseStatusException responseStatusException = assertThrows(ResponseStatusException.class, () -> {
             authenticationController.logout(null);
         });
-        //String baseErrorMessage = "You need to log in to see this information.";
-        //assertEquals((HttpStatus.FORBIDDEN + String.format( baseErrorMessage)), responseStatusException.getMessage());
+        String baseErrorMessage = " \"You need to log in to see this information.\"";
+        assertEquals((HttpStatus.FORBIDDEN + String.format(baseErrorMessage)), responseStatusException.getMessage());
     }
 }
