@@ -29,6 +29,7 @@ public class Timer {
                  
                 }
         }catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             //Error handling needs to be implemented here and improved in general
         }
         isRunning = false;
