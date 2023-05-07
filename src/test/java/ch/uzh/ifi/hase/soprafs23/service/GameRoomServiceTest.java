@@ -49,9 +49,6 @@ class GameRoomServiceTest {
         // when -> any object is being save in the userRepository -> return the dummy
         // testUser        
         Mockito.when(userRepository.findByid(Mockito.any())).thenReturn(testUser);
-
-        
-        
     }
     
     @Test
