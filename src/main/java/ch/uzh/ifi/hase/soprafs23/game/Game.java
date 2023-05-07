@@ -53,6 +53,7 @@ public class Game {
 
     //one iteration of a question
     public void startGame(){
+        
         sendAnswers();//send all answers as well as correct answer
         sendQuestion();
 

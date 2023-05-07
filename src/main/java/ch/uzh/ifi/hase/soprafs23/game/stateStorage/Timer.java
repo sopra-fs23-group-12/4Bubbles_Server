@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs23.game.stateStorage;
 
 
+import ch.uzh.ifi.hase.soprafs23.constant.EventNames;
 import ch.uzh.ifi.hase.soprafs23.service.SocketBasics;
 
 public class Timer {
@@ -19,16 +20,16 @@ public class Timer {
     public void start(String roomCode) {
         
         try {
-            for (int i = timeInSeconds; i > 0; i--) {
+            for (int i = timeInSeconds; i >= 0; i--) {
                 isRunning = true;
                 Thread.sleep(1000);
                 elapsedTimeInSeconds++;
-                socketBasics.sendObjectToRoom(roomCode, "timer_count", i);
+                socketBasics.sendObjectToRoom(roomCode, EventNames.TIMER_COUNT.eventName, i);
                 System.out.println("Remaining time: " + (timeInSeconds-elapsedTimeInSeconds) + " seconds");
                  
                 }
         }catch (InterruptedException e) {
-            
+            //Error handling needs to be implemented here and improved in general
         }
         isRunning = false;
         
@@ -53,22 +54,4 @@ public class Timer {
     public int getRemainingTimeInSeconds() {
         return timeInSeconds-elapsedTimeInSeconds;
     }
-
-    /* public static void main(String[] args) {
-        
-        Thread thread = new Thread(new Runnable() {
-            Timer timer = new Timer(5);
-            @Override
-            public void run() {
-                //Timer timer = new Timer(5);
-                timer.setIsRunning(true);
-                timer.start("test");
-            }
-        });
-        thread.start();
-        while (thread.isAlive()) {
-            System.out.println("Timer is running");
-        }
-
-    } */
 }
