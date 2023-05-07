@@ -20,7 +20,7 @@ public class Timer {
     public void start(String roomCode) {
         
         try {
-            for (int i = timeInSeconds; i >= 0; i--) {
+            for (int i = timeInSeconds; i > 0; i--) {
                 isRunning = true;
                 Thread.sleep(1000);
                 elapsedTimeInSeconds++;
@@ -46,10 +46,6 @@ public class Timer {
 
     public boolean isRunning() {
         return isRunning;
-    }
-
-    public void setIsRunning(boolean isRunning) {
-        this.isRunning = isRunning;
     }
 
     public int getRemainingTimeInSeconds() {
