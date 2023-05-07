@@ -98,12 +98,6 @@ public class Game {
         
     }
 
-    
-
-    public int getRemainingTime(){
-        return this.timerController.getTimer().getRemainingTimeInSeconds();
-    }
-
     public int getRoundCounter(){return this.roundCounter;}
 
     public GameRanking getRanking(){return this.ranking;}
