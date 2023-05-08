@@ -63,15 +63,6 @@ public class Game {
         sendAnswers();
 
         roundCounter--;
-
-        /*
-        can no longer be automated because the timer now runs in the frontend
-        while(roundCounter > 0){
-            System.out.println("Question" + roundCounter);
-            playRound();
-            this.voting.resetVotes();
-            roundCounter--;
-        }*/
     }
 
     public void setVoteGame(long userId, String message, int remainingTime){

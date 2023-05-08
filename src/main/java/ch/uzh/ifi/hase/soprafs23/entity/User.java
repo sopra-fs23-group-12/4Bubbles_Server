@@ -44,6 +44,16 @@ public class User implements Serializable {
     @Column(nullable = false)
     private UserStatus status;
 
+    @Column(nullable = true)
+    private int totalPoints;
+
+    @Column(nullable = true)
+    private int totalGamesPlayed;
+
+    /* 
+     * Only getters and setters below this point
+     */
+
     public Long getId() {
         return id;
     }
@@ -99,4 +109,28 @@ public class User implements Serializable {
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
+
+    public int getTotalPoints() {
+        return totalPoints;
+    }
+
+    public void increaseTotalPoints(int points) {
+        this.totalPoints += points;
+    }
+
+    /* public void setTotalPoints(int totalPoints) {
+        this.totalPoints = totalPoints;
+    } */
+
+    public int getTotalGamesPlayed() {
+        return totalGamesPlayed;
+    }
+
+    public void increaseTotalGamesPlayed() {
+        this.totalGamesPlayed += 1;
+    }
+
+    /* public void setTotalGamesPlayed(int totalGamesPlayed) {
+        this.totalGamesPlayed = totalGamesPlayed;
+    } */
 }

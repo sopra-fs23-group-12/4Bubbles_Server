@@ -3,6 +3,8 @@ package ch.uzh.ifi.hase.soprafs23.service;
 import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.repository.UserRepository;
+import ch.uzh.ifi.hase.soprafs23.rest.dto.UserPointsPutDTO;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -12,6 +14,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.web.server.ResponseStatusException;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.Optional;
 
 public class UserServiceTest {
 
@@ -78,6 +82,25 @@ public class UserServiceTest {
         // then -> attempt to create second user with same user -> check that an error
         // is thrown
         assertThrows(ResponseStatusException.class, () -> userService.createUser(testUser));
+    }
+
+    @Test
+    void updateUserStatsTest(){
+        userService.createUser(testUser);
+        Optional<User> testUser2 = Optional.of(testUser);
+
+        UserPointsPutDTO userPointsPutDTO = new UserPointsPutDTO();
+        userPointsPutDTO.setPoints(10);
+        userPointsPutDTO.setId(1L);
+
+        Mockito.when(userRepository.findById(Mockito.any())).thenReturn(testUser2);
+
+        User updatedUser = userService.updateUserStats(userPointsPutDTO);
+
+        assertEquals(updatedUser.getId(), userPointsPutDTO.getId());
+        assertEquals(updatedUser.getTotalPoints(), userPointsPutDTO.getPoints());
+        assertEquals(updatedUser.getTotalGamesPlayed(), 1);
+        
     }
 
 }
