@@ -310,7 +310,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void getStatsTest() throws Exception{
+    void getStatsTest() throws Exception{
 
         User user = new User();
         user.setId(1L);
@@ -338,7 +338,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void getStats_Not_Authenticated() throws Exception{
+    void getStats_Not_Authenticated() throws Exception{
         User user = new User();
         user.setUsername("firstname@lastname");
         user.setStatus(UserStatus.OFFLINE);
