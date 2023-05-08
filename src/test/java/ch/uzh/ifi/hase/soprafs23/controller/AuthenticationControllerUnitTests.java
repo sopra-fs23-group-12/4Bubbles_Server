@@ -42,6 +42,7 @@ public class AuthenticationControllerUnitTests {
         MockitoAnnotations.openMocks(this);
         userPostDTO = new UserPostDTO();
         userPostDTO.setToken("token");
+
     }
 
     @Test
@@ -52,6 +53,8 @@ public class AuthenticationControllerUnitTests {
 
     @Test
     public void testRegister() throws Exception {
+        userPostDTO.setUsername("userName");
+        userPostDTO.setPassword("pw");
         LoginGetDTO loginGetDTO = authenticationController.register(userPostDTO);
         verify(userService, times(1)).registerUser(any(User.class));
     }
