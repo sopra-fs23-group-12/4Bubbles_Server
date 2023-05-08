@@ -44,7 +44,6 @@ public class Game {
     //called upon startGame, does the things that only need to happen before the first question is started
     public void startPreGame(){
 
-
         socketBasics.sendObjectToRoom(this.gameRoom.getRoomCode(),EventNames.GAME_STARTED.eventName,  "");
 
         //have 5 second timer before the game starts, then send the question, then have 3 second timer
@@ -54,13 +53,23 @@ public class Game {
 
     //one iteration of a question
     public void startGame(){
-
+        
+        sendAnswers();//send all answers as well as correct answer
         sendQuestion();
 
         timerController.setTimer(3);
         timerController.startTimer(roomCode);
+        
 
-        sendAnswers();
+        Thread timerThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                timerController.setTimer(10);
+                timerController.startTimer(roomCode);
+                socketBasics.sendObjectToRoom(roomCode, "end_of_question", 0);
+            }
+        });
+        timerThread.start();
 
         roundCounter--;
     }
@@ -70,25 +79,6 @@ public class Game {
         List<Vote> votes = voteController.getVotes();
         System.out.print(votes);
 
-    }
-
-    //send the timer pings
-    //receive the votes and broadcast them to the other players
-    //send the correct answers
-    public void playRound(){
-        sendQuestion();
-
-        timerController.setTimer(3);
-        timerController.startTimer(roomCode);
-
-        sendAnswers();
-        timerController.setTimer(10);
-        timerController.startTimer(roomCode);
-
-        List<Vote> votes = voteController.getVotes();
-        String currentRanking = ranking.updateRanking(questions.get(roundCounter-1), votes).values().toString();
-        socketBasics.sendObjectToRoom(roomCode,EventNames.RECEIVE_VOTING.eventName, currentRanking);
-        
     }
 
 
@@ -102,15 +92,10 @@ public class Game {
     //list of answers is converted to a string to comply with constructor of Message Type
     //must be converted back to list in frontend
     private void sendAnswers(){
-        socketBasics.sendObjectToRoom(roomCode,EventNames.GET_ANSWERS.eventName,  gameRoom.getQuestions().get(roundCounter-1).getAnswers().toString());
+        socketBasics.sendObjectToRoom(roomCode, EventNames.GET_RIGHT_ANSWER.eventName, gameRoom.getQuestions().get(roundCounter-1).getCorrectAnswer());
+        socketBasics.sendObjectToRoom(roomCode,EventNames.GET_ANSWERS.eventName,  gameRoom.getQuestions().get(roundCounter-1).getAnswers());
         
         
-    }
-
-    
-
-    public int getRemainingTime(){
-        return this.timerController.getTimer().getRemainingTimeInSeconds();
     }
 
     public int getRoundCounter(){return this.roundCounter;}

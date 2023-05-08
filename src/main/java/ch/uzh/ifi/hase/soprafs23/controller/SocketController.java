@@ -83,7 +83,8 @@ public class SocketController {
         server.addEventListener(EventNames.JOIN_ROOM.eventName, Message.class, joinRoom());
         server.addEventListener(EventNames.SEND_VOTE.eventName, VoteMessage.class, updateVote());
         server.addEventListener(EventNames.REQUEST_RANKING.eventName, Message.class, requestRanking());
-        server.addEventListener(EventNames.END_OF_QUESTION.eventName, Message.class, sendRightAnswer());
+        server.addEventListener(EventNames.END_OF_QUESTION.eventName, Message.class, sendRightAnswer()); 
+        //will be removed as the server will send the right answer to the client at the beginnging of every question
 
     }
 
@@ -174,7 +175,6 @@ public class SocketController {
         return (senderClient, data, ackSender) -> {
             logger.info("timer has been started:");
             logger.info(data.getRoomCode());
-            // socketService.timerExample(data.getRoomCode());
         };
     }
 
