@@ -168,4 +168,8 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage));
         }
     }
+
+    public boolean testMethod(int a, int b) {
+        return a == b;
+    }
 }
