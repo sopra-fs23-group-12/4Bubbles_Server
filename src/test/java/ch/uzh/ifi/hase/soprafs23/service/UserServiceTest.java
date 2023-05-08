@@ -85,7 +85,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void updateUserStatsTest(){
+    void updateUserStatsTest(){
         userService.createUser(testUser);
         Optional<User> testUser2 = Optional.of(testUser);
 
