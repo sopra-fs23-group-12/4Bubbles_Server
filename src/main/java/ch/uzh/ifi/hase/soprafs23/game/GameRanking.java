@@ -3,9 +3,7 @@ package ch.uzh.ifi.hase.soprafs23.game;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.entity.Vote;
 import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
-import ch.uzh.ifi.hase.soprafs23.service.UserService;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

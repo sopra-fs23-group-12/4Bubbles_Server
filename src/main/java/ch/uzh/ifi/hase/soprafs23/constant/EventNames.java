@@ -13,6 +13,7 @@ public enum EventNames {
     SOMEBODY_VOTED("somebody_voted"),
     GET_RANKING("get_ranking"),
     GET_RIGHT_ANSWER("get_right_answer"),
+    END_OF_QUESTION("end_of_question"),
 
 
     
@@ -22,7 +23,7 @@ public enum EventNames {
     START_TIMER("start_timer"),
     JOIN_ROOM("join_room"),
     SEND_MESSAGE("send_message"),
-    END_OF_QUESTION("end_of_question"),
+    
     REQUEST_RANKING("request_ranking");
 
 

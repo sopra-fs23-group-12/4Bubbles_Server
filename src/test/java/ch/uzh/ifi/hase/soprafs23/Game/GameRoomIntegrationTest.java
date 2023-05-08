@@ -2,7 +2,6 @@ package ch.uzh.ifi.hase.soprafs23.Game;
 
 import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
-import ch.uzh.ifi.hase.soprafs23.entity.Vote;
 import ch.uzh.ifi.hase.soprafs23.game.Game;
 import ch.uzh.ifi.hase.soprafs23.game.VoteController;
 import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
@@ -23,8 +22,6 @@ public class GameRoomIntegrationTest {
 
     private List<Question> questions;
     private List<User> members;
-
-    private List<Vote> votes;
 
     @BeforeEach
     public void setup() {
