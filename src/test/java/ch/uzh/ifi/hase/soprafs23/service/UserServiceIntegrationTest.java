@@ -20,28 +20,28 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 
 
-//@Disabled
-//@WebAppConfiguration
-//@SpringBootTest
+
+@WebAppConfiguration
+@SpringBootTest
 public class UserServiceIntegrationTest {
 
-    //@Qualifier("userRepository")
-    //@Autowired
-    //private UserRepository userRepository;
+    @Qualifier("userRepository")
+    @Autowired
+    private UserRepository userRepository;
 
-    //@Autowired
-    //private UserService userService;
+    @Autowired
+    private UserService userService;
 
     @BeforeEach
     public void setup() {
-        //userRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
-    //@Disabled
+    
     @Test
     public void createUser_validInputs_success() {
         // given
-        /*assertNull(userRepository.findByUsername("testUsername"));
+        assertNull(userRepository.findByUsername("testUsername"));
 
         User testUser = new User();
         testUser.setUsername("testUsername");
@@ -54,12 +54,12 @@ public class UserServiceIntegrationTest {
         assertEquals(testUser.getId(), createdUser.getId());
         assertEquals(testUser.getUsername(), createdUser.getUsername());
         assertNotNull(createdUser.getToken());
-        assertEquals(UserStatus.OFFLINE, createdUser.getStatus());*/
+        assertEquals(UserStatus.OFFLINE, createdUser.getStatus());
     }
-    //@Disabled
+    
     @Test
     public void createUser_duplicateUsername_throwsException() {
-        /*assertNull(userRepository.findByUsername("testUsername"));
+        assertNull(userRepository.findByUsername("testUsername"));
 
         User testUser = new User();
         testUser.setUsername("testUsername");
@@ -73,7 +73,7 @@ public class UserServiceIntegrationTest {
         testUser2.setUsername("testUsername");
 
         // check that an error is thrown
-        assertThrows(ResponseStatusException.class, () -> userService.createUser(testUser2));*/
+        assertThrows(ResponseStatusException.class, () -> userService.createUser(testUser2));
     }
 }
 
