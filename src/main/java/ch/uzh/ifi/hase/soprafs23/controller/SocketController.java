@@ -116,7 +116,6 @@ public class SocketController {
                 HashMap<String, Integer> votesHash = socketService.votesListAsMap(votes);
                 System.out.println(votesHash);
                 socketBasics.sendObjectToRoom(roomCode, EventNames.SOMEBODY_VOTED.eventName, votesHash);
-
             }
         };
     }

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -51,9 +52,9 @@ public class AuthenticationServiceUnitTests {
         ResponseStatusException responseStatusException = assertThrows(ResponseStatusException.class, () -> {
             authenticationService.authenticateUser(testUser);
         });
-        /*String baseErrorMessage = "Wrong credentials!";
-        assertEquals(responseStatusException.getMessage(), HttpStatus.UNAUTHORIZED,
-                String.format(baseErrorMessage, "requested user"));*/
+        String baseErrorMessage = "\"Wrong credentials!\"";
+        assertEquals(responseStatusException.getMessage(), HttpStatus.UNAUTHORIZED + " " +
+                String.format(baseErrorMessage, "requested user"));
     }
 
     @Test
