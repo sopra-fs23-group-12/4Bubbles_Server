@@ -103,4 +103,9 @@ public class UserServiceTest {
         
     }
 
+    @Test
+    void testMethodTest(){
+        assertTrue(userService.testMethod(1,1));
+        assertFalse(userService.testMethod(1,2));
+    }
 }
