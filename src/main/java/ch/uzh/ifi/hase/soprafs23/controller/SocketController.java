@@ -88,6 +88,7 @@ public class SocketController {
         server.addEventListener(EventNames.SEND_VOTE.eventName, VoteMessage.class, updateVote());
         server.addEventListener(EventNames.REQUEST_RANKING.eventName, Message.class, requestRanking());
         server.addEventListener(EventNames.END_OF_QUESTION.eventName, Message.class, sendRightAnswer());
+
     }
 
     private DataListener<Message> sendRightAnswer() {
@@ -97,7 +98,6 @@ public class SocketController {
             String correctAnswer = gameRoom.getQuestions().get(gameRoom.getCurrentGame().getRoundCounter())
                     .getCorrectAnswer();
             socketBasics.sendObjectToRoom(roomCode, EventNames.GET_RIGHT_ANSWER.eventName, correctAnswer);
-            requestRanking();
         };
     }
 
@@ -132,10 +132,16 @@ public class SocketController {
             Game game = gameRoom.getCurrentGame();
             int round = game.getRoundCounter();
             GameRanking gameRanking = game.getRanking();
+            
+            //Keeping track of the total points of the players will be here for now
+            //eventually we can put an intermediate storage in the gameRoom and add everything to the Repo entity at the end
+            List<User> players = gameRoom.getMembers();
+
+
 
 
             // send ranking as a json
-            Map currentRanking = gameRanking.updateRanking(gameRoom.getQuestions().get(round), votes);
+            Map<Long, Integer> currentRanking = gameRanking.updateRanking(gameRoom.getQuestions().get(round), votes);
             voteController.resetVotes();
 
             JSONObject json = new JSONObject(currentRanking);
@@ -151,8 +157,9 @@ public class SocketController {
             System.out.println(response);
             socketBasics.sendObjectToRoom(roomCode, EventNames.GET_RANKING.eventName, response.toString());
 
-            if (finalRound)
+            if (finalRound){
                 roomCoordinator.deleteRoom(roomCode);
+            }
             else if (!finalRound) {
                 // start game after 5 seconds of ranking (get_question will then automatically
                 // let the client know the game continues)
@@ -170,7 +177,6 @@ public class SocketController {
         return (senderClient, data, ackSender) -> {
             logger.info("timer has been started:");
             logger.info(data.getRoomCode());
-            // socketService.timerExample(data.getRoomCode());
         };
     }
 

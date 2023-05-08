@@ -2,6 +2,7 @@ package ch.uzh.ifi.hase.soprafs23.controller;
 
 import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
+import ch.uzh.ifi.hase.soprafs23.rest.dto.UserPointsPutDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.UserPostDTO;
 import ch.uzh.ifi.hase.soprafs23.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -280,6 +281,75 @@ public class UserControllerTest {
 
     }
 
+    @Test
+    public void updateUserStatsTest() throws Exception{
+
+        User user = new User();
+        user.setId(1L);
+        user.setUsername("testUsername");
+        user.setToken("1");
+        user.setStatus(UserStatus.ONLINE);
+
+        UserPointsPutDTO pointsPutDTO = new UserPointsPutDTO();
+        pointsPutDTO.setPoints(100);
+        pointsPutDTO.setId(1L);
+
+        given(userService.updateUserStats(Mockito.any())).willReturn(user);
+
+        // when/then -> do the request + validate the result
+        MockHttpServletRequestBuilder putRequest = put("/users/Statistics")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(pointsPutDTO)).header("Authorization", "Bearer " + "top-secret-token");
+
+        // then
+        
+                mockMvc.perform(putRequest)
+                        .andExpect(status().isNoContent());
+        
+
+    }
+
+    @Test
+    void getStatsTest() throws Exception{
+
+        User user = new User();
+        user.setId(1L);
+        user.setUsername("testUsername");
+        user.setToken("1");
+        user.setStatus(UserStatus.ONLINE);
+        user.increaseTotalPoints(100);
+        user.increaseTotalGamesPlayed();
+
+        given(userService.getUser(Mockito.any(), Mockito.any())).willReturn(user);
+
+        // when/then -> do the request + validate the result
+        MockHttpServletRequestBuilder getRequest = get("/users/Statistics/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", "Bearer " + "top-secret-token");
+
+        // then
+        
+        mockMvc.perform(getRequest).andDo(print()).andExpect(status().isOk())
+                .andExpect(jsonPath("username", is(user.getUsername())))
+                .andExpect(jsonPath("totalPoints", is(user.getTotalPoints())))
+                .andExpect(jsonPath("totalGamesPlayed", is(user.getTotalGamesPlayed())));
+        
+
+    }
+
+    @Test
+    void getStats_Not_Authenticated() throws Exception{
+        User user = new User();
+        user.setUsername("firstname@lastname");
+        user.setStatus(UserStatus.OFFLINE);
+
+        given(userService.getUser(Mockito.any(), Mockito.any())).willReturn(user);
+
+        MockHttpServletRequestBuilder getRequest = get("/users/Statistics/1").contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(getRequest).andExpect(status().isForbidden());
+    }
+
     /**
      * Helper Method to convert userPostDTO into a JSON string such that the input
      * can be processed
@@ -297,5 +367,7 @@ public class UserControllerTest {
                     String.format("The request body could not be created.%s", e.toString()));
         }
     }
+
+    
 
 }

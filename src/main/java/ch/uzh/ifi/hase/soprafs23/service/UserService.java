@@ -3,6 +3,8 @@ package ch.uzh.ifi.hase.soprafs23.service;
 import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.repository.UserRepository;
+import ch.uzh.ifi.hase.soprafs23.rest.dto.UserPointsPutDTO;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,6 +85,18 @@ public class UserService {
         userRepository.flush();
 
         log.debug("Created Information for User: {}", user);
+        return user;
+    }
+
+    public User updateUserStats(UserPointsPutDTO userPointsPutDTO) {
+        long id = userPointsPutDTO.getId();
+        int points = userPointsPutDTO.getPoints();
+        checkIfExists(id);
+        User user = this.userRepository.findById(id).get();
+        user.increaseTotalPoints(points); 
+        user.increaseTotalGamesPlayed();
+        user = userRepository.save(user);
+        userRepository.flush();
         return user;
     }
 
