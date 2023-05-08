@@ -88,7 +88,7 @@ public class UserService {
         return user;
     }
 
-    public void updateUserStats(UserPointsPutDTO userPointsPutDTO) {
+    public User updateUserStats(UserPointsPutDTO userPointsPutDTO) {
         long id = userPointsPutDTO.getId();
         int points = userPointsPutDTO.getPoints();
         checkIfExists(id);
@@ -97,6 +97,7 @@ public class UserService {
         user.increaseTotalGamesPlayed();
         user = userRepository.save(user);
         userRepository.flush();
+        return user;
     }
 
     public User createUser(User newUser) {
