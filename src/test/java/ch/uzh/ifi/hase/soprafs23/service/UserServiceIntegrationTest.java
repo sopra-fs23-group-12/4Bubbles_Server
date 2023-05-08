@@ -21,20 +21,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 //@Disabled
-@WebAppConfiguration
-@SpringBootTest
+//@WebAppConfiguration
+//@SpringBootTest
 public class UserServiceIntegrationTest {
 
-    @Qualifier("userRepository")
-    @Autowired
-    private UserRepository userRepository;
+    //@Qualifier("userRepository")
+    //@Autowired
+    //private UserRepository userRepository;
 
-    @Autowired
-    private UserService userService;
+    //@Autowired
+    //private UserService userService;
 
     @BeforeEach
     public void setup() {
-        userRepository.deleteAll();
+        //userRepository.deleteAll();
     }
 
     //@Disabled
