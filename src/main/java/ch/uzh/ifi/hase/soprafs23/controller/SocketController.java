@@ -75,6 +75,10 @@ public class SocketController {
         this.server = server;
         this.socketService = socketService;
 
+        addEventListeners(server);
+    }
+
+    public void addEventListeners(SocketIOServer server) {
         server.addConnectListener(onConnected());
         server.addDisconnectListener(onDisconnected());
         server.addEventListener(EventNames.SEND_MESSAGE.eventName, Message.class, onChatReceived());
@@ -83,8 +87,7 @@ public class SocketController {
         server.addEventListener(EventNames.JOIN_ROOM.eventName, Message.class, joinRoom());
         server.addEventListener(EventNames.SEND_VOTE.eventName, VoteMessage.class, updateVote());
         server.addEventListener(EventNames.REQUEST_RANKING.eventName, Message.class, requestRanking());
-        server.addEventListener(EventNames.END_OF_QUESTION.eventName, Message.class, sendRightAnswer()); 
-        //will be removed as the server will send the right answer to the client at the beginnging of every question
+        server.addEventListener(EventNames.END_OF_QUESTION.eventName, Message.class, sendRightAnswer());
 
     }
 
@@ -96,7 +99,6 @@ public class SocketController {
                     .getCorrectAnswer();
             socketBasics.sendObjectToRoom(roomCode, EventNames.GET_RIGHT_ANSWER.eventName, correctAnswer);
         };
-
     }
 
     private DataListener<VoteMessage> updateVote() {
@@ -114,7 +116,6 @@ public class SocketController {
                 HashMap<String, Integer> votesHash = socketService.votesListAsMap(votes);
                 System.out.println(votesHash);
                 socketBasics.sendObjectToRoom(roomCode, EventNames.SOMEBODY_VOTED.eventName, votesHash);
-
             }
         };
     }

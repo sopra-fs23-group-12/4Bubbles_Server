@@ -52,15 +52,15 @@ public class UserController {
         return userGetDTOs;
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/users/{Id}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<UserGetDTO> getUser(@PathVariable Long id,
+    public List<UserGetDTO> getUser(@PathVariable Long Id,
                                     @RequestHeader(value = "Authorization", required = false) String bearerToken) {
 
         throwForbiddenWhenNoBearerToken(bearerToken);
 
-        User user = userService.getUser(id, bearerToken);
+        User user = userService.getUser(Id, bearerToken);
         List<UserGetDTO> userGetDTOs = new ArrayList<>();
 
         userGetDTOs.add(DTOMapper.INSTANCE.convertEntityToUserGetDTO(user));
@@ -89,10 +89,10 @@ public class UserController {
         return DTOMapper.INSTANCE.convertEntityToUserGetDTO(createdUser);
     }
 
-    @PutMapping("/users/{id}")
+    @PutMapping("/users/{Id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ResponseBody
-    public void updateUser(@PathVariable Long id,
+    public void updateUser(@PathVariable Long Id,
                            @RequestHeader(value = "Authorization", required = false) String bearerToken,
                            @RequestBody UserPutDTO userPutDTO) {
 
@@ -100,7 +100,7 @@ public class UserController {
 
         User userInput = DTOMapper.INSTANCE.convertUserPutDTOtoEntity(userPutDTO);
 
-        userService.updateUser(id, bearerToken, userInput);
+        userService.updateUser(Id, bearerToken, userInput);
 
     }
 

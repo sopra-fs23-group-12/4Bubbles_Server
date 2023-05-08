@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,10 +27,9 @@ public class GameRoomController {
     private final RoomCoordinator roomCoordinator;
     private final ApiService apiService;
 
-
-    GameRoomController(UserService userService, GameRoomService gameRoomService, RoomCoordinator roomCoordinator, ApiService apiService) {
+    GameRoomController(GameRoomService gameRoomService, RoomCoordinator roomCoordinator, ApiService apiService) {
         this.gameRoomService = gameRoomService;
-        this.roomCoordinator = RoomCoordinator.getInstance();
+        this.roomCoordinator = roomCoordinator;
         this.apiService = apiService;
     }
 
@@ -37,7 +37,6 @@ public class GameRoomController {
     //having only one method in the API controller makes not much sense imo
     @GetMapping("/categories")
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
     public List<TopicGetDTO> getTopics(@RequestHeader(value = "Authorization", required = false) String bearerToken){
         gameRoomService.throwForbiddenWhenNoBearerToken(bearerToken);
         List<TopicGetDTO> topics = new ArrayList<TopicGetDTO>();
@@ -47,7 +46,6 @@ public class GameRoomController {
         } catch (IOException e) {
             throw new ApiConnectionError("Something went wrong while accessing the API", e);
         }
-        
         return topics;
     }
     
@@ -55,7 +53,6 @@ public class GameRoomController {
     //so that questions are fetched when a room is created
     @PostMapping("/createRoom") 
     @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
     public GameRoomGetDTO createGameRoom(@RequestBody GameRoomPostDTO gameRoomPostDTO, @RequestHeader(value = "Authorization", required = false) String bearerToken) {
         gameRoomService.throwForbiddenWhenNoBearerToken(bearerToken);
         GameRoom gameRoom = DTOMapper.INSTANCE.convertGameRoomPostDTOtoEntity(gameRoomPostDTO);
@@ -75,16 +72,15 @@ public class GameRoomController {
 
     @PutMapping("/joinRoom") // who and which room, evtl authorization?
     @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public GameRoomGetDTO joinGameRoom(@RequestBody GameRoomPutDTO GameRoomPutDTO, @RequestHeader(value = "Authorization", required = false) String bearerToken) {
+    public GameRoomGetDTO joinGameRoom(@RequestBody GameRoomPutDTO gameRoomPutDTO, @RequestHeader(value = "Authorization", required = false) String bearerToken) {
         gameRoomService.throwForbiddenWhenNoBearerToken(bearerToken);
         try {
-            GameRoom room = roomCoordinator.getRoomByCode(GameRoomPutDTO.getRoomCode());
-            gameRoomService.addPlayerToGameRoom(room, GameRoomPutDTO.getUserId());
+            GameRoom room = roomCoordinator.getRoomByCode(gameRoomPutDTO.getRoomCode());
+            gameRoomService.addPlayerToGameRoom(room, gameRoomPutDTO.getUserId());
             return DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(room);
         }
         catch (NotFoundException e) {
-            throw new RoomNotFoundException("Unable to find game room with code: " + GameRoomPutDTO.getRoomCode(), e);
+            throw new RoomNotFoundException("Unable to find game room with code: " + gameRoomPutDTO.getRoomCode(), e);
         }
     }
 }

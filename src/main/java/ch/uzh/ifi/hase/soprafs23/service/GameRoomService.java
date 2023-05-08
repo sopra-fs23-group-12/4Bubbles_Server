@@ -30,7 +30,7 @@ public class GameRoomService {
     }
 
     public User retrieveUserFromRepo(long userId){
-        return userRepository.findByid(userId);
+        return userRepository.findById(userId).orElseThrow();
     }
 
     public void initGameRoom(GameRoom gameRoom) {

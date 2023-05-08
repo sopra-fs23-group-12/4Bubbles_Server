@@ -3,9 +3,13 @@ package ch.uzh.ifi.hase.soprafs23.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 import org.junit.jupiter.api.BeforeEach;
@@ -44,13 +48,12 @@ class GameRoomServiceTest {
         testUser.setPassword("password");
         testUser.setUsername("testUsername");
 
+        when(userRepository.findByid(any())).thenReturn(testUser);
+        when(userRepository.findById(any())).thenReturn(Optional.of(testUser));
+
         userService.createUser(testUser);
         // when -> any object is being save in the userRepository -> return the dummy
-        // testUser        
-        Mockito.when(userRepository.findByid(Mockito.any())).thenReturn(testUser);
-
-        
-        
+        // testUser
     }
     
     @Test
@@ -83,7 +86,7 @@ class GameRoomServiceTest {
         GameRoom testRoom = new GameRoom();
         testRoom.setLeaderUserId(testUser.getId());
         gameRoomService.setLeaderFromRepo(testRoom);
-        Mockito.when(userRepository.findByid(Mockito.any())).thenReturn(testUser);
+        when(userRepository.findByid(any())).thenReturn(testUser);
 
         assertEquals(testRoom.getLeader(), testUser);
     }

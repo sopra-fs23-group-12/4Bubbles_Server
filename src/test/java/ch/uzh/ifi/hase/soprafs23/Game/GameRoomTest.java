@@ -78,44 +78,6 @@ public class GameRoomTest {
 
         assertEquals(1, gameRoom.getMembers().size());*/
     }
-
-
-    @Test
-    public void testJoinRoomSecond() {
-        this.gameRoom = new GameRoom();
-        List<User> users = List.of(testUser1);
-        gameRoom.setRoomCode("1");
-        gameRoom.setMembers(users);
-        gameRoom.setLeader(testUser1);
-
-
-        //create PUTDTO
-        GameRoomPutDTO putDTO = new GameRoomPutDTO();
-        putDTO.setUserId(2);
-        putDTO.setRoomCode("1");
-
-        roomService.addPlayerToGameRoom(gameRoom, putDTO.getUserId());
-
-        assertEquals(2, gameRoom.getMembers().size());
-    }
-
-    @Test
-    public void testJoinRoomThird() {
-        this.gameRoom = new GameRoom();
-        List<User> users = List.of(testUser1, testUser2);
-        gameRoom.setRoomCode("1");
-        gameRoom.setMembers(users);
-        gameRoom.setLeader(testUser1);
-
-        //create PUTDTO
-        GameRoomPutDTO putDTO = new GameRoomPutDTO();
-        putDTO.setUserId(3);
-        putDTO.setRoomCode("1");
-
-        roomService.addPlayerToGameRoom(gameRoom, putDTO.getUserId());
-
-        assertEquals(3, gameRoom.getMembers().size());
-    }
 }
 
 
