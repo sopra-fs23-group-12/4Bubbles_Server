@@ -11,11 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
+
 import java.util.Objects;
 import java.security.SecureRandom;
 
-import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -37,7 +36,7 @@ public class GameRoomService {
 
         gameRoom.setRoomCode(Integer.toString(random.nextInt(100000, 1000000)));
         //list unmodifiable -> every time pass a new one
-        gameRoom.setMembers(List.of(gameRoom.getLeader()));
+        gameRoom.getMembers().put(gameRoom.getLeader().getId(), gameRoom.getLeader());
 
     }
 
@@ -49,10 +48,8 @@ public class GameRoomService {
     }
 
     public GameRoom addPlayerToGameRoom(GameRoom gameRoom, long userId) {
-        //list unmodifiable -> every time pass a new one
         User player = retrieveUserFromRepo(userId);
-        List<User> members = Stream.concat(gameRoom.getMembers().stream(), Stream.of(player)).toList();
-        gameRoom.setMembers(members);
+        gameRoom.getMembers().put(userId, player);
         return gameRoom;
     }
 
@@ -62,4 +59,11 @@ public class GameRoomService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, String.format(baseErrorMessage));
         }
     }
+
+    public void removePlayerFromGameRoom(GameRoom room, Long userId) {
+        room.getMembers().remove(userId);
+
+    }
+
+
 }

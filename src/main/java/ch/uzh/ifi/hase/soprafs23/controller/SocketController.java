@@ -132,13 +132,6 @@ public class SocketController {
             int round = game.getRoundCounter();
             GameRanking gameRanking = game.getRanking();
             
-            //Keeping track of the total points of the players will be here for now
-            //eventually we can put an intermediate storage in the gameRoom and add everything to the Repo entity at the end
-            List<User> players = gameRoom.getMembers();
-
-
-
-
             // send ranking as a json
             Map<Long, Integer> currentRanking = gameRanking.updateRanking(gameRoom.getQuestions().get(round), votes);
             voteController.resetVotes();

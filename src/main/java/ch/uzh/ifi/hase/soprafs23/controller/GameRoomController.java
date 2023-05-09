@@ -9,14 +9,12 @@ import ch.uzh.ifi.hase.soprafs23.rest.dto.*;
 import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs23.service.ApiService;
 import ch.uzh.ifi.hase.soprafs23.service.GameRoomService;
-import ch.uzh.ifi.hase.soprafs23.service.UserService;
 import javassist.NotFoundException;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -70,7 +68,7 @@ public class GameRoomController {
         return DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(gameRoom);
     }
 
-    @PutMapping("/joinRoom") // who and which room, evtl authorization?
+    @PutMapping("/joinRoom")
     @ResponseStatus(HttpStatus.OK)
     public GameRoomGetDTO joinGameRoom(@RequestBody GameRoomPutDTO gameRoomPutDTO, @RequestHeader(value = "Authorization", required = false) String bearerToken) {
         gameRoomService.throwForbiddenWhenNoBearerToken(bearerToken);
@@ -82,5 +80,19 @@ public class GameRoomController {
         catch (NotFoundException e) {
             throw new RoomNotFoundException("Unable to find game room with code: " + gameRoomPutDTO.getRoomCode(), e);
         }
+    }
+
+    @PutMapping("/leaveRoom")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void leaveRoom(@RequestBody GameRoomPutDTO gameRoomPutDTO, @RequestHeader(value = "Authorization", required = false) String bearerToken){
+        gameRoomService.throwForbiddenWhenNoBearerToken(bearerToken);
+        try {
+            GameRoom room = roomCoordinator.getRoomByCode(gameRoomPutDTO.getRoomCode());
+            gameRoomService.removePlayerFromGameRoom(room, gameRoomPutDTO.getUserId());
+        }
+        catch (NotFoundException e) {
+            throw new RoomNotFoundException("Unable to find game room with code: " + gameRoomPutDTO.getRoomCode(), e);
+        }
+
     }
 }
