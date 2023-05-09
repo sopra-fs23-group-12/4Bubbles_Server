@@ -29,7 +29,7 @@ public class GameRoomController {
 
     GameRoomController(GameRoomService gameRoomService, RoomCoordinator roomCoordinator, ApiService apiService) {
         this.gameRoomService = gameRoomService;
-        this.roomCoordinator = roomCoordinator;
+        this.roomCoordinator = RoomCoordinator.getInstance();
         this.apiService = apiService;
     }
 
@@ -66,6 +66,7 @@ public class GameRoomController {
             throw new ApiConnectionError("Something went wrong while accessing the API", e);
         }
         roomCoordinator.addRoom(gameRoom);
+        System.out.println("create room triggered, game room; " + gameRoom.getRoomCode() );
 
         return DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(gameRoom);
     }
