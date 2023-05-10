@@ -12,6 +12,7 @@ public class GameRoomGetDTO {
     private String questionTopic;
     private String roomCode;
     private String gameMode;
+    private String difficulty;
 
 
     public List<User> getMembers() {
@@ -60,6 +61,14 @@ public class GameRoomGetDTO {
 
     public void setGameMode(String gameMode) {
         this.gameMode = gameMode;
+    }
+
+    public String getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
     }
 
 

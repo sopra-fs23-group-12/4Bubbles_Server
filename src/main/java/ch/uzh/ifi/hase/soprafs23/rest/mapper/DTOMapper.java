@@ -25,6 +25,7 @@ public interface DTOMapper {
     
 
     @Mapping(source = "leaderId", target = "leaderUserId")
+    @Mapping(source = "difficulty", target = "difficulty")
     @Mapping(source = "gameMode", target = "gameMode")
     @Mapping(source = "questionTopicId", target = "questionTopicId")
     GameRoom convertGameRoomPostDTOtoEntity(GameRoomPostDTO gameRoomPostDTO);
