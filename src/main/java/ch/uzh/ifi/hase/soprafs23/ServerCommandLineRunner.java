@@ -25,7 +25,7 @@ public class ServerCommandLineRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        TimeUnit.SECONDS.sleep(130);
+        // TimeUnit.SECONDS.sleep(130);
 
         server.startAsync();
         /* server.start();
