@@ -20,21 +20,20 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class Application {
 
 
-      public static void main(String[] args) {
+    public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
-      }
+    }
 
-      @GetMapping(value = "/", produces = MediaType.TEXT_PLAIN_VALUE)
-      @ResponseStatus(HttpStatus.OK)
-      @ResponseBody
-      public String helloWorld() {
+    @GetMapping(value = "/", produces = MediaType.TEXT_PLAIN_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public String helloWorld() {
         return "The application is running.";
-      }
+    }
 
 
-
-  //imported from the Spring Boot Netty Socket.IO Example (https://medium.com/folksdev/spring-boot-netty-socket-io-example-3f21fcc1147d)
-  // and Spring Boot Netty Socket.IO Example by https://github.com/jamesjieye/netty-socketio.spring
+    //imported from the Spring Boot Netty Socket.IO Example (https://medium.com/folksdev/spring-boot-netty-socket-io-example-3f21fcc1147d)
+    // and Spring Boot Netty Socket.IO Example by https://github.com/jamesjieye/netty-socketio.spring
     @Value("${rt-server.host}")
     private String host;
 
@@ -47,8 +46,8 @@ public class Application {
         Configuration config = new Configuration();
         config.setHostname(host);
         config.setPort(port);
-        config.setOrigin("*");
-        config.setAllowHeaders("*");
+        config.setOrigin("https://sopra-fs23-group-12-client.ew.r.appspot.com");
+        //config.setAllowHeaders("*");
         return new SocketIOServer(config);
     }
 
