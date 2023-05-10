@@ -1,0 +1,8 @@
+[
+  {
+    "origin": ["https://sopra-fs23-group-12-client.ew.r.appspot.com"],
+    "method": ["GET", "POST"],
+    "responseHeader": ["Content-Type"],
+    "maxAgeSeconds": 3600
+  }
+]
