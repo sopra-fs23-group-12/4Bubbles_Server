@@ -46,7 +46,7 @@ public class Application {
         Configuration config = new Configuration();
         config.setHostname(host);
         config.setPort(port);
-        config.setOrigin("https://sopra-fs23-group-12-client.ew.r.appspot.com");
+        //config.setOrigin("https://sopra-fs23-group-12-client.ew.r.appspot.com");
         //config.setAllowHeaders("*");
         return new SocketIOServer(config);
     }
