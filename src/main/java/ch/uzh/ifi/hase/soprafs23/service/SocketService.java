@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +30,7 @@ public class SocketService {
     private final SocketBasics socketBasics;
     public SocketService(GameRoomService gameRoomService, RoomCoordinator roomCoordinator) {
         this.gameRoomService = gameRoomService;
-        this.roomCoordinator = RoomCoordinator.getInstance();
+        this.roomCoordinator = roomCoordinator;
         this.socketBasics = new SocketBasics();
     }
 
@@ -56,7 +57,8 @@ public class SocketService {
         try{
             GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
             Collection<User> members = gameRoom.getMembers().values();
-            socketBasics.sendObjectToRoom(roomCode, EventNames.JOINED_PLAYERS.eventName, members);
+            List<User> membersList = members.stream().toList();
+            socketBasics.sendObjectToRoom(roomCode, EventNames.JOINED_PLAYERS.eventName, membersList);
         } catch (Exception e){
             System.out.printf("Exception occurred while sending user array: %s", e);
         }
