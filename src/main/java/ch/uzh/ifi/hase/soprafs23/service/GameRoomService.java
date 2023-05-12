@@ -60,10 +60,5 @@ public class GameRoomService {
         }
     }
 
-    public void removePlayerFromGameRoom(GameRoom room, Long userId) {
-        room.getMembers().remove(userId);
-
-    }
-
 
 }

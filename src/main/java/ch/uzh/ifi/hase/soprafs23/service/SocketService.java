@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -95,6 +94,11 @@ public class SocketService {
             else votesDict.put(entry.getVote(), i + 1);
         }
         return votesDict;
+    }
+    
+    public void removePlayerFromGameRoom(GameRoom room, Long userId) {
+        room.getMembers().remove(userId);
+
     }
 
     }

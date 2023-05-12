@@ -81,18 +81,4 @@ public class GameRoomController {
             throw new RoomNotFoundException("Unable to find game room with code: " + gameRoomPutDTO.getRoomCode(), e);
         }
     }
-
-    @PutMapping("/leaveRoom")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void leaveRoom(@RequestBody GameRoomPutDTO gameRoomPutDTO, @RequestHeader(value = "Authorization", required = false) String bearerToken){
-        gameRoomService.throwForbiddenWhenNoBearerToken(bearerToken);
-        try {
-            GameRoom room = roomCoordinator.getRoomByCode(gameRoomPutDTO.getRoomCode());
-            gameRoomService.removePlayerFromGameRoom(room, gameRoomPutDTO.getUserId());
-        }
-        catch (NotFoundException e) {
-            throw new RoomNotFoundException("Unable to find game room with code: " + gameRoomPutDTO.getRoomCode(), e);
-        }
-
-    }
 }
