@@ -8,7 +8,6 @@ public class GameRoomPostDTO {
     private String questionTopic;
     private int questionTopicId;
     private String gameMode;
-    private String difficulty;
 
 
     public long getleaderId() {
@@ -49,13 +48,6 @@ public class GameRoomPostDTO {
 
     public void setGameMode(String gameMode) {
         this.gameMode = gameMode;
-    }
-    public String getDifficulty() {
-        return difficulty;
-    }
-
-    public void setDifficulty(String difficulty) {
-        this.difficulty = difficulty;
     }
 
 }

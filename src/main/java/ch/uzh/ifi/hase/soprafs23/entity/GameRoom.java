@@ -19,7 +19,6 @@ public class GameRoom {
     private int questionTopicId;
     private String roomCode;
     private String gameMode;
-    private String difficulty;
     private long leaderUserId;
 
     private final VoteController voteController = new VoteController();
@@ -97,14 +96,6 @@ public class GameRoom {
 
     public void setGameMode(String gameMode) {
         this.gameMode = gameMode;
-    }
-
-    public String getDifficulty() {
-        return difficulty;
-    }
-
-    public void setDifficulty(String difficulty) {
-        this.difficulty = difficulty;
     }
 
     public List<Question> getQuestions() {
