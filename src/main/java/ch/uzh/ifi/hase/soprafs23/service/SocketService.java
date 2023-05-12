@@ -30,7 +30,7 @@ public class SocketService {
     private final SocketBasics socketBasics;
     public SocketService(GameRoomService gameRoomService, RoomCoordinator roomCoordinator) {
         this.gameRoomService = gameRoomService;
-        this.roomCoordinator = roomCoordinator;
+        this.roomCoordinator = RoomCoordinator.getInstance();
         this.socketBasics = new SocketBasics();
     }
 

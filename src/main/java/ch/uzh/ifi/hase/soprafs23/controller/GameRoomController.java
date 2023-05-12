@@ -27,7 +27,7 @@ public class GameRoomController {
 
     GameRoomController(GameRoomService gameRoomService, RoomCoordinator roomCoordinator, ApiService apiService) {
         this.gameRoomService = gameRoomService;
-        this.roomCoordinator = roomCoordinator;
+        this.roomCoordinator = RoomCoordinator.getInstance();
         this.apiService = apiService;
     }
 
