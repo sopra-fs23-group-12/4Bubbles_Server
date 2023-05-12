@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 //this is for the websockets
 // from https://medium.com/folksdev/spring-boot-netty-socket-io-example-3f21fcc1147d
@@ -83,9 +84,9 @@ public class SocketService {
     }
 
 
-    public HashMap<String, Integer> votesListAsMap(List<Vote> votes) {
+    public HashMap<String, Integer> votesListAsMap(Map<Long, Vote> votes) {
         HashMap<String, Integer> votesDict = new HashMap<String, Integer>();
-        for(Vote entry : votes) {
+        for(Vote entry : votes.values()) {
             Integer i = votesDict.get(entry.getVote());
             if(i == null) {votesDict.put(entry.getVote(), 1);}
             else votesDict.put(entry.getVote(), i + 1);

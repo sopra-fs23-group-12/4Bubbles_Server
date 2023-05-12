@@ -112,8 +112,7 @@ public class SocketController {
                 VoteController voteController = gameRoom.getVoteController();
                 Game game = gameRoom.getCurrentGame();
                 game.setVoteGame(userId, message, remainingTime);
-                List<Vote> votes = voteController.getVotes();
-                HashMap<String, Integer> votesHash = socketService.votesListAsMap(votes);
+                HashMap<String, Integer> votesHash = socketService.votesListAsMap(voteController.getVotes());
                 System.out.println(votesHash);
                 socketBasics.sendObjectToRoom(roomCode, EventNames.SOMEBODY_VOTED.eventName, votesHash);
             }
@@ -127,17 +126,10 @@ public class SocketController {
             // change this round to currentRoundCounter in game
             GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
             VoteController voteController = gameRoom.getVoteController();
-            List<Vote> votes = voteController.getVotes();
+            Map<Long, Vote> votes = voteController.getVotes();
             Game game = gameRoom.getCurrentGame();
             int round = game.getRoundCounter();
             GameRanking gameRanking = game.getRanking();
-            
-            //Keeping track of the total points of the players will be here for now
-            //eventually we can put an intermediate storage in the gameRoom and add everything to the Repo entity at the end
-            List<User> players = gameRoom.getMembers();
-
-
-
 
             // send ranking as a json
             Map<Long, Integer> currentRanking = gameRanking.updateRanking(gameRoom.getQuestions().get(round), votes);

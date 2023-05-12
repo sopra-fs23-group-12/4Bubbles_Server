@@ -10,6 +10,7 @@ import ch.uzh.ifi.hase.soprafs23.service.SocketBasics;
 
 
 import java.util.List;
+import java.util.Map;
 
 public class Game {
     private GameRoom gameRoom;
@@ -76,7 +77,7 @@ public class Game {
 
     public void setVoteGame(long userId, String message, int remainingTime){
         voteController.setVote(userId, message,remainingTime);
-        List<Vote> votes = voteController.getVotes();
+        Map<Long, Vote> votes = voteController.getVotes();
         System.out.print(votes);
 
     }

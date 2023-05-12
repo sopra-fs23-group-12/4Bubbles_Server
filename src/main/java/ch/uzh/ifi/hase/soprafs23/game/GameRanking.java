@@ -19,8 +19,8 @@ public class GameRanking {
         }
     }
 
-    public Map<Long, Integer> updateRanking(Question question, List<Vote> votes) {
-        for(Vote vote : votes){
+    public Map<Long, Integer> updateRanking(Question question, Map<Long, Vote> votes) {
+        for(Vote vote : votes.values()){
             int oldPoints = rankingDict.get(vote.getPlayerId());
             int addPoints = 0;
             if (vote.getVote().equals(question.getCorrectAnswer())){
