@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
 
-
+/*
 @Component
 public class ServerCommandLineRunner implements CommandLineRunner {
 
@@ -29,6 +29,7 @@ public class ServerCommandLineRunner implements CommandLineRunner {
         server.startAsync();
         /* server.start();
         Thread.sleep(Integer.MAX_VALUE);
-        server.stop();  */
+        server.stop();
     }
 }
+*/

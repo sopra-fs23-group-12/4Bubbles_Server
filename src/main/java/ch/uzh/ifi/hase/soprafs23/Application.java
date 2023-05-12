@@ -3,12 +3,15 @@ package ch.uzh.ifi.hase.soprafs23;
 //netty-socketio corundumstudio is the library to use socketio for java  (https://github.com/mrniko/netty-socketio/tree/master/src)
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -60,5 +63,24 @@ public class Application {
                 registry.addMapping("/**").allowedOrigins("*").allowedMethods("*");
             }
         };
+    }
+
+
+    @Component
+    public class ServerCommandLineRunner implements CommandLineRunner {
+
+        private final SocketIOServer server;
+
+        @Autowired
+        public ServerCommandLineRunner(SocketIOServer server) {
+            this.server = server;
+        }
+
+        @Override
+        public void run(String... args) throws Exception {
+
+            server.startAsync();
+
+        }
     }
 }
