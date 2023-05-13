@@ -1,11 +1,8 @@
 package ch.uzh.ifi.hase.soprafs23.game;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.entity.Vote;
 
 
