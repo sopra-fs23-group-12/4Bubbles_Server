@@ -120,6 +120,7 @@ public class SocketController {
         };
     }
 
+    //this may only be called by the room leader otherwise the roundcounter doesn't work correctly
     private DataListener<Message> requestRanking() {
         return (senderClient, data, ackSender) -> {
             String roomCode = data.getRoomCode();
@@ -129,6 +130,7 @@ public class SocketController {
             VoteController voteController = gameRoom.getVoteController();
             List<Vote> votes = voteController.getVotes();
             Game game = gameRoom.getCurrentGame();
+            game.incrementCounter();
             int round = game.getRoundCounter();
             GameRanking gameRanking = game.getRanking();
             
