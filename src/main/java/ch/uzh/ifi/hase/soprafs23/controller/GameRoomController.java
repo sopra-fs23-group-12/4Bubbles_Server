@@ -58,7 +58,7 @@ public class GameRoomController {
         GameRoom gameRoom = DTOMapper.INSTANCE.convertGameRoomPostDTOtoEntity(gameRoomPostDTO);
         gameRoomService.setLeaderFromRepo(gameRoom);
         gameRoomService.initGameRoom(gameRoom);
-        String apiURL = String.format(ApiUrls.QUESTIONS.url, gameRoom.getNumOfQuestions(), gameRoom.getQuestionTopicId(), gameRoom.getGameMode());
+        String apiURL = String.format(ApiUrls.QUESTIONS.url, gameRoom.getNumOfQuestions(), gameRoom.getQuestionTopicId(), gameRoom.getDifficulty());
         try{
             gameRoom.setQuestions(apiService.getQuestionsFromApi(apiURL));
             gameRoom.getQuestions().forEach(question -> System.out.println(question.getQuestion()));

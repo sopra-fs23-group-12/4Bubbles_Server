@@ -24,6 +24,8 @@ public class Game {
 
     private String roomCode;
 
+    private String gameMode;
+
     private final SocketBasics socketBasics;
 
     private VoteController voteController;
@@ -33,6 +35,7 @@ public class Game {
         this.gameRoom = gameRoom;
         this.ranking  = new GameRanking(gameRoom.getMembers());
         this.questions = this.gameRoom.getQuestions();
+        this.gameMode = this.gameRoom.getGameMode();
         this.roundCounter = this.gameRoom.getQuestions().size();
         this.roomCode = this.gameRoom.getRoomCode();
         this.voteController = this.gameRoom.getVoteController();
@@ -42,7 +45,7 @@ public class Game {
 
     //called upon startGame, does the things that only need to happen before the first question is started
     public void startPreGame(){
-        socketBasics.sendObjectToRoom(this.gameRoom.getRoomCode(),EventNames.GAME_STARTED.eventName,  "");
+        socketBasics.sendObjectToRoom(this.gameRoom.getRoomCode(),EventNames.GAME_STARTED.eventName,  gameMode);
         //have 5 second timer before the game starts, then send the question, then have 3 second timer
         timerController.setTimer(5);
         timerController.startTimer(roomCode);
@@ -97,6 +100,8 @@ public class Game {
     public GameRanking getRanking(){return this.ranking;}
     
     public String getRoomCode(){return this.roomCode;}
+
+    public String getGameMode(){return this.gameMode;}
 
     public List<Question> getQuestions(){return this.questions;}
 
