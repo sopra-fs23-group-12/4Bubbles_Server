@@ -120,7 +120,7 @@ public class GameRoomControllerUnitTests {
 */
     @Test
     public void testGetTopics() throws Exception {
-        Topics topicGetDTOs = gameRoomController.getTopics( null);
+        List<TopicGetDTO> topicGetDTOs = gameRoomController.getTopics( null);
         verify(gameRoomService, times(1)).throwForbiddenWhenNoBearerToken(any());
 
         assertEquals("https://opentdb.com/api_category.php", ApiUrls.CATEGORIES.url);

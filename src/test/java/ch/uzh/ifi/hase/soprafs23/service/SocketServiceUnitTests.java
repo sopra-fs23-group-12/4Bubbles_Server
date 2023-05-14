@@ -1,5 +1,6 @@
 package ch.uzh.ifi.hase.soprafs23.service;
 
+import ch.uzh.ifi.hase.soprafs23.constant.EventNames;
 import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
 import ch.uzh.ifi.hase.soprafs23.entity.RoomCoordinator;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
@@ -12,12 +13,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import javassist.NotFoundException;
 
 import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class SocketServiceUnitTests {
@@ -106,5 +107,10 @@ public class SocketServiceUnitTests {
 
         HashMap map = socketService.votesListAsMap(votes);
         assertEquals(1, map.size());
+    }
+
+    @Test
+    public void testSendObject() throws Exception {
+        socketService.sendObject(socketIOClient, EventNames.GET_RIGHT_ANSWER.eventName, "Correct Answer");
     }
 }
