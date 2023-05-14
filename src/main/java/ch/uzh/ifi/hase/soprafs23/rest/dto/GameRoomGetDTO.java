@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs23.rest.dto;
 
 import java.util.List;
+import java.util.Map;
 
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 
@@ -12,14 +13,15 @@ public class GameRoomGetDTO {
     private String questionTopic;
     private String roomCode;
     private String gameMode;
+    private String difficulty;
 
 
     public List<User> getMembers() {
         return members;
     }
 
-    public void setMembers(List<User> members) {
-        this.members = members;
+    public void setMembers(Map<Long, User> members) {
+        this.members = members.values().stream().toList();
     }
 
     public User getLeader() {
@@ -60,6 +62,14 @@ public class GameRoomGetDTO {
 
     public void setGameMode(String gameMode) {
         this.gameMode = gameMode;
+    }
+
+    public String getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
     }
 
 

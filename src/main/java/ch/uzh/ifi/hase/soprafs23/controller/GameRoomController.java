@@ -9,14 +9,12 @@ import ch.uzh.ifi.hase.soprafs23.rest.dto.*;
 import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs23.service.ApiService;
 import ch.uzh.ifi.hase.soprafs23.service.GameRoomService;
-import ch.uzh.ifi.hase.soprafs23.service.UserService;
 import javassist.NotFoundException;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,7 +56,7 @@ public class GameRoomController {
         GameRoom gameRoom = DTOMapper.INSTANCE.convertGameRoomPostDTOtoEntity(gameRoomPostDTO);
         gameRoomService.setLeaderFromRepo(gameRoom);
         gameRoomService.initGameRoom(gameRoom);
-        String apiURL = String.format(ApiUrls.QUESTIONS.url, gameRoom.getNumOfQuestions(), gameRoom.getQuestionTopicId(), gameRoom.getGameMode());
+        String apiURL = String.format(ApiUrls.QUESTIONS.url, gameRoom.getNumOfQuestions(), gameRoom.getQuestionTopicId(), gameRoom.getDifficulty());
         try{
             gameRoom.setQuestions(apiService.getQuestionsFromApi(apiURL));
             gameRoom.getQuestions().forEach(question -> System.out.println(question.getQuestion()));
@@ -71,7 +69,7 @@ public class GameRoomController {
         return DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(gameRoom);
     }
 
-    @PutMapping("/joinRoom") // who and which room, evtl authorization?
+    @PutMapping("/joinRoom")
     @ResponseStatus(HttpStatus.OK)
     public GameRoomGetDTO joinGameRoom(@RequestBody GameRoomPutDTO gameRoomPutDTO, @RequestHeader(value = "Authorization", required = false) String bearerToken) {
         gameRoomService.throwForbiddenWhenNoBearerToken(bearerToken);

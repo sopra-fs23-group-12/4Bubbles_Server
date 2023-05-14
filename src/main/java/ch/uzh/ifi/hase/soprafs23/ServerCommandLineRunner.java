@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.TimeUnit;
+
+
 @Component
 public class ServerCommandLineRunner implements CommandLineRunner {
 
@@ -22,6 +25,7 @@ public class ServerCommandLineRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+
         server.startAsync();
         /* server.start();
         Thread.sleep(Integer.MAX_VALUE);
