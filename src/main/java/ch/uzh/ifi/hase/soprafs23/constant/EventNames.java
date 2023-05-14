@@ -23,7 +23,7 @@ public enum EventNames {
     START_TIMER("start_timer"),
     JOIN_ROOM("join_room"),
     SEND_MESSAGE("send_message"),
-    
+    USER_LEFT_GAMEROOM("user_left_gameroom"),
     REQUEST_RANKING("request_ranking");
 
 

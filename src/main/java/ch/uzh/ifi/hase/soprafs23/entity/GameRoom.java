@@ -1,6 +1,9 @@
 package ch.uzh.ifi.hase.soprafs23.entity;
 
+import java.util.HashMap;
 import java.util.List;
+
+import java.util.Map;
 
 import ch.uzh.ifi.hase.soprafs23.game.Game;
 import ch.uzh.ifi.hase.soprafs23.game.VoteController;
@@ -10,8 +13,7 @@ import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
 
 public class GameRoom {
 
-    //Compare with GameRoomDTOs and check duplications
-    private List<User> members;
+    private Map<Long, User> members = new HashMap<>();
     private List<Question> questions;
     private User leader;
     private int numOfQuestions;
@@ -35,11 +37,11 @@ public class GameRoom {
         this.leaderUserId = leaderUserId;
     }
 
-    public List<User> getMembers() {
+    public Map<Long,User> getMembers() {
         return members;
     }
 
-    public void setMembers(List<User> members) {
+    public void setMembers(Map<Long, User> members) {
         this.members = members;
     }
 

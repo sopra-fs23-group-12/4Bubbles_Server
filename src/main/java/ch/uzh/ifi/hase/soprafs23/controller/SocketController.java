@@ -88,6 +88,7 @@ public class SocketController {
         server.addEventListener(EventNames.SEND_VOTE.eventName, VoteMessage.class, updateVote());
         server.addEventListener(EventNames.REQUEST_RANKING.eventName, Message.class, requestRanking());
         server.addEventListener(EventNames.END_OF_QUESTION.eventName, Message.class, sendRightAnswer());
+        server.addEventListener(EventNames.USER_LEFT_GAMEROOM.eventName, Message.class, leaveRoom());
 
     }
 
@@ -134,13 +135,6 @@ public class SocketController {
             int round = game.getRoundCounter();
             GameRanking gameRanking = game.getRanking();
             
-            //Keeping track of the total points of the players will be here for now
-            //eventually we can put an intermediate storage in the gameRoom and add everything to the Repo entity at the end
-            List<User> players = gameRoom.getMembers();
-
-
-
-
             // send ranking as a json
             Map<Long, Integer> currentRanking = gameRanking.updateRanking(gameRoom.getQuestions().get(round), votes);
             voteController.resetVotes();
@@ -244,6 +238,33 @@ public class SocketController {
             logger.info("Socket ID[{}]  Connected to socket");
             logger.info(senderClient.getSessionId().toString());
         };
+    }
+
+    private DataListener<Message> leaveRoom(){
+        return (senderClient, data, ackSender) -> {
+            String roomCode = data.getRoomCode();
+            Long userId = Long.parseLong(data.getMessage()); // message is the userId in this case change later to userId
+            GameRoom room = roomCoordinator.getRoomByCode(roomCode);
+            
+            try {
+                // leave the gameRoom (server entitiy)
+                socketService.removePlayerFromGameRoom(room, userId);
+                // leave the socket namespace
+                senderClient.leaveRoom(roomCode);
+                logger.info("room was left!");
+                logger.info(roomCode);
+            
+                // notifies all clients that are already joined that there is a new member
+                socketService.sendMemberArray(roomCode, senderClient);
+            } catch (Exception e) {
+                logger.info("room could not be left, either room was null or no room with that code exists");
+                logger.info(e.toString());
+
+            }
+            logger.info("Socket ID[{}]  Connected to socket");
+            logger.info(senderClient.getSessionId().toString());
+        };
+
     }
 
     private ConnectListener onConnected() {

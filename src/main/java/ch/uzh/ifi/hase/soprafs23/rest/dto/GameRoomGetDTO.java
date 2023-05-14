@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs23.rest.dto;
 
 import java.util.List;
+import java.util.Map;
 
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 
@@ -19,8 +20,8 @@ public class GameRoomGetDTO {
         return members;
     }
 
-    public void setMembers(List<User> members) {
-        this.members = members;
+    public void setMembers(Map<Long, User> members) {
+        this.members = members.values().stream().toList();
     }
 
     public User getLeader() {

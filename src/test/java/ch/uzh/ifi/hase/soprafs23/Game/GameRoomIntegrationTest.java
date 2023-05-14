@@ -8,8 +8,9 @@ import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -21,7 +22,7 @@ public class GameRoomIntegrationTest {
     private Game game;
 
     private List<Question> questions;
-    private List<User> members;
+    private Map<Long, User> members;
 
     @BeforeEach
     public void setup() {
@@ -52,7 +53,10 @@ public class GameRoomIntegrationTest {
         testUser3.setPassword("password3");
         testUser3.setUsername("testUsername2");
 
-        this.members = List.of(testUser1, testUser2, testUser3);
+        this.members = new HashMap<Long, User>();
+        members.put(testUser1.getId(), testUser1);
+        members.put(testUser2.getId(), testUser2);
+        members.put(testUser3.getId(), testUser3);
 
         this.gameRoom = new GameRoom();
         gameRoom.setMembers(members);
