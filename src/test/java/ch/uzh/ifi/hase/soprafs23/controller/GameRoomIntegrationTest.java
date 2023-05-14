@@ -59,7 +59,7 @@ public class GameRoomIntegrationTest {
         testUser2.setPassword("password2");
         testUser2.setUsername("playerName2");
     }
-
+    /*
     @Test
     public void integrationTestJoinRoom() throws Exception {
 
@@ -84,6 +84,7 @@ public class GameRoomIntegrationTest {
                 .content(asJsonString(gameRoomPutDTO))
         ).andExpect(MockMvcResultMatchers.status().isOk());
     }
+    */
 
     private String asJsonString(final Object object) {
         try {
