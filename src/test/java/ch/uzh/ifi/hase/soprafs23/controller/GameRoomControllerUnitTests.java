@@ -5,10 +5,7 @@ import ch.uzh.ifi.hase.soprafs23.entity.RoomCoordinator;
 import ch.uzh.ifi.hase.soprafs23.exceptions.ApiConnectionError;
 import ch.uzh.ifi.hase.soprafs23.exceptions.RoomNotFoundException;
 import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
-import ch.uzh.ifi.hase.soprafs23.rest.dto.GameRoomGetDTO;
-import ch.uzh.ifi.hase.soprafs23.rest.dto.GameRoomPostDTO;
-import ch.uzh.ifi.hase.soprafs23.rest.dto.GameRoomPutDTO;
-import ch.uzh.ifi.hase.soprafs23.rest.dto.TopicGetDTO;
+import ch.uzh.ifi.hase.soprafs23.rest.dto.*;
 import ch.uzh.ifi.hase.soprafs23.service.ApiService;
 import ch.uzh.ifi.hase.soprafs23.service.GameRoomService;
 import javassist.NotFoundException;
@@ -123,7 +120,7 @@ public class GameRoomControllerUnitTests {
 */
     @Test
     public void testGetTopics() throws Exception {
-        List<TopicGetDTO> topicGetDTOs = gameRoomController.getTopics( null);
+        Topics topicGetDTOs = gameRoomController.getTopics( null);
         verify(gameRoomService, times(1)).throwForbiddenWhenNoBearerToken(any());
 
         assertEquals("https://opentdb.com/api_category.php", ApiUrls.CATEGORIES.url);
