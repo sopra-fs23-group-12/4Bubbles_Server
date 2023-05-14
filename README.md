@@ -1,35 +1,44 @@
-# SoPra RESTful Service Template FS23
+# UZH SoPra Course FS23 
 
-## Getting started with Spring Boot
--   Documentation: https://docs.spring.io/spring-boot/docs/current/reference/html/index.html
--   Guides: http://spring.io/guides
-    -   Building a RESTful Web Service: http://spring.io/guides/gs/rest-service/
-    -   Building REST services with Spring: https://spring.io/guides/tutorials/rest/
+# 4Bubble Trivia
 
-## Setup this Template with your IDE of choice
-Download your IDE of choice (e.g., [IntelliJ](https://www.jetbrains.com/idea/download/), [Visual Studio Code](https://code.visualstudio.com/), or [Eclipse](http://www.eclipse.org/downloads/)). Make sure Java 17 is installed on your system (for Windows, please make sure your `JAVA_HOME` environment variable is set to the correct version of Java).
+Make Trivia fun again!  \
+This is a trivia game with a focus on multiplayer aspects. 
+You can test your trivia knowledge by battling your friends in your preferred
+topic. Choose your difficulty, the number of questions and your game mode. 
+You have 10 seconds to answer the questions in the bubble and collect points. The faster
+you answer, the more points you will get. This will prove more difficult than you might
+expect, especially in hard mode. But not to worry - since the bubble sizes change to indicate
+the number of people that have already cast their vote on one of the answers, you can go
+the safe road and follow your friend's choice ... or can you? Depending on your gamemode,
+bubble sizes could just be randomly generated without you knowing, or players could change
+their answer in the last seconds to try and confuse you. 
+Whether you chose the correct answer will be revealed when the time is up; if your 
+bubble doesn't burst, you've made the correct choice!
 
-### IntelliJ
-1. File -> Open... -> SoPra server template
-2. Accept to import the project as a `gradle project`
-3. To build right click the `build.gradle` file and choose `Run Build`
+[Play here](sopra-fs23-group-12-client.ew.r.appspot.com). Enjoy!
 
-### VS Code
-The following extensions can help you get started more easily:
--   `vmware.vscode-spring-boot`
--   `vscjava.vscode-spring-initializr`
--   `vscjava.vscode-spring-boot-dashboard`
--   `vscjava.vscode-java-pack`
 
-**Note:** You'll need to build the project first with Gradle, just click on the `build` command in the _Gradle Tasks_ extension. Then check the _Spring Boot Dashboard_ extension if it already shows `soprafs23` and hit the play button to start the server. If it doesn't show up, restart VS Code and check again.
 
-## Building with Gradle
-You can use the local Gradle Wrapper to build the application.
--   macOS: `./gradlew`
--   Linux: `./gradlew`
--   Windows: `./gradlew.bat`
+## Technologies
 
-More Information about [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) and [Gradle](https://gradle.org/docs/).
+This project is a Node.js application running ReactJS with JavaScript.\
+Server-Client communications are handled with REST API and Socket.io with the [Netty-Socketio](https://github.com/mrniko/netty-socketio) library for the java server.
+
+## High-level Components
+
+*what is meant by this?? server, client and DB?
+
+## Contributing
+
+Please read [contributions.md]() for details of our task history.
+
+## Launch and Deployment
+
+
+### Setup this Template with your IDE of choice
+Download your IDE of choice (e.g., [IntelliJ](https://www.jetbrains.com/idea/download/), [Visual Studio Code](https://code.visualstudio.com/), or [Eclipse](http://www.eclipse.org/downloads/)). Make sure Java 17 is installed on your system (for Windows, please make sure your `JAVA_HOME` environment variable is set to the correct version of Java). \
+Clone the repo and open in your IDE of choice. Note: you might have to build gradle first.
 
 ### Build
 
@@ -51,36 +60,50 @@ You can verify that the server is running by visiting `localhost:8080` in your b
 ./gradlew test
 ```
 
-### Development Mode
-You can start the backend in development mode, this will automatically trigger a new build and reload the application
-once the content of a file has been changed.
+### Prerequisites
 
-Start two terminal windows and run:
+TODO: are there any prerequisites? I dont think so since it is in google cloud right?<
+OR do we actually have to provide info on how to run it locally?
 
-`./gradlew build --continuous`
 
-and in the other one:
+## Illustrations
 
-`./gradlew bootRun`
+Login/signup
+welcomepage
+user stats
+create a game
+join a game
+questions
+ranking
 
-If you want to avoid running all tests with every change, use the following command instead:
+## Roadmap
+tbd
 
-`./gradlew build --continuous -xtest`
 
-## API Endpoint Testing with Postman
-We recommend using [Postman](https://www.getpostman.com) to test your API Endpoints.
 
-## Debugging
-If something is not working and/or you don't know what is going on. We recommend using a debugger and step-through the process step-by-step.
 
-To configure a debugger for SpringBoot's Tomcat servlet (i.e. the process you start with `./gradlew bootRun` command), do the following:
 
-1. Open Tab: **Run**/Edit Configurations
-2. Add a new Remote Configuration and name it properly
-3. Start the Server in Debug mode: `./gradlew bootRun --debug-jvm`
-4. Press `Shift + F9` or the use **Run**/Debug "Name of your task"
-5. Set breakpoints in the application where you need it
-6. Step through the process one step at a time
+## Authors
 
-## Testing
-Have a look here: https://www.baeldung.com/spring-boot-testing
+in alpahbetical order:
+* **Dario Küffer** - [GitHub](https://github.com/dariokueffer)
+* **Fabio Bertschi** - [GitHub](https://github.com/fabibert)
+* **Maaike van Vliet** - [GitHub](https://github.com/Bluee1Bird)
+* **Marlen Kühn**  - [GitHub](https://github.com/MarlenKuehn)
+* **Louis Devillers** - [GitHub](https://github.com/a1ps)
+
+
+Special thanks to the authors of the template:
+* **Roy Rutishauser** - [GitHub](https://github.com/royru)
+* **Dennis Huber** - [GitHub](https://github.com/devnnys)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+
+## Acknowledgments
+
+* This project was build on the basis of the SoPra Template FS23 provided by the University of Zurich for the 
+Software Engineering Lab (Softwarepraktikum) course supervised by Professor Thomas Fritz
+* Special Thanks also to our Teaching Assistant [Valentin Hollenstein](https://github.com/v4lentin1879)
+
