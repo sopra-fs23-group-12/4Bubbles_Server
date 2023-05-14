@@ -91,7 +91,7 @@ public class GameRoomControllerUnitTests {
         });
     }
 
-    /*
+
     @Test
     public void testJoinRoom() throws Exception {
         GameRoomGetDTO gameRoomGetDTO = gameRoomController.joinGameRoom(gameRoomPutDTO, "bearer");
@@ -117,7 +117,7 @@ public class GameRoomControllerUnitTests {
         });
         assertEquals("Unable to find game room with code: 123456", roomNotFoundException.getMessage());
     }
-*/
+
     @Test
     public void testGetTopics() throws Exception {
         List<TopicGetDTO> topicGetDTOs = gameRoomController.getTopics( null);
