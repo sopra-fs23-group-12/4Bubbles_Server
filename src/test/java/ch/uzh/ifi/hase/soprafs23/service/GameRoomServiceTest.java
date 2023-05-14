@@ -3,12 +3,11 @@ package ch.uzh.ifi.hase.soprafs23.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -16,7 +15,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -71,8 +69,8 @@ class GameRoomServiceTest {
     void initGameRoomTest() {
         GameRoom testRoom = new GameRoom();
         testRoom.setLeader(testUser);
-        List<User> testList = new ArrayList<>();
-        testList.add(testUser);
+        Map<Long, User> testList = new HashMap<Long, User>();
+        testList.put(testUser.getId(), testUser);
         gameRoomService.initGameRoom(testRoom);
 
         assertNotNull(testRoom.getRoomCode());
@@ -95,10 +93,9 @@ class GameRoomServiceTest {
     @Test
     void addPlayerToGameRoomTest() {
         GameRoom testRoom = new GameRoom();
-        List<User> memberList = new ArrayList<>();
-        List<User> memberList2 = new ArrayList<>();
-        testRoom.setMembers(memberList2);
-        memberList.add(testUser);
+        Map<Long, User> memberList = new HashMap<Long, User>();
+        testRoom.getMembers().put(testUser.getId(), testUser);
+        memberList.put(testUser.getId(), testUser);
         
         gameRoomService.addPlayerToGameRoom(testRoom, testUser.getId());
 

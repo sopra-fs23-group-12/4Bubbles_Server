@@ -1,6 +1,7 @@
 package ch.uzh.ifi.hase.soprafs23.controller;
 
 import ch.uzh.ifi.hase.soprafs23.constant.ApiUrls;
+import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
 import ch.uzh.ifi.hase.soprafs23.entity.RoomCoordinator;
 import ch.uzh.ifi.hase.soprafs23.exceptions.ApiConnectionError;
 import ch.uzh.ifi.hase.soprafs23.exceptions.RoomNotFoundException;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
@@ -147,4 +149,14 @@ public class GameRoomControllerUnitTests {
             gameRoomController.createGameRoom(gameRoomPostDTO, null);
         });
     }
+
+    /* @Test
+    public void leaveRoomTest() throws Exception {
+        //given
+        GameRoom gameRoom = new GameRoom();
+        gameRoom.setRoomCode("123456");
+        gameRoom.setLeaderId(1L);
+        gameRoom.setMembers(null);        
+        
+    } */
 }
