@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +44,10 @@ public class GameRankingTest {
         testUser3.setPassword("password3");
         testUser3.setUsername("testUsername2");
 
-        List<User> users = List.of(testUser1, testUser2, testUser3);
+        Map<Long, User> users = new HashMap<Long, User>();
+        users.put(testUser1.getId(), testUser1);
+        users.put(testUser2.getId(), testUser2);
+        users.put(testUser3.getId(), testUser3);
 
         gameRoom = new GameRoom();
         gameRoom.setMembers(users);

@@ -69,7 +69,7 @@ public class GameRoomController {
         return DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(gameRoom);
     }
 
-    @PutMapping("/joinRoom") // who and which room, evtl authorization?
+    @PutMapping("/joinRoom")
     @ResponseStatus(HttpStatus.OK)
     public GameRoomGetDTO joinGameRoom(@RequestBody GameRoomPutDTO gameRoomPutDTO, @RequestHeader(value = "Authorization", required = false) String bearerToken) {
         gameRoomService.throwForbiddenWhenNoBearerToken(bearerToken);

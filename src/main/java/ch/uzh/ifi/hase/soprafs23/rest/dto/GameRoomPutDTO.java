@@ -3,7 +3,7 @@ package ch.uzh.ifi.hase.soprafs23.rest.dto;
 public class GameRoomPutDTO {
 
     private String roomCode;
-    private int userId;
+    private long userId;
 
     public String getRoomCode() {
         return roomCode;
@@ -13,7 +13,7 @@ public class GameRoomPutDTO {
         this.roomCode = roomCode;
     }
 
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 

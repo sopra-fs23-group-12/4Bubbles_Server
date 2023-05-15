@@ -3,7 +3,6 @@ package ch.uzh.ifi.hase.soprafs23.Game;
 import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.repository.UserRepository;
-import ch.uzh.ifi.hase.soprafs23.rest.dto.GameRoomPutDTO;
 import ch.uzh.ifi.hase.soprafs23.service.GameRoomService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,8 +11,6 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GameRoomTest {
 
@@ -60,7 +57,7 @@ public class GameRoomTest {
 
     @Test
     public void testCreateRoom() {
-        /*Mockito.when(userRepository.findById(1L)).thenReturn(testUser1);
+        /* Mockito.when(userRepository.findById(1L)).thenReturn(testUser1);
         Mockito.when(userRepository.findById(2L)).thenReturn(testUser2);
         Mockito.when(userRepository.findById(3L)).thenReturn(testUser3);
 
@@ -76,7 +73,7 @@ public class GameRoomTest {
         RoomCoordinator roomCoordinator = RoomCoordinator.getInstance();
         roomCoordinator.addRoom(gameRoomInput);
 
-        assertEquals(1, gameRoom.getMembers().size());*/
+        assertEquals(1, gameRoom.getMembers().size()); */
     }
 }
 

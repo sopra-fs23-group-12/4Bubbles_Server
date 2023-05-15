@@ -4,6 +4,8 @@ import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.*;
 
+import java.util.List;
+
 import org.mapstruct.*;
 import org.mapstruct.factory.Mappers;
 
@@ -19,19 +21,24 @@ import org.mapstruct.factory.Mappers;
  * creating information (POST).
  */
 @Mapper
+@SuppressWarnings(value = { "Unmapped target properties" })
 public interface DTOMapper {
-
+    @SuppressWarnings(value = { "Unmapped target properties" })
     DTOMapper INSTANCE = Mappers.getMapper(DTOMapper.class);
     
-
     @Mapping(source = "leaderId", target = "leaderUserId")
     @Mapping(source = "difficulty", target = "difficulty")
     @Mapping(source = "gameMode", target = "gameMode")
     @Mapping(source = "questionTopicId", target = "questionTopicId")
+    
     GameRoom convertGameRoomPostDTOtoEntity(GameRoomPostDTO gameRoomPostDTO);
 
-
-
+/* 
+    @BeforeMapping
+    default List<User> convertMapToList(GameRoom gameRoom) {
+        return gameRoom.getMembers().values().stream().toList();
+    }
+    @Mapping(source = "members", target = "members") */
     GameRoomGetDTO convertEntityToGameRoomGetDTO(GameRoom gameRoom);
 
     @Mapping(source = "username", target = "username")

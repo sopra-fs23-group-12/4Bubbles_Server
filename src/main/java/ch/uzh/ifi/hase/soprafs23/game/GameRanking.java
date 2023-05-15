@@ -12,10 +12,10 @@ public class GameRanking {
     private Map<Long, Integer> rankingDict;
 
 
-    public GameRanking(List<User> members) {
+    public GameRanking(Map<Long, User> map) {
         rankingDict = new HashMap<>();
-        for (User member : members) {
-            rankingDict.put(member.getId(), 0);
+        for (long memberId : map.keySet()) {
+            rankingDict.put(memberId, 0);
         }
     }
 
@@ -30,14 +30,4 @@ public class GameRanking {
         }
         return rankingDict;
     }
-
-    /*
-    public Map<Long, Integer> rankingWithUsername(Map<Long,Integer> ranking){
-        HashMap<String, Integer> rankingNames = new HashMap<>();
-        for (Map.Entry<Long, Integer> entry : ranking.entrySet()){
-            rankingNames.put(userService.getentry.getKey())
-        }
-    }
-
-     */
 }

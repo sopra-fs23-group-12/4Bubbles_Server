@@ -9,8 +9,10 @@ import ch.uzh.ifi.hase.soprafs23.exceptions.RoomNotFoundException;
 import com.corundumstudio.socketio.SocketIOClient;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,8 +56,9 @@ public class SocketService {
     public void sendMemberArray(String roomCode, SocketIOClient senderClient){
         try{
             GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
-            List<User> members = gameRoom.getMembers();
-            socketBasics.sendObjectToRoom(roomCode, EventNames.JOINED_PLAYERS.eventName, members);
+            Collection<User> members = gameRoom.getMembers().values();
+            List<User> membersList = members.stream().toList();
+            socketBasics.sendObjectToRoom(roomCode, EventNames.JOINED_PLAYERS.eventName, membersList);
         } catch (Exception e){
             System.out.printf("Exception occurred while sending user array: %s", e);
         }
@@ -92,6 +95,11 @@ public class SocketService {
             else votesDict.put(entry.getVote(), i + 1);
         }
         return votesDict;
+    }
+    
+    public void removePlayerFromGameRoom(GameRoom room, Long userId) {
+        room.getMembers().remove(userId);
+
     }
 
     }
