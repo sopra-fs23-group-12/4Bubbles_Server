@@ -71,8 +71,7 @@ public class Game {
             }
         });
         timerThread.start();
-
-        roundCounter--;
+        
     }
 
     public void setVoteGame(long userId, String message, int remainingTime){
