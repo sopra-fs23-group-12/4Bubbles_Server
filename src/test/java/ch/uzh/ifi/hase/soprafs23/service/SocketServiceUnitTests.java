@@ -17,6 +17,7 @@ import javassist.NotFoundException;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -89,7 +90,7 @@ public class SocketServiceUnitTests {
         GameRoom gameRoom = new GameRoom();
         gameRoom.setLeaderUserId(1);
         gameRoom.setRoomCode("123456");
-        gameRoom.setMembers(List.of(testUser1));
+        gameRoom.setMembers(Map.of(testUser1.getId(),testUser1));
 
         RoomCoordinator roomCoordinator = RoomCoordinator.getInstance();
         roomCoordinator.addRoom(gameRoom);
@@ -103,7 +104,7 @@ public class SocketServiceUnitTests {
     @Test
     public void testVotesListAsMap() throws Exception {
         Vote vote = new Vote();
-        List<Vote> votes = List.of(vote);
+        Map<Long, Vote> votes = Map.of(testUser1.getId(),vote);
 
         HashMap map = socketService.votesListAsMap(votes);
         assertEquals(1, map.size());

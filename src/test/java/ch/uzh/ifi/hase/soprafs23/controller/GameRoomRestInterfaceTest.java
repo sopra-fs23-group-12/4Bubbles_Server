@@ -27,6 +27,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
@@ -131,7 +132,7 @@ public class GameRoomRestInterfaceTest {
         GameRoom gameRoom = new GameRoom();
         gameRoom.setRoomCode("123456");
         gameRoom.setLeader(testUser1);
-        gameRoom.setMembers(List.of(testUser1));
+        gameRoom.setMembers(Map.of(testUser1.getId(),testUser1));
 
         GameRoomPutDTO gameRoomPutDTO = new GameRoomPutDTO();
         gameRoomPutDTO.setRoomCode("123456");
