@@ -129,6 +129,7 @@ public class SocketController {
             VoteController voteController = gameRoom.getVoteController();
             Map<Long, Vote> votes = voteController.getVotes();
             Game game = gameRoom.getCurrentGame();
+            game.decreaseCounter();
             int round = game.getRoundCounter();
             GameRanking gameRanking = game.getRanking();
 

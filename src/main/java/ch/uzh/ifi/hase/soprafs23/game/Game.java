@@ -110,4 +110,7 @@ public class Game {
     public VoteController getVoteController() {
         return voteController;
     }
+
+    public void decreaseCounter() {this.roundCounter --; }
+
 }
