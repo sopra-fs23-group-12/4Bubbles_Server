@@ -71,7 +71,6 @@ public class Game {
         });
         timerThread.start();
 
-        roundCounter--;
     }
 
     public void setVoteGame(long userId, String message, int remainingTime){
@@ -109,4 +108,6 @@ public class Game {
     public VoteController getVoteController() {
         return voteController;
     }
+
+    public void incrementCounter() {this.roundCounter --; }
 }
