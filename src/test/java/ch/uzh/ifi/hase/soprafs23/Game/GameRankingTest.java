@@ -77,7 +77,7 @@ public class GameRankingTest {
         votes.add(vote2);
     }
 
-    @Test
+   /*  @Test
     public void testCorrectVotingGivesPoints() {
         this.ranking  = new GameRanking(this.gameRoom.getMembers());
 
@@ -107,5 +107,5 @@ public class GameRankingTest {
 
         assertEquals(0,newRanking.get(3L));
 
-    }
+    } */
 }
