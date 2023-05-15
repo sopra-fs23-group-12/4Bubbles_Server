@@ -109,5 +109,5 @@ public class Game {
         return voteController;
     }
 
-    public void incrementCounter() {this.roundCounter --; }
+    public void decreaseCounter() {this.roundCounter --; }
 }

@@ -131,7 +131,7 @@ public class SocketController {
             VoteController voteController = gameRoom.getVoteController();
             List<Vote> votes = voteController.getVotes();
             Game game = gameRoom.getCurrentGame();
-            game.incrementCounter();
+            game.decreaseCounter();
             int round = game.getRoundCounter();
             GameRanking gameRanking = game.getRanking();
             
