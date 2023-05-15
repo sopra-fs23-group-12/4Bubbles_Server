@@ -48,7 +48,7 @@ public class GameUnitTests {
         game.startPreGame();
         game.startGame();
         game.getRanking();
-        assertEquals(game.getRoundCounter(), gameRoom.getQuestions().size()-1);
+        assertEquals(game.getRoundCounter(), gameRoom.getQuestions().size());
     }
 
     @Test
@@ -70,7 +70,7 @@ public class GameUnitTests {
         checkVote.setVote("answer1");
         checkVote.setRemainingTime(5);
 
-        assertEquals(checkVote.getVote(), game.getVoteController().getVotes().get(0).getVote());
+        assertEquals(checkVote.getVote(), game.getVoteController().getVotes().get(1L).getVote());
         game.getVoteController().resetVotes();
     }
 

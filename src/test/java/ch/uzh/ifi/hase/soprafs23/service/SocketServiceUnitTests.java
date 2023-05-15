@@ -104,7 +104,7 @@ public class SocketServiceUnitTests {
     @Test
     public void testVotesListAsMap() throws Exception {
         Vote vote = new Vote();
-        List<Vote> votes = List.of(vote);
+        Map<Long, Vote> votes = Map.of(1L, vote);
 
         HashMap map = socketService.votesListAsMap(votes);
         assertEquals(1, map.size());
