@@ -113,15 +113,13 @@ public class SocketController {
                 VoteController voteController = gameRoom.getVoteController();
                 Game game = gameRoom.getCurrentGame();
                 game.setVoteGame(userId, message, remainingTime);
-                List<Vote> votes = voteController.getVotes();
-                HashMap<String, Integer> votesHash = socketService.votesListAsMap(votes);
+                HashMap<String, Integer> votesHash = socketService.votesListAsMap(voteController.getVotes());
                 System.out.println(votesHash);
                 socketBasics.sendObjectToRoom(roomCode, EventNames.SOMEBODY_VOTED.eventName, votesHash);
             }
         };
     }
 
-    //this may only be called by the room leader otherwise the roundcounter doesn't work correctly
     private DataListener<Message> requestRanking() {
         return (senderClient, data, ackSender) -> {
             String roomCode = data.getRoomCode();
@@ -129,12 +127,12 @@ public class SocketController {
             // change this round to currentRoundCounter in game
             GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
             VoteController voteController = gameRoom.getVoteController();
-            List<Vote> votes = voteController.getVotes();
+            Map<Long, Vote> votes = voteController.getVotes();
             Game game = gameRoom.getCurrentGame();
             game.decreaseCounter();
             int round = game.getRoundCounter();
             GameRanking gameRanking = game.getRanking();
-            
+
             // send ranking as a json
             Map<Long, Integer> currentRanking = gameRanking.updateRanking(gameRoom.getQuestions().get(round), votes);
             voteController.resetVotes();
