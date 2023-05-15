@@ -47,6 +47,7 @@ public class Application {
         config.setHostname(host);
         config.setPort(port);
         config.setOrigin("*");
+        //config.setSocketConfig();
         //config.setAllowHeaders("*");
         return new SocketIOServer(config);
     }
