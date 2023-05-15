@@ -60,12 +60,12 @@ Definition of week dates:
 ### Dario Küffer
 
 ###### Week 1
-- [x] [#13] (https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/13)
-- [x] [#16] (https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/16)
+- [x] [#13](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/13)
+- [x] [#16](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/16)
 ###### Week 2
-- [x] [#34] (https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/34)
-- [x] [#22] (https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/22)
-- [x] [#21] (https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/21)
+- [x] [#34](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/34)
+- [x] [#22](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/22)
+- [x] [#21](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/21)
 ###### Week 3
 
 ###### Week 4
