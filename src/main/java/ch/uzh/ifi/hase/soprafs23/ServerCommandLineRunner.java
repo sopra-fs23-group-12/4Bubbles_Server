@@ -26,7 +26,7 @@ public class ServerCommandLineRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        server.startAsync();
+        server.startAsync().syncUninterruptibly();
         /* server.start();
         Thread.sleep(Integer.MAX_VALUE);
         server.stop();  */
