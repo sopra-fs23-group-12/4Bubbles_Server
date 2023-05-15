@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -39,7 +40,7 @@ public class GameUnitTests {
         GameRoom gameRoom = new GameRoom();
         gameRoom.setLeaderUserId(1);
         gameRoom.setRoomCode("123456");
-        gameRoom.setMembers(List.of(testUser1));
+        gameRoom.setMembers(Map.of(1L,testUser1));
         gameRoom.setQuestions(List.of(new Question(), new Question(), new Question()));
 
         Game game = new Game(gameRoom);
@@ -56,7 +57,7 @@ public class GameUnitTests {
         GameRoom gameRoom = new GameRoom();
         gameRoom.setLeaderUserId(1);
         gameRoom.setRoomCode("123456");
-        gameRoom.setMembers(List.of(testUser1));
+        gameRoom.setMembers(Map.of(1L,testUser1));
         gameRoom.setQuestions(List.of(new Question(), new Question(), new Question()));
 
         Game game = new Game(gameRoom);

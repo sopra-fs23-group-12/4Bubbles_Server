@@ -17,6 +17,7 @@ import javassist.NotFoundException;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -89,7 +90,7 @@ public class SocketServiceUnitTests {
         GameRoom gameRoom = new GameRoom();
         gameRoom.setLeaderUserId(1);
         gameRoom.setRoomCode("123456");
-        gameRoom.setMembers(List.of(testUser1));
+        gameRoom.setMembers(Map.of(1L, testUser1));
 
         RoomCoordinator roomCoordinator = RoomCoordinator.getInstance();
         roomCoordinator.addRoom(gameRoom);

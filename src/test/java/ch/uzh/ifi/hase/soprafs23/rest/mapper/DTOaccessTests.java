@@ -14,6 +14,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class DTOaccessTests {
 
@@ -45,11 +46,11 @@ public class DTOaccessTests {
         GameRoom gameRoom = new GameRoom();
         gameRoom.setLeaderUserId(1);
         gameRoom.setRoomCode("123456");
-        gameRoom.setMembers(List.of(testUser1));
+        gameRoom.setMembers(Map.of(1L,testUser1));
 
         GameRoomGetDTO gameRoomGetDTO = new GameRoomGetDTO();
 
-        gameRoomGetDTO.setMembers(List.of(testUser1, testUser2));
+        gameRoomGetDTO.setMembers(Map.of(1L, testUser1,2L,  testUser2));
 
         List<User> members = gameRoomGetDTO.getMembers();
 
