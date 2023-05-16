@@ -41,17 +41,23 @@ public class Application {
     @Value("${rt-server.port}")
     private Integer port;
 
+    @Value("${env.environment}")
+    private String environment;
+
     @Bean
     public SocketIOServer socketIOServer() {
         Configuration config = new Configuration();
         config.setHostname(host);
         config.setPort(port);
-        config.setOrigin("*");
         // config.setSocketConfig();
         // config.setAllowHeaders("*");
-        config.setKeyStorePassword("mypassword");
-        InputStream stream = getClass().getClassLoader().getResourceAsStream("keystore.jks");
-        config.setKeyStore(stream);
+
+        if (isProductionEnvironment()) {
+            System.out.println("Pruduction environment!");
+            config.setKeyStorePassword("mypassword");
+            InputStream stream = getClass().getClassLoader().getResourceAsStream("keystore.jks");
+            config.setKeyStore(stream);
+        }
         return new SocketIOServer(config);
     }
 
@@ -63,5 +69,9 @@ public class Application {
                 registry.addMapping("/**").allowedOrigins("*").allowedMethods("*");
             }
         };
+    }
+
+    private boolean isProductionEnvironment() {
+        return "production".equals(this.environment);
     }
 }
