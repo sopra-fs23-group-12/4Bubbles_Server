@@ -62,24 +62,7 @@ public class SocketService {
         } catch (Exception e){
             System.out.printf("Exception occurred while sending user array: %s", e);
         }
-
     }
-
-
-    // i got the dependency from here:  https://mvnrepository.com/artifact/com.corundumstudio.socketio/netty-socketio/1.5.0
-    public void sendMessage(SocketIOClient client, String eventName, String message) {
-        socketBasics.sendObject(eventName, message, client);
-    }
-
-    public void sendAnswers(String roomCode, SocketIOClient senderClient, String answers) {
-        socketBasics.sendObjectToRoom(roomCode, EventNames.GET_ANSWERS.eventName, new Message(MessageType.SERVER, answers));
-        
-    }
-
-    public void sendQuestion(String roomCode, SocketIOClient senderClient, String question) {
-        socketBasics.sendObjectToRoom(roomCode, EventNames.GET_QUESTION.eventName, new Message(MessageType.SERVER, question));
-    }
-
 
     //this is used to send a data package for the data hook
     public void sendObject(SocketIOClient client, String eventName, Object data) {
@@ -96,6 +79,7 @@ public class SocketService {
         }
         return votesDict;
     }
+
     
     public void removePlayerFromGameRoom(GameRoom room, Long userId) {
         room.getMembers().remove(userId);
@@ -103,6 +87,7 @@ public class SocketService {
     }
 
     }
+
 
 
 
