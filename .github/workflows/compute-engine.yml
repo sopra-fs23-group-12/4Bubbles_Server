@@ -1,0 +1,22 @@
+name: Build and Deploy to Google Compute Engine
+
+on:
+  push:
+    branches:
+      - google-compute-engine
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+
+      - name: Build JAR file
+        run: ./gradlew build
