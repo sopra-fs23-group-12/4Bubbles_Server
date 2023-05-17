@@ -25,7 +25,7 @@ jobs:
       - name: Authenticate with Google Cloud
         uses: google-github-actions/auth@v1
         with:
-          credentials: ${{ secrets.GCP_SA_KEY }}
+          credentials: ${{ secrets.GCE_SECRET }}
 
       - name: Copy JAR file to Google Compute Engine
         run: |
