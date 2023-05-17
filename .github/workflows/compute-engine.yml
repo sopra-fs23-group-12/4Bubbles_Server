@@ -20,7 +20,7 @@ jobs:
           distribution: 'zulu' # Alternative distribution options are available
 
       - name: Build JAR file
-       # run: ./gradlew build
+        run: ./gradlew build
         
       - name: Authenticate with Google Cloud
         uses: google-github-actions/auth@v1
