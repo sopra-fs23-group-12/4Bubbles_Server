@@ -23,7 +23,7 @@ public class ApiServiceUnitTests {
 
     @Test
     public void testGetTopics_ReturnsListWithContent() throws Exception {
-        List<TopicGetDTO> topics = apiService.getTopicsFromApi("https://opentdb.com/api_category.php");
+        List<TopicGetDTO> topics = apiService.getTopicList();
         assertTrue(topics.size()>0);
     }
 
