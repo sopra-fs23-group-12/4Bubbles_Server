@@ -19,19 +19,17 @@ jobs:
           java-version: 17
           distribution: 'zulu' # Alternative distribution options are available
 
+      - name: Build JAR file
+        run: ./gradlew build
+        
       - name: Authenticate with Google Cloud
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCE_SECRET }}
           
-      - name: Build JAR file
-        run: ./gradlew build
-        
-
 
       - name: Copy JAR file to Google Compute Engine
         run: |
-          gcloud compute scp target/your-app.jar <INSTANCE_NAME>:~/app.jar \
-            --project=${{ secrets.GCP_PROJECT_ID }} \
+          gcloud compute scp build/libs/soprafs23.jar instance-1:~/soprafs23-v2.jar \
+            --project=sopra-fs23-group-12-server-v2\
             --zone=us-central1-a \
-            --ssh-key-file=${{ secrets.GCE_SSH_KEY_PATH }}
