@@ -83,10 +83,8 @@ public class SocketService {
     
     public void removePlayerFromGameRoom(GameRoom room, Long userId) {
         room.getMembers().remove(userId);
-
     }
-
-    }
+}
 
 
 
