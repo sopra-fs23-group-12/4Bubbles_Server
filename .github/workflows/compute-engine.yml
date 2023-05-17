@@ -21,3 +21,17 @@ jobs:
 
       - name: Build JAR file
         run: ./gradlew build
+        
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          project_id: sopra-fs23-group-12-server-v2
+          service_account_key: ${{ secrets.GCE_SECRET }}
+          export_default_credentials: true
+
+      - name: Copy JAR file to Google Compute Engine
+        run: |
+          gcloud compute scp target/your-app.jar <INSTANCE_NAME>:~/app.jar \
+            --project=${{ secrets.GCP_PROJECT_ID }} \
+            --zone=us-central1-a \
+            --ssh-key-file=${{ secrets.GCE_SSH_KEY_PATH }}
