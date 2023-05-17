@@ -19,6 +19,8 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.unbescape.html.HtmlEscape;
 
+import ch.uzh.ifi.hase.soprafs23.constant.ApiUrls;
+import ch.uzh.ifi.hase.soprafs23.exceptions.ApiConnectionError;
 import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.TopicGetDTO;
 
@@ -26,18 +28,24 @@ import ch.uzh.ifi.hase.soprafs23.rest.dto.TopicGetDTO;
 @Service
 @Transactional
 public class ApiService implements TriviaCaller{
-    //returns a list of topics from the api
-    public List<TopicGetDTO> getTopicsFromApi(String apiURL) throws IOException {
-        JSONObject topics = getJSON(apiURL);
-        List<TopicGetDTO> topicList = new ArrayList<>();
-        for (Object cat : topics.getJSONArray("trivia_categories")) {
-            TopicGetDTO topic = new TopicGetDTO();
-            topic.setId(((JSONObject) cat).getInt("id"));
-            topic.setTopicName(((JSONObject) cat).getString("name"));
-            topicList.add(topic);
+
+    private List<TopicGetDTO> topicList;
+
+    
+    public ApiService() throws ApiConnectionError {
+        try{
+            this.topicList = getTopicsFromApi();
+        }catch(IOException e){
+            throw new ApiConnectionError("Something went wrong while accessing the API", e);
         }
+        
+    }
+
+
+    public List<TopicGetDTO> getTopicList() {
         return topicList;
     }
+    
 
     public List<Question> getQuestionsFromApi(String url) throws IOException {
         JSONObject questions = getJSON(url);
@@ -55,6 +63,19 @@ public class ApiService implements TriviaCaller{
         }
 
         return questionList;
+    }
+
+    //returns a list of topics from the api
+    private List<TopicGetDTO> getTopicsFromApi() throws IOException {
+        JSONObject topics = getJSON(ApiUrls.CATEGORIES.url);
+        List<TopicGetDTO> topicList = new ArrayList<>();
+        for (Object cat : topics.getJSONArray("trivia_categories")) {
+            TopicGetDTO topic = new TopicGetDTO();
+            topic.setId(((JSONObject) cat).getInt("id"));
+            topic.setTopicName(((JSONObject) cat).getString("name"));
+            topicList.add(topic);
+        }
+        return topicList;
     }
 
 
