@@ -30,6 +30,6 @@ jobs:
 
       - name: Copy JAR file to Google Compute Engine
         run: |
-          gcloud compute scp build/libs/soprafs23.jar instance-1:~/soprafs23-v2.jar \
-            --project=sopra-fs23-group-12-server-v2\
-            --zone=us-central1-a \
+          gcloud compute scp build/libs/soprafs23.jar instance-1:~/ \
+            --project "sopra-fs23-group-12-server-v2" \
+            --zone "us-central1-a" \
