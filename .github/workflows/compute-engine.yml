@@ -19,13 +19,15 @@ jobs:
           java-version: 17
           distribution: 'zulu' # Alternative distribution options are available
 
-      - name: Build JAR file
-        run: ./gradlew build
-        
       - name: Authenticate with Google Cloud
         uses: google-github-actions/auth@v1
         with:
-          credentials: ${{ secrets.GCE_SECRET }}
+          credentials_json: ${{ secrets.GCE_SECRET }}
+          
+      - name: Build JAR file
+        run: ./gradlew build
+        
+
 
       - name: Copy JAR file to Google Compute Engine
         run: |
