@@ -23,7 +23,7 @@ jobs:
         run: ./gradlew build
         
       - name: Set up Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@master
+        uses: 'google-github-actions/setup-gcloud@v1'
         with:
           project_id: sopra-fs23-group-12-server-v2
           service_account_key: ${{ secrets.GCE_SECRET }}
