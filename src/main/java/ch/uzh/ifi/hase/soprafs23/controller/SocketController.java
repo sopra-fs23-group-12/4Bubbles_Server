@@ -94,7 +94,6 @@ public class SocketController {
         server.addEventListener(EventNames.REQUEST_RANKING.eventName, Message.class, requestRanking());
         server.addEventListener(EventNames.END_OF_QUESTION.eventName, Message.class, sendRightAnswer());
         server.addEventListener(EventNames.USER_LEFT_GAMEROOM.eventName, Message.class, leaveRoom());
-
     }
 
     private DataListener<Message> sendRightAnswer() {
