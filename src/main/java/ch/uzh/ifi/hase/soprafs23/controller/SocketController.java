@@ -12,7 +12,6 @@ import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
 
 import ch.uzh.ifi.hase.soprafs23.service.SocketBasics;
 
-import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
@@ -70,15 +69,16 @@ public class SocketController {
 
     private final SocketIOServer server;
     private final SocketService socketService;
-    @Autowired
+
     private SocketControllerHelper socketControllerHelper;
     private final SocketBasics socketBasics = new SocketBasics();
 
     private RoomCoordinator roomCoordinator = RoomCoordinator.getInstance();
 
-    public SocketController(SocketIOServer server, SocketService socketService, SocketControllerHelper socketControllerHelper) {
+    public SocketController(SocketIOServer server, SocketService socketService) {
         this.server = server;
         this.socketService = socketService;
+        this.socketControllerHelper = new SocketControllerHelper(roomCoordinator, this.socketService);
 
         addEventListeners(server);
     }

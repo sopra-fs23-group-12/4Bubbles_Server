@@ -12,29 +12,25 @@ import com.corundumstudio.socketio.SocketIOClient;
 import javassist.NotFoundException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
-@Service
 public class SocketControllerHelper {
 
+    private final RoomCoordinator roomCoordinator;
+    private final SocketService socketService;
     Logger logger = Logger.getLogger(
             SocketController.class.getName());
 
-    @Autowired
-    private GameRoomService gameRoomService;
-    @Autowired
-    private RoomCoordinator roomCoordinator;
-
-    @Autowired
-    private SocketService socketService;
-
     private SocketBasics socketBasics;
 
-    public SocketControllerHelper() {
+    public SocketControllerHelper(RoomCoordinator roomCoordinator, SocketService socketService) {
+        this.socketService = socketService;
+        this.roomCoordinator = roomCoordinator;
         this.socketBasics = new SocketBasics();
     }
 
@@ -143,7 +139,7 @@ public class SocketControllerHelper {
         GameRoom room = roomCoordinator.getRoomByCode(roomCode);
 
         try {
-            // leave the gameRoom (server entitiy)
+            // leave the gameRoom (server entity)
             socketService.removePlayerFromGameRoom(room, userId);
             // leave the socket namespace
             senderClient.leaveRoom(roomCode);
