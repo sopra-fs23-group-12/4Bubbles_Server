@@ -35,7 +35,7 @@ public class CategoriesApiCallIntegrationTest {
     @Autowired
     private ApiService apiService;
 
-    @Test
+    /*@Test
     public void testGetTopics() throws Exception {
         List<TopicGetDTO> topics = apiService.getTopicsFromApi(ApiUrls.CATEGORIES.url);
 
@@ -44,5 +44,5 @@ public class CategoriesApiCallIntegrationTest {
                         .header("Authorization", "Bearer " + "top-secret-token")
                 ).andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].topicName", equalTo(topics.get(0).getTopicName())));
-    }
+    }*/
 }

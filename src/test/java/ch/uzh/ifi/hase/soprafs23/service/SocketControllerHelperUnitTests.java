@@ -1,154 +1,161 @@
 package ch.uzh.ifi.hase.soprafs23.service;
 
+import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
 import ch.uzh.ifi.hase.soprafs23.entity.Message;
+import ch.uzh.ifi.hase.soprafs23.entity.RoomCoordinator;
 import ch.uzh.ifi.hase.soprafs23.entity.VoteMessage;
+import ch.uzh.ifi.hase.soprafs23.game.Game;
+import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
 import com.corundumstudio.socketio.*;
+import com.corundumstudio.socketio.listener.*;
 import com.corundumstudio.socketio.protocol.Packet;
 import javassist.NotFoundException;
+import org.aspectj.apache.bcel.classfile.Module;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-import java.util.Set;
-import java.util.UUID;
+import java.net.http.HttpHeaders;
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 public class SocketControllerHelperUnitTests {
+
+    @Mock
+    private SocketIOClient senderClient;
+    @Mock
+    private SocketIONamespace socketIONamespace;
 
     @Autowired
     private SocketControllerHelper socketControllerHelper;
 
     @BeforeEach
     public void Setup(){
+        MockitoAnnotations.openMocks(this);
 
+        RoomCoordinator roomCoordinator = RoomCoordinator.getInstance();
+
+        GameRoom gameRoom = new GameRoom();
+        gameRoom.setRoomCode("123456");
+
+        Question question = new Question();
+        question.setQuestion("Largest city in the world?");
+        question.setAnswers(List.of("Los Angeles", " Delhi", "Tokyo", "London"));
+        gameRoom.setQuestions(List.of(question));
+
+        Game game = new Game(gameRoom);
+        gameRoom.setCurrentGame(game);
+
+        roomCoordinator.addRoom(gameRoom);
+    }
+
+    @AfterEach
+    public void clean(){
+        RoomCoordinator roomCoordinator = RoomCoordinator.getInstance();
+        roomCoordinator.deleteRoom("123456");
     }
 
     @Test
     public void testSendRightAnswerMethod() throws NotFoundException {
-        socketControllerHelper.sendRightAnswerMethod("123456");
+        assertDoesNotThrow(() -> socketControllerHelper.sendRightAnswerMethod("123456"));
     }
 
     @Test
     public void testUpdateVoteMethod() throws NotFoundException {
-        socketControllerHelper.updateVoteMethod(new VoteMessage());
+        assertDoesNotThrow(() -> socketControllerHelper.updateVoteMethod(1L, "Tokyo", 5, "123456"));
     }
 
     @Test
     public void testRequestRankingMethod() throws NotFoundException {
-        socketControllerHelper.requestRankingMethod(new Message());
+        assertDoesNotThrow(() ->socketControllerHelper.requestRankingMethod("123456"));
+    }
+
+    @Test
+    public void testStartTimerMethod() throws NotFoundException {
+        assertDoesNotThrow(() ->socketControllerHelper.startTimerMethod("123456"));
+    }
+
+    @Test
+    public void testStartGameMethod() throws NotFoundException {
+        assertDoesNotThrow(() ->socketControllerHelper.socketStartGameMethod("123456"));
+    }
+
+    @Test
+    public void testOnChatReceivedMethod(){
+        io.netty.handler.codec.http.HttpHeaders httpHeaders = Mockito.mock(io.netty.handler.codec.http.HttpHeaders.class);
+        InetSocketAddress inetSocketAddress = Mockito.mock(InetSocketAddress.class);
+
+        when(senderClient.getNamespace()).thenReturn(socketIONamespace);
+        when(senderClient.getSessionId()).thenReturn(UUID.randomUUID());
+        when(senderClient.getHandshakeData()).thenReturn(new HandshakeData(httpHeaders, Map.of(),inetSocketAddress, "url", false));
+
+        assertDoesNotThrow(() ->socketControllerHelper.onChatReceivedMethod(senderClient, "Hello", "123456", "1"));
+
+        verify(senderClient, times(1)).getHandshakeData();
     }
 
     @Test
     public void testJoinRoomMethod(){
-        SocketIOClient socketIOClient = new SocketIOClient() {
-            @Override
-            public HandshakeData getHandshakeData() {
-                return null;
-            }
+        //SocketService spySocketService = Mockito.spy(socketservice);
 
-            @Override
-            public Transport getTransport() {
-                return null;
-            }
+        when(senderClient.getNamespace()).thenReturn(socketIONamespace);
+        when(senderClient.getSessionId()).thenReturn(UUID.randomUUID());
+        //doNothing().when(spySocketservice).joinRoom(any(), any(), any(), any());
 
-            @Override
-            public void sendEvent(String name, AckCallback<?> ackCallback, Object... data) {
+        assertDoesNotThrow(() -> socketControllerHelper.joinRoomMethod(senderClient, "123456", 1L, "bearerToken"));
 
-            }
+        verify(senderClient, times(1)).getSessionId();
 
-            @Override
-            public void send(Packet packet, AckCallback<?> ackCallback) {
-
-            }
-
-            @Override
-            public SocketIONamespace getNamespace() {
-                return null;
-            }
-
-            @Override
-            public UUID getSessionId() {
-                return null;
-            }
-
-            @Override
-            public SocketAddress getRemoteAddress() {
-                return null;
-            }
-
-            @Override
-            public boolean isChannelOpen() {
-                return false;
-            }
-
-            @Override
-            public void joinRoom(String room) {
-
-            }
-
-            @Override
-            public void joinRooms(Set<String> rooms) {
-
-            }
-
-            @Override
-            public void leaveRoom(String room) {
-
-            }
-
-            @Override
-            public void leaveRooms(Set<String> rooms) {
-
-            }
-
-            @Override
-            public Set<String> getAllRooms() {
-                return null;
-            }
-
-            @Override
-            public int getCurrentRoomSize(String room) {
-                return 0;
-            }
-
-            @Override
-            public void send(Packet packet) {
-
-            }
-
-            @Override
-            public void disconnect() {
-
-            }
-
-            @Override
-            public void sendEvent(String name, Object... data) {
-
-            }
-
-            @Override
-            public void set(String key, Object val) {
-
-            }
-
-            @Override
-            public <T> T get(String key) {
-                return null;
-            }
-
-            @Override
-            public boolean has(String key) {
-                return false;
-            }
-
-            @Override
-            public void del(String key) {
-
-            }
-        };
-        socketControllerHelper.joinRoomMethod(socketIOClient, new Message());
     }
 
+    @Test
+    public void testLeaveRoomMethod() throws NotFoundException {
+
+        when(senderClient.getNamespace()).thenReturn(socketIONamespace);
+        when(senderClient.getSessionId()).thenReturn(UUID.randomUUID());
+
+        assertDoesNotThrow(() -> socketControllerHelper.leaveRoomMethod(senderClient, "123456", 1L));
+
+        verify(senderClient, times(1)).getSessionId();
+
+    }
+
+    @Test
+    public void testOnConnectMethod(){
+
+        io.netty.handler.codec.http.HttpHeaders httpHeaders = Mockito.mock(io.netty.handler.codec.http.HttpHeaders.class);
+        InetSocketAddress inetSocketAddress = Mockito.mock(InetSocketAddress.class);
+
+        when(senderClient.getNamespace()).thenReturn(socketIONamespace);
+        when(senderClient.getSessionId()).thenReturn(UUID.randomUUID());
+        when(senderClient.getHandshakeData()).thenReturn(new HandshakeData(httpHeaders, Map.of(),inetSocketAddress, "url", false));
+
+        assertDoesNotThrow(() -> socketControllerHelper.onConnectedMethod(senderClient));
+
+        verify(senderClient, times(1)).getSessionId();
+
+    }
+
+    @Test
+    public void testOnDisconnectMethod(){
+
+        when(senderClient.getNamespace()).thenReturn(socketIONamespace);
+        when(senderClient.getSessionId()).thenReturn(UUID.randomUUID());
+
+        assertDoesNotThrow(() -> socketControllerHelper.onDisconectedMethod(senderClient));
+
+        verify(senderClient, times(1)).getSessionId();
+
+    }
 }
