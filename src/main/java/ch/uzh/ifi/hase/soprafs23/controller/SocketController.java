@@ -12,6 +12,7 @@ import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
 
 import ch.uzh.ifi.hase.soprafs23.service.SocketBasics;
 
+import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
@@ -78,7 +79,7 @@ public class SocketController {
     public SocketController(SocketIOServer server, SocketService socketService) {
         this.server = server;
         this.socketService = socketService;
-        this.socketControllerHelper = new SocketControllerHelper(roomCoordinator, this.socketService);
+        this.socketControllerHelper = new SocketControllerHelper(this.socketService);
 
         addEventListeners(server);
     }
@@ -97,80 +98,48 @@ public class SocketController {
     }
 
     private DataListener<Message> sendRightAnswer() {
-        return (senderClient, data, ackSender) -> {
-            socketControllerHelper.sendRightAnswerMethod(data.getRoomCode());
-        };
+        return (senderClient, data, ackSender) -> {socketControllerHelper.sendRightAnswerMethod(data.getRoomCode());};
     }
 
     private DataListener<VoteMessage> updateVote() {
-        return (senderClient, data, ackSender) -> {
-            socketControllerHelper.updateVoteMethod(data);
-        };
+        return (senderClient, data, ackSender) -> {socketControllerHelper.updateVoteMethod(Long.parseLong(data.getUserId()), data.getMessage(), data.getRemainingTime(), data.getRoomCode());};
     }
 
     private DataListener<Message> requestRanking() {
-        return (senderClient, data, ackSender) -> {
-            socketControllerHelper.requestRankingMethod(data);
-        };
+        return (senderClient, data, ackSender) -> {socketControllerHelper.requestRankingMethod(data.getRoomCode());};
     }
 
     // example implementation on /websockets, call this method to start the timer
     private DataListener<Message> startTimer() {
-        return (senderClient, data, ackSender) -> {
-            logger.info("timer has been started:");
-            logger.info(data.getRoomCode());
-        };
+        return (senderClient, data, ackSender) -> {socketControllerHelper.startTimerMethod(data.getRoomCode());};
     }
 
     private DataListener<Message> socketStartGame() {
-        return (senderClient, data, ackSender) -> {
-            GameRoom gameRoom = roomCoordinator.getRoomByCode(data.getRoomCode());
-            logger.info("This game was started:");
-            logger.info(String.valueOf(data.getRoomCode()));
-            Game game = new Game(gameRoom);
-            gameRoom.setCurrentGame(game);
-            game.startPreGame();
-            game.startGame();
-        };
+        return (senderClient, data, ackSender) -> {socketControllerHelper.socketStartGameMethod(data.getRoomCode());};
     }
 
     // great to use for debugging, sends a message to every member of a namespace
     // upon receiving a message
     private DataListener<Message> onChatReceived() {
-        return (senderClient, data, ackSender) -> {
-            System.out.println("message received:");
-            logger.info(senderClient.getHandshakeData().getHttpHeaders().toString());
-            logger.info(data.getMessage());
-            logger.info(String.valueOf(data.getRoomCode()));
-            logger.info(String.valueOf(data.getUserId()));
-            socketBasics.sendObject(EventNames.GET_MESSAGE.eventName, "hello this is the server", senderClient);
-
-        };
+        return (senderClient, data, ackSender) -> {socketControllerHelper.onChatReceivedMethod(senderClient, data.getMessage(), data.getRoomCode(), String.valueOf(data.getUserId()));};
     }
 
     // this method is only called once the gameroom has been created.
     // join a gameRoom and the socketio namespace with the same code
     private DataListener<Message> joinRoom() {
-        return (senderClient, data, ackSender) -> {
-            socketControllerHelper.joinRoomMethod(senderClient, data);
-        };
+        return (senderClient, data, ackSender) -> {socketControllerHelper.joinRoomMethod(senderClient, data.getRoomCode(), Long.parseLong(data.getUserId()), data.getBearerToken());};
     }
 
     private DataListener<Message> leaveRoom(){
-        return (senderClient, data, ackSender) -> {
-            socketControllerHelper.leaveRoomMethod(senderClient, data);
+        return (senderClient, data, ackSender) -> {socketControllerHelper.leaveRoomMethod(senderClient, data.getRoomCode(), Long.parseLong(data.getMessage()));
         };
     }
 
     private ConnectListener onConnected() {
-        return (senderClient) -> {
-            socketControllerHelper.onConnectedMethod(senderClient);
-        };
+        return (senderClient) -> {socketControllerHelper.onConnectedMethod(senderClient);};
     }
 
     private DisconnectListener onDisconnected() {
-        return client -> {
-            socketControllerHelper.onDisconectedMethod(client);
-        };
+        return client -> {socketControllerHelper.onDisconectedMethod(client);};
     }
 }

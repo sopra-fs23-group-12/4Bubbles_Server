@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+@Service
 public class SocketControllerHelper {
 
     private final RoomCoordinator roomCoordinator;
@@ -28,25 +29,22 @@ public class SocketControllerHelper {
 
     private SocketBasics socketBasics;
 
-    public SocketControllerHelper(RoomCoordinator roomCoordinator, SocketService socketService) {
+    public SocketControllerHelper(SocketService socketService) {
         this.socketService = socketService;
-        this.roomCoordinator = roomCoordinator;
+        this.roomCoordinator = RoomCoordinator.getInstance();
         this.socketBasics = new SocketBasics();
     }
 
     public void sendRightAnswerMethod(String roomCode) throws NotFoundException {
         GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
-        String correctAnswer = gameRoom.getQuestions().get(gameRoom.getCurrentGame().getRoundCounter())
+        Integer roundIndex = gameRoom.getCurrentGame().getRoundCounter();
+        String correctAnswer = gameRoom.getQuestions().get(roundIndex-1)
                 .getCorrectAnswer();
         socketBasics.sendObjectToRoom(roomCode, EventNames.GET_RIGHT_ANSWER.eventName, correctAnswer);
     }
 
-    public void updateVoteMethod(VoteMessage data) throws NotFoundException {
-        long userId = Long.parseLong(data.getUserId());
-        String message = data.getMessage();
-        int remainingTime = data.getRemainingTime();
-        String roomCode = data.getRoomCode();
-        if (data.getRemainingTime() > 0) {
+    public void updateVoteMethod(Long userId, String message, int remainingTime,String roomCode) throws NotFoundException {
+        if (remainingTime > 0) {
             GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
             VoteController voteController = gameRoom.getVoteController();
             Game game = gameRoom.getCurrentGame();
@@ -57,8 +55,7 @@ public class SocketControllerHelper {
         }
     }
 
-    public void requestRankingMethod(Message data) throws NotFoundException {
-        String roomCode = data.getRoomCode();
+    public void requestRankingMethod(String roomCode) throws NotFoundException {
 
         // change this round to currentRoundCounter in game
         GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
@@ -99,10 +96,31 @@ public class SocketControllerHelper {
         }
     }
 
-    public void joinRoomMethod(SocketIOClient senderClient, Message data) {
-        String roomCode = data.getRoomCode();
-        Long userId = Long.parseLong(data.getUserId());
-        String bearerToken = data.getBearerToken();
+    public void startTimerMethod(String roomCode) {
+        logger.info("timer has been started:");
+        logger.info(roomCode);
+    }
+
+    public void socketStartGameMethod(String roomCode) throws NotFoundException {
+        GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
+        logger.info("This game was started:");
+        logger.info(String.valueOf(roomCode));
+        Game game = new Game(gameRoom);
+        gameRoom.setCurrentGame(game);
+        game.startPreGame();
+        game.startGame();
+    }
+
+    public void onChatReceivedMethod(SocketIOClient senderClient, String message, String roomCode, String userId) {
+        System.out.println("message received:");
+        logger.info(senderClient.getHandshakeData().getHttpHeaders().toString());
+        logger.info(message);
+        logger.info(roomCode);
+        logger.info(userId);
+        socketBasics.sendObject(EventNames.GET_MESSAGE.eventName, "hello this is the server", senderClient);
+    }
+
+    public void joinRoomMethod(SocketIOClient senderClient, String roomCode, Long userId, String bearerToken) {
 
         // if a room is specified (and exists) and passed with the url, you sign the
         // user into the room. Otherwise, a room is created that has the name of the
@@ -133,9 +151,7 @@ public class SocketControllerHelper {
         logger.info(senderClient.getSessionId().toString());
     }
 
-    public void leaveRoomMethod(SocketIOClient senderClient, Message data) throws NotFoundException {
-        String roomCode = data.getRoomCode();
-        Long userId = Long.parseLong(data.getMessage()); // message is the userId in this case change later to userId
+    public void leaveRoomMethod(SocketIOClient senderClient, String roomCode, Long userId) throws NotFoundException {
         GameRoom room = roomCoordinator.getRoomByCode(roomCode);
 
         try {
