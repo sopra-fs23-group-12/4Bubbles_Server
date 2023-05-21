@@ -72,9 +72,6 @@ public class SocketController {
     private final SocketService socketService;
 
     private SocketControllerHelper socketControllerHelper;
-    private final SocketBasics socketBasics = new SocketBasics();
-
-    private RoomCoordinator roomCoordinator = RoomCoordinator.getInstance();
 
     public SocketController(SocketIOServer server, SocketService socketService) {
         this.server = server;
