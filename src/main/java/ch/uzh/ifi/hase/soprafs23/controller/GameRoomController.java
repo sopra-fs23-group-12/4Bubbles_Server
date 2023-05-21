@@ -38,12 +38,8 @@ public class GameRoomController {
     public List<TopicGetDTO> getTopics(@RequestHeader(value = "Authorization", required = false) String bearerToken){
         gameRoomService.throwForbiddenWhenNoBearerToken(bearerToken);
         List<TopicGetDTO> topics = new ArrayList<TopicGetDTO>();
-        String apiURL = ApiUrls.CATEGORIES.url;
-        try {
-            topics = apiService.getTopicsFromApi(apiURL);
-        } catch (IOException e) {
-            throw new ApiConnectionError("Something went wrong while accessing the API", e);
-        }
+        topics = apiService.getTopicList();
+        
         return topics;
     }
     

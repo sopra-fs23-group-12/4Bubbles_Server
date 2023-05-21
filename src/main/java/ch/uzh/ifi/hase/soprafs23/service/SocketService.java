@@ -25,8 +25,6 @@ public class SocketService {
 
     private final GameRoomService gameRoomService;
     private final RoomCoordinator roomCoordinator;
-
-
     private final SocketBasics socketBasics;
     public SocketService(GameRoomService gameRoomService, RoomCoordinator roomCoordinator) {
         this.gameRoomService = gameRoomService;
@@ -83,10 +81,8 @@ public class SocketService {
     
     public void removePlayerFromGameRoom(GameRoom room, Long userId) {
         room.getMembers().remove(userId);
-
     }
-
-    }
+}
 
 
 

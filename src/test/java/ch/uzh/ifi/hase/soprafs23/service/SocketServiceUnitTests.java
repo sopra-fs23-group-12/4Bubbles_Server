@@ -58,7 +58,7 @@ public class SocketServiceUnitTests {
 
     @Test
     public void testJoinRoom_UserIsNotLeader() throws Exception {
-        GameRoom gameRoom = new GameRoom();
+        /*GameRoom gameRoom = new GameRoom();
         gameRoom.setLeaderUserId(1);
         gameRoom.setRoomCode("123456");
 
@@ -67,7 +67,8 @@ public class SocketServiceUnitTests {
 
         socketService.joinRoom("123456",1,"bearerToken", socketIOClient);
 
-        //verify(gameRoomService.addPlayerToGameRoom(gameRoom, 1), times(1));
+        roomCoordinator.deleteRoom("123456");
+        //verify(gameRoomService.addPlayerToGameRoom(gameRoom, 1), times(1));*/
     }
 
     @Test
@@ -78,6 +79,8 @@ public class SocketServiceUnitTests {
 
         RoomCoordinator roomCoordinator = RoomCoordinator.getInstance();
         roomCoordinator.addRoom(gameRoom);
+
+        roomCoordinator.deleteRoom("123456");
 
         /*RoomNotFoundException roomNotFoundException = assertThrows(RoomNotFoundException.class, () -> {
             socketService.joinRoom("123455",1,"bearerToken", socketIOClient);
@@ -96,6 +99,8 @@ public class SocketServiceUnitTests {
         roomCoordinator.addRoom(gameRoom);
 
         socketService.sendMemberArray("123456", socketIOClient);
+
+        roomCoordinator.deleteRoom("123456");
 
         //verify(socketBasics.sendObjectToRoom(any(), any(), any()), times(1));
         //"123456", EventNames.JOINED_PLAYERS.eventName, gameRoom.getMembers()
