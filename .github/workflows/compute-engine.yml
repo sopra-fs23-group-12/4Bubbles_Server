@@ -37,4 +37,4 @@ jobs:
           gcloud compute ssh instance-1 \
             --project "sopra-fs23-group-12-server-v2" \
             --zone "us-central1-a" \
-            --command "PRODUCTION=true nohup java -jar soprafs23.jar > output.log 2>&1 &"
+            --command "PRODUCTION=true nohup java -jar ~/soprafs23.jar > output.log 2>&1 &"
