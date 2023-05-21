@@ -93,13 +93,9 @@ public class SocketController {
         server.addEventListener(EventNames.JOIN_ROOM.eventName, Message.class, joinRoom());
         server.addEventListener(EventNames.SEND_VOTE.eventName, VoteMessage.class, updateVote());
         server.addEventListener(EventNames.REQUEST_RANKING.eventName, Message.class, requestRanking());
-        server.addEventListener(EventNames.END_OF_QUESTION.eventName, Message.class, sendRightAnswer());
         server.addEventListener(EventNames.USER_LEFT_GAMEROOM.eventName, Message.class, leaveRoom());
     }
 
-    private DataListener<Message> sendRightAnswer() {
-        return (senderClient, data, ackSender) -> {socketControllerHelper.sendRightAnswerMethod(data.getRoomCode());};
-    }
 
     private DataListener<VoteMessage> updateVote() {
         return (senderClient, data, ackSender) -> {socketControllerHelper.updateVoteMethod(Long.parseLong(data.getUserId()), data.getMessage(), data.getRemainingTime(), data.getRoomCode());};
