@@ -3,7 +3,7 @@ name: Build and Deploy to Google Compute Engine
 on:
   push:
     branches:
-      - google-compute-engine
+      - main
 
 jobs:
   build:
