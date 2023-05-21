@@ -41,9 +41,6 @@ public class Application {
     @Value("${rt-server.port}")
     private Integer port;
 
-    @Value("${env.environment}")
-    private String environment;
-
     @Bean
     public SocketIOServer socketIOServer() {
         Configuration config = new Configuration();
@@ -72,6 +69,7 @@ public class Application {
     }
 
     private boolean isProductionEnvironment() {
-        return "production".equals(this.environment);
+        String production = System.getenv("PRODUCTION");
+        return "true".equals(production);
     }
 }
