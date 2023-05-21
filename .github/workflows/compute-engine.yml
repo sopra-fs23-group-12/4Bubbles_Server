@@ -33,6 +33,8 @@ jobs:
             --project "sopra-fs23-group-12-server-v2" \
             --zone "us-central1-a" \
 
+      - name: Restart Service
+        run: |
         # SSH into the server and execute commands
           gcloud compute ssh instance-1 \
             --project "sopra-fs23-group-12-server-v2" \
