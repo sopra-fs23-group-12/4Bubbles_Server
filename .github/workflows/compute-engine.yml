@@ -33,3 +33,9 @@ jobs:
           gcloud compute scp build/libs/soprafs23.jar instance-1:~/ \
             --project "sopra-fs23-group-12-server-v2" \
             --zone "us-central1-a" \
+
+        # SSH into the server and execute commands
+          gcloud compute ssh instance-1 \
+            --project "sopra-fs23-group-12-server-v2" \
+            --zone "us-central1-a" \
+            --command "sudo pkill -f soprafs23.jar && PRODUCTION=true nohup java -jar soprafs23.jar > output.log 2>&1 &"
