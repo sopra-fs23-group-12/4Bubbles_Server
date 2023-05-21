@@ -31,11 +31,9 @@ jobs:
         run: |
           gcloud compute scp build/libs/soprafs23.jar instance-1:~/ \
             --project "sopra-fs23-group-12-server-v2" \
-            --zone "us-central1-a" \
-
-      - name: Restart Service
-        run: |
-        # SSH into the server and execute commands
+            --zone "us-central1-a"
+            
+          # SSH into the server and execute commands
           gcloud compute ssh instance-1 \
             --project "sopra-fs23-group-12-server-v2" \
             --zone "us-central1-a" \
