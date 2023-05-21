@@ -121,11 +121,11 @@ public class GameRoomControllerIntegrationTests {
         userService.createUser(secondUser);
 
         GameRoomPutDTO gameRoomPutDTO = new GameRoomPutDTO();
-        gameRoomPutDTO.setRoomCode("123456");
+        gameRoomPutDTO.setRoomCode("113311");
         gameRoomPutDTO.setUserId(userRepository.findByUsername("second").getId().intValue());
 
         GameRoom gameRoom = new GameRoom();
-        gameRoom.setRoomCode("123456");
+        gameRoom.setRoomCode("113311");
         gameRoom.setLeader(user);
         gameRoom.getMembers().put(user.getId(),user);
 
@@ -138,6 +138,8 @@ public class GameRoomControllerIntegrationTests {
                 .content(asJsonString(gameRoomPutDTO));
 
         mockMvc.perform(putRequest).andExpect(jsonPath("$.members[1].username", is(secondUser.getUsername())));
+
+        roomCoordinator.deleteRoom("113311");
     }
 
 
