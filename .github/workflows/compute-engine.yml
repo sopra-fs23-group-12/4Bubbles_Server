@@ -27,7 +27,6 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCE_SECRET }}
           
-
       - name: Copy JAR file to Google Compute Engine
         run: |
           gcloud compute scp build/libs/soprafs23.jar instance-1:~/ \
