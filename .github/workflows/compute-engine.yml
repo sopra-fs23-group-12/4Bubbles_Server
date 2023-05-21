@@ -26,6 +26,13 @@ jobs:
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCE_SECRET }}
+
+      - name: Kill the old process 
+        run: |
+          gcloud compute ssh instance-1 \
+            --project "sopra-fs23-group-12-server-v2" \
+            --zone "us-central1-a" \
+            --command "pkill -f soprafs23.jar &"
           
       - name: Copy JAR file to Google Compute Engine
         run: |
