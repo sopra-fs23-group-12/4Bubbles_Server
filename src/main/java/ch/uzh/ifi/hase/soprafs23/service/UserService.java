@@ -148,7 +148,7 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     String.format(baseErrorMessage));
         }
-        if (userToBeCreated.getPassword().length() > 20 || userToBeCreated.getUsername().length() > 20) {
+        if (userToBeCreated.getPassword().length() > 18 || userToBeCreated.getUsername().length() > 18) {
             String baseErrorMessage = "Please don't use more than 20 characters for username or password!";
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     String.format(baseErrorMessage));
