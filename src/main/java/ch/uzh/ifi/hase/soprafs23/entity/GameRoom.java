@@ -23,9 +23,6 @@ public class GameRoom {
     private String gameMode;
     private String difficulty;
     private long leaderUserId;
-    private boolean isGameStarted = false;
-
-    
 
     private final VoteController voteController = new VoteController();
 
@@ -124,21 +121,9 @@ public class GameRoom {
         return voteController;
     }
 
-    public boolean isGameStarted() {
-        return isGameStarted;
-    }
+    public Game getCurrentGame(){return this.currentGame;}
 
-    public void setGameStarted(boolean isGameStarted) {
-        this.isGameStarted = isGameStarted;
-    }
-
-    public Game getCurrentGame(){
-        return this.currentGame;
-    }
-
-    public void setCurrentGame(Game currentGame){
-        this.currentGame = currentGame;
-    }
+    public void setCurrentGame(Game currentGame){ this.currentGame = currentGame;}
 
 }
 
