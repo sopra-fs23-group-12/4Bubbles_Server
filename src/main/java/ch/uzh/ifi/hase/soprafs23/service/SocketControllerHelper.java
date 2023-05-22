@@ -11,8 +11,7 @@ import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
 import com.corundumstudio.socketio.SocketIOClient;
 import javassist.NotFoundException;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -33,14 +32,6 @@ public class SocketControllerHelper {
         this.socketService = socketService;
         this.roomCoordinator = RoomCoordinator.getInstance();
         this.socketBasics = new SocketBasics();
-    }
-
-    public void sendRightAnswerMethod(String roomCode) throws NotFoundException {
-        GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
-        Integer roundIndex = gameRoom.getCurrentGame().getRoundCounter();
-        String correctAnswer = gameRoom.getQuestions().get(roundIndex-1)
-                .getCorrectAnswer();
-        socketBasics.sendObjectToRoom(roomCode, EventNames.GET_RIGHT_ANSWER.eventName, correctAnswer);
     }
 
     public void updateVoteMethod(Long userId, String message, int remainingTime,String roomCode) throws NotFoundException {

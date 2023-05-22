@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
 
+
 @Component
 public class ServerCommandLineRunner implements CommandLineRunner {
 

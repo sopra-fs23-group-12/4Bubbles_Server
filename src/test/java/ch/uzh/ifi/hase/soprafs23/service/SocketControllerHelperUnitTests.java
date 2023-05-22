@@ -1,18 +1,13 @@
 package ch.uzh.ifi.hase.soprafs23.service;
 
 import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
-import ch.uzh.ifi.hase.soprafs23.entity.Message;
 import ch.uzh.ifi.hase.soprafs23.entity.RoomCoordinator;
-import ch.uzh.ifi.hase.soprafs23.entity.VoteMessage;
 import ch.uzh.ifi.hase.soprafs23.game.Game;
 import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
 import com.corundumstudio.socketio.*;
-import com.corundumstudio.socketio.listener.*;
-import com.corundumstudio.socketio.protocol.Packet;
+
 import javassist.NotFoundException;
-import org.aspectj.apache.bcel.classfile.Module;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
@@ -20,13 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.net.http.HttpHeaders;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
+
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
