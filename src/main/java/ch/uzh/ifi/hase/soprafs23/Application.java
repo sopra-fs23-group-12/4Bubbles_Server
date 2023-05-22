@@ -68,6 +68,9 @@ public class Application {
         };
     }
 
+
+
+
     private boolean isProductionEnvironment() {
         String production = System.getenv("PRODUCTION");
         return "true".equals(production);

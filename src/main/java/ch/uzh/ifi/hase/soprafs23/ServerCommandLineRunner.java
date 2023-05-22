@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PreDestroy;
 import java.util.concurrent.TimeUnit;
 
 
@@ -30,5 +31,10 @@ public class ServerCommandLineRunner implements CommandLineRunner {
         /* server.start();
         Thread.sleep(Integer.MAX_VALUE);
         server.stop();  */
+    }
+
+    @PreDestroy
+    public void stopSocketServer(){
+        server.stop();
     }
 }
