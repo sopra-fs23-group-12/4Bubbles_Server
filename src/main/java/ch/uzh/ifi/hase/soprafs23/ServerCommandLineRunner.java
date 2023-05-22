@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PreDestroy;
 
 
 @Component
@@ -26,8 +27,10 @@ public class ServerCommandLineRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         server.startAsync().syncUninterruptibly();
-        /* server.start();
-        Thread.sleep(Integer.MAX_VALUE);
-        server.stop();  */
+    }
+
+    @PreDestroy
+    public void stopSocketServer() {
+        server.stop();
     }
 }
