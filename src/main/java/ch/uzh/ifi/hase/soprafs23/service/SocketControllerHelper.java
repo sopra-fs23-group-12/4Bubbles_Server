@@ -146,7 +146,6 @@ public class SocketControllerHelper {
         }catch(GameIsRunningExeption e){
             logger.info("game is already running");
             logger.info(e.toString());
-            throw new GameIsRunningExeption("Game is already running");
             
         }
 
