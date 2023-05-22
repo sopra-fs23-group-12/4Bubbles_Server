@@ -33,7 +33,7 @@ public class AuthenticationService{
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     String.format(baseErrorMessage));
         }
-        if (externalUser.getPassword().length() > 20 || externalUser.getUsername().length() > 20) {
+        if (externalUser.getPassword().length() > 18 || externalUser.getUsername().length() > 18) {
             String baseErrorMessage = "Please don't use more than 20 characters for username or password!";
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     String.format(baseErrorMessage));
