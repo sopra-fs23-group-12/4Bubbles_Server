@@ -17,7 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 @Transactional
 public class AuthenticationService{
 
-    private final Logger log = LoggerFactory.getLogger(UserService.class);
+    private final Logger log = LoggerFactory.getLogger(AuthenticationService.class);
 
     private final UserRepository userRepository;
 
@@ -39,11 +39,9 @@ public class AuthenticationService{
         return user;
     }
 
-    //changed to void as there is no return value needed
     public void logout(String token) {
         User user = this.userRepository.findByToken(token);
         user.setStatus(UserStatus.OFFLINE);
-        //return user;
     }
 
 }

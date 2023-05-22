@@ -19,7 +19,7 @@ public class RoomCoordinator {
     }
 
     private RoomCoordinator() {
-        this.rooms = new ArrayList<GameRoom>();
+        this.rooms = new ArrayList<>();
     }
 
     public void addRoom(GameRoom gameRoom){

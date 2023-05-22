@@ -1,30 +1,17 @@
 package ch.uzh.ifi.hase.soprafs23.controller;
 
 import ch.uzh.ifi.hase.soprafs23.entity.*;
-import ch.uzh.ifi.hase.soprafs23.game.GameRanking;
-import ch.uzh.ifi.hase.soprafs23.game.VoteController;
-import ch.uzh.ifi.hase.soprafs23.game.stateStorage.TimerController;
+
 import ch.uzh.ifi.hase.soprafs23.service.SocketControllerHelper;
 import ch.uzh.ifi.hase.soprafs23.service.SocketService;
 import ch.uzh.ifi.hase.soprafs23.constant.EventNames;
-import ch.uzh.ifi.hase.soprafs23.game.Game;
-import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
 
-import ch.uzh.ifi.hase.soprafs23.service.SocketBasics;
-
-import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
-import javassist.NotFoundException;
-import lombok.extern.slf4j.Slf4j;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Logger;
 
 /*
@@ -39,11 +26,11 @@ import java.util.logging.Logger;
 
  2. Register the EventListener in SocketController with the correct eventName, incoming object and the name of the method you want it to trigger
 
-         server.addEventListener(*"Event_Name"*, *receive this object*, *method call*);
+         server.addEventListener(*"Event_Name"*, *receive this object*, *method call*) 
 
  3. Specify the method in the SocketController class, you can extract functionalities and add them to SocketService when useful or use methods already defined in SocketService
 
-        private DataListener<Message> *method name*() {
+        private DataListener<Message> *method name* {
             return (senderClient, data, ackSender) -> {
                 TODO ...
      }
@@ -60,7 +47,6 @@ import java.util.logging.Logger;
 
  */
 
-@Slf4j
 @Component
 public class SocketController {
 
@@ -78,7 +64,7 @@ public class SocketController {
         this.socketService = socketService;
         this.socketControllerHelper = new SocketControllerHelper(this.socketService);
 
-        addEventListeners(server);
+        addEventListeners(this.server);
     }
 
     public void addEventListeners(SocketIOServer server) {
@@ -114,25 +100,25 @@ public class SocketController {
     // great to use for debugging, sends a message to every member of a namespace
     // upon receiving a message
     private DataListener<Message> onChatReceived() {
-        return (senderClient, data, ackSender) -> {socketControllerHelper.onChatReceivedMethod(senderClient, data.getMessage(), data.getRoomCode(), String.valueOf(data.getUserId()));};
+        return (senderClient, data, ackSender) -> {socketControllerHelper.onChatReceivedMethod(senderClient, data.getMessageString(), data.getRoomCode(), String.valueOf(data.getUserId()));};
     }
 
     // this method is only called once the gameroom has been created.
     // join a gameRoom and the socketio namespace with the same code
     private DataListener<Message> joinRoom() {
-        return (senderClient, data, ackSender) -> {socketControllerHelper.joinRoomMethod(senderClient, data.getRoomCode(), Long.parseLong(data.getUserId()), data.getBearerToken());};
+        return (senderClient, data, ackSender) -> socketControllerHelper.joinRoomMethod(senderClient, data.getRoomCode(), Long.parseLong(data.getUserId()), data.getBearerToken());
     }
 
     private DataListener<Message> leaveRoom(){
-        return (senderClient, data, ackSender) -> {socketControllerHelper.leaveRoomMethod(senderClient, data.getRoomCode(), Long.parseLong(data.getMessage()));
-        };
+        return (senderClient, data, ackSender) -> socketControllerHelper.leaveRoomMethod(senderClient, data.getRoomCode(), Long.parseLong(data.getMessageString()));
+        
     }
 
     private ConnectListener onConnected() {
-        return (senderClient) -> {socketControllerHelper.onConnectedMethod(senderClient);};
+        return (senderClient) -> socketControllerHelper.onConnectedMethod(senderClient);
     }
 
     private DisconnectListener onDisconnected() {
-        return client -> {socketControllerHelper.onDisconectedMethod(client);};
+        return client -> socketControllerHelper.onDisconectedMethod(client);
     }
 }

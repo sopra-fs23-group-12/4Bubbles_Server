@@ -39,7 +39,7 @@ public class AuthenticationControllerUnitTests {
 
     @Test
     public void testLogin() throws Exception {
-        LoginGetDTO loginGetDTO = authenticationController.login(userPostDTO);
+        authenticationController.login(userPostDTO);
         verify(authenticationService, times(1)).authenticateUser(any(User.class));
     }
 
@@ -47,7 +47,7 @@ public class AuthenticationControllerUnitTests {
     public void testRegister() throws Exception {
         userPostDTO.setUsername("userName");
         userPostDTO.setPassword("pw");
-        LoginGetDTO loginGetDTO = authenticationController.register(userPostDTO);
+        authenticationController.register(userPostDTO);
         verify(userService, times(1)).registerUser(any(User.class));
     }
 
@@ -55,22 +55,19 @@ public class AuthenticationControllerUnitTests {
     public void testRegister_PassWordNotSet() throws Exception {
         userPostDTO.setUsername("userName");
         userPostDTO.setPassword(null);
-        ResponseStatusException responseStatusException = assertThrows(ResponseStatusException.class, () -> {
+        assertThrows(ResponseStatusException.class, () -> {
             authenticationController.register(userPostDTO);
         });
-        //String baseErrorMessage = "Oups, your request is wrong. ";
-        //assertEquals((HttpStatus.BAD_REQUEST + String.format( baseErrorMessage)), responseStatusException.getMessage());
     }
 
     @Test
     public void testRegister_UserNameNotSet() throws Exception {
         userPostDTO.setUsername(null);
         userPostDTO.setPassword("pw");
-        ResponseStatusException responseStatusException = assertThrows(ResponseStatusException.class, () -> {
+        assertThrows(ResponseStatusException.class, () -> {
             authenticationController.register(userPostDTO);
         });
-        //String baseErrorMessage = "Oups, your request is wrong. ";
-        //assertEquals((HttpStatus.BAD_REQUEST + String.format( baseErrorMessage)), responseStatusException.getMessage());
+        
     }
 
     @Test
@@ -82,10 +79,8 @@ public class AuthenticationControllerUnitTests {
 
     @Test
     public void testLogout() throws Exception {
-        //StringBuffer bearerToken = new StringBuffer("bearer");
         authenticationController.logout("bearer");
         verify(authenticationService, times(1)).logout(any(String.class));
-        //assertEquals("", bearerToken);
     }
 
     //todo test bearer conversion

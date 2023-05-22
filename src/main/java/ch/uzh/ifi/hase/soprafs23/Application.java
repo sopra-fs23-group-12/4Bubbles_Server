@@ -46,8 +46,7 @@ public class Application {
         Configuration config = new Configuration();
         config.setHostname(host);
         config.setPort(port);
-        // config.setSocketConfig();
-        // config.setAllowHeaders("*");
+        
 
         if (isProductionEnvironment()) {
             System.out.println("Pruduction environment!");

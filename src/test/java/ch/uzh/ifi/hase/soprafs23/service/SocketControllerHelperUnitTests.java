@@ -125,7 +125,7 @@ public class SocketControllerHelperUnitTests {
         gameRoom.setRoomCode("123456");
 
         Question question = new Question();
-        question.setQuestion("Largest city in the world?");
+        question.setQuestionString("Largest city in the world?");
         question.setAnswers(List.of("Los Angeles", " Delhi", "Tokyo", "London"));
         gameRoom.setQuestions(List.of(question));
 
@@ -173,7 +173,7 @@ public class SocketControllerHelperUnitTests {
         gameRoom.setRoomCode("123456");
 
         Question question = new Question();
-        question.setQuestion("Largest city in the world?");
+        question.setQuestionString("Largest city in the world?");
         question.setAnswers(List.of("Los Angeles", " Delhi", "Tokyo", "London"));
         gameRoom.setQuestions(List.of(question));
 
@@ -206,7 +206,7 @@ public class SocketControllerHelperUnitTests {
         gameRoom.setRoomCode("123456");
 
         Question question = new Question();
-        question.setQuestion("Largest city in the world?");
+        question.setQuestionString("Largest city in the world?");
         question.setAnswers(List.of("Los Angeles", " Delhi", "Tokyo", "London"));
         gameRoom.setQuestions(List.of(question));
 
@@ -270,7 +270,7 @@ public class SocketControllerHelperUnitTests {
         gameRoom.setRoomCode("123456");
 
         Question question = new Question();
-        question.setQuestion("Largest city in the world?");
+        question.setQuestionString("Largest city in the world?");
         question.setAnswers(List.of("Los Angeles", " Delhi", "Tokyo", "London"));
         gameRoom.setQuestions(List.of(question));
 
@@ -305,7 +305,7 @@ public class SocketControllerHelperUnitTests {
         gameRoom.setRoomCode("123456");
 
         Question question = new Question();
-        question.setQuestion("Largest city in the world?");
+        question.setQuestionString("Largest city in the world?");
         question.setAnswers(List.of("Los Angeles", " Delhi", "Tokyo", "London"));
         gameRoom.setQuestions(List.of(question));
 

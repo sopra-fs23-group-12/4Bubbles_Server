@@ -67,10 +67,10 @@ public class GameUnitTests {
 
         Vote checkVote = new Vote();
         checkVote.setPlayerId(1);
-        checkVote.setVote("answer1");
+        checkVote.setVoteString("answer1");
         checkVote.setRemainingTime(5);
 
-        assertEquals(checkVote.getVote(), game.getVoteController().getVotes().get(1L).getVote());
+        assertEquals(checkVote.getVoteString(), game.getVoteController().getVotes().get(1L).getVoteString());
         game.getVoteController().resetVotes();
     }
 

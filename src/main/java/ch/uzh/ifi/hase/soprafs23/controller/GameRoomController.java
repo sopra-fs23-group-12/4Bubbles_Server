@@ -12,7 +12,6 @@ import ch.uzh.ifi.hase.soprafs23.service.GameRoomService;
 import javassist.NotFoundException;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -25,7 +24,7 @@ public class GameRoomController {
     private final RoomCoordinator roomCoordinator;
     private final ApiService apiService;
 
-    GameRoomController(GameRoomService gameRoomService, RoomCoordinator roomCoordinator, ApiService apiService) {
+    GameRoomController(GameRoomService gameRoomService, ApiService apiService) {
         this.gameRoomService = gameRoomService;
         this.roomCoordinator = RoomCoordinator.getInstance();
         this.apiService = apiService;
@@ -37,7 +36,7 @@ public class GameRoomController {
     @ResponseStatus(HttpStatus.OK)
     public List<TopicGetDTO> getTopics(@RequestHeader(value = "Authorization", required = false) String bearerToken){
         gameRoomService.throwForbiddenWhenNoBearerToken(bearerToken);
-        List<TopicGetDTO> topics = new ArrayList<TopicGetDTO>();
+        List<TopicGetDTO> topics;
         topics = apiService.getTopicList();
         
         return topics;
@@ -55,7 +54,7 @@ public class GameRoomController {
         String apiURL = String.format(ApiUrls.QUESTIONS.url, gameRoom.getNumOfQuestions(), gameRoom.getQuestionTopicId(), gameRoom.getDifficulty());
         try{
             gameRoom.setQuestions(apiService.getQuestionsFromApi(apiURL));
-            gameRoom.getQuestions().forEach(question -> System.out.println(question.getQuestion()));
+            gameRoom.getQuestions().forEach(question -> System.out.println(question.getQuestionString()));
         } catch (IOException e) {
             throw new ApiConnectionError("Something went wrong while accessing the API", e);
         }

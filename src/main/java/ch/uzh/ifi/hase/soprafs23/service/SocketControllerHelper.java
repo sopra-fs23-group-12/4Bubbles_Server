@@ -24,7 +24,7 @@ public class SocketControllerHelper {
     private final RoomCoordinator roomCoordinator;
     private final SocketService socketService;
     Logger logger = Logger.getLogger(
-            SocketController.class.getName());
+            SocketControllerHelper.class.getName());
 
     private SocketBasics socketBasics;
 
@@ -132,7 +132,7 @@ public class SocketControllerHelper {
                     DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(gameRoom));
 
             // notifies all clients that are already joined that there is a new member
-            socketService.sendMemberArray(roomCode, senderClient);
+            socketService.sendMemberArray(roomCode);
         } catch (Exception e) {
             logger.info("room could not be joined, either room was null or no room with that code exists");
             logger.info(e.toString());
@@ -154,7 +154,7 @@ public class SocketControllerHelper {
             logger.info(roomCode);
 
             // notifies all clients that are already joined that there is a new member
-            socketService.sendMemberArray(roomCode, senderClient);
+            socketService.sendMemberArray(roomCode);
         } catch (Exception e) {
             logger.info("room could not be left, either room was null or no room with that code exists");
             logger.info(e.toString());

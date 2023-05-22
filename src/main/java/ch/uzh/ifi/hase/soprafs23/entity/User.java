@@ -118,10 +118,6 @@ public class User implements Serializable {
         this.totalPoints += points;
     }
 
-    /* public void setTotalPoints(int totalPoints) {
-        this.totalPoints = totalPoints;
-    } */
-
     public int getTotalGamesPlayed() {
         return totalGamesPlayed;
     }
@@ -130,7 +126,4 @@ public class User implements Serializable {
         this.totalGamesPlayed += 1;
     }
 
-    /* public void setTotalGamesPlayed(int totalGamesPlayed) {
-        this.totalGamesPlayed = totalGamesPlayed;
-    } */
 }

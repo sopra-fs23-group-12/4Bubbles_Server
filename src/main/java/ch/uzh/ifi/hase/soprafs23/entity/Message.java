@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class Message {
     private MessageType type;
-    private String message;
+    private String messageString;
     private String roomCode;
 
     private String userId;
@@ -21,15 +21,15 @@ public class Message {
     }
     public Message(MessageType type, String message) {
         this.type = type;
-        this.message = message;
+        this.messageString = message;
     }
 
     public String getRoomCode(){
         return this.roomCode;
     }
 
-    public String getMessage(){
-        return this.message;
+    public String getMessageString(){
+        return this.messageString;
     }
 
     public MessageType getType(){

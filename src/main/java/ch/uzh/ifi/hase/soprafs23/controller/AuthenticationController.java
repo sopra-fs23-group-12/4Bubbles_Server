@@ -34,7 +34,6 @@ public class AuthenticationController {
 
         // convert internal representation of user back to API
         return DTOMapper.INSTANCE.convertEntityToLoginPostGetDTO(internalUser);
-        // return internalUser.getToken();
     }
 
     @PostMapping("/register")

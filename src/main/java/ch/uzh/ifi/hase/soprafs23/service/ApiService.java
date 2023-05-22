@@ -52,7 +52,7 @@ public class ApiService implements TriviaCaller{
         List<Question> questionList = new ArrayList<>();
         for (Object q : questions.getJSONArray("results")) {
             Question question = new Question();
-            question.setQuestion(HtmlEscape.unescapeHtml(((JSONObject) q).getString("question")));
+            question.setQuestionString(HtmlEscape.unescapeHtml(((JSONObject) q).getString("question")));
             String correctAnswer = (HtmlEscape.unescapeHtml(((JSONObject) q).getString("correct_answer")));
             question.setCorrectAnswer(correctAnswer);
             List<String> answers = turnToStrings(((JSONObject) q).getJSONArray("incorrect_answers"));
@@ -68,14 +68,14 @@ public class ApiService implements TriviaCaller{
     //returns a list of topics from the api
     private List<TopicGetDTO> getTopicsFromApi() throws IOException {
         JSONObject topics = getJSON(ApiUrls.CATEGORIES.url);
-        List<TopicGetDTO> topicList = new ArrayList<>();
+        List<TopicGetDTO> topicsList = new ArrayList<>();
         for (Object cat : topics.getJSONArray("trivia_categories")) {
             TopicGetDTO topic = new TopicGetDTO();
             topic.setId(((JSONObject) cat).getInt("id"));
             topic.setTopicName(((JSONObject) cat).getString("name"));
-            topicList.add(topic);
+            topicsList.add(topic);
         }
-        return topicList;
+        return topicsList;
     }
 
 

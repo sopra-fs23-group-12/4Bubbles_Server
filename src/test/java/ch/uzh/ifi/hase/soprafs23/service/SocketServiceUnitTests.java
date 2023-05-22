@@ -98,7 +98,7 @@ public class SocketServiceUnitTests {
         RoomCoordinator roomCoordinator = RoomCoordinator.getInstance();
         roomCoordinator.addRoom(gameRoom);
 
-        socketService.sendMemberArray("123456", socketIOClient);
+        socketService.sendMemberArray("123456");
 
         roomCoordinator.deleteRoom("123456");
 

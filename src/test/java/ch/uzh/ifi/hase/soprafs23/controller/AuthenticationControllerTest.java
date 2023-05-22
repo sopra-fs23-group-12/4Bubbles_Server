@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * This tests if the UserController works.
  */
 @WebMvcTest(AuthenticationController.class)
-public class AuthenticationControllerTest {
+class AuthenticationControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -55,7 +55,7 @@ public class AuthenticationControllerTest {
     }*/
 
     @Test
-    public void RegisterTest_Success() throws Exception {
+    void RegisterTest_Success() throws Exception {
 
         User user = new User();
         user.setId(1L);
@@ -82,7 +82,7 @@ public class AuthenticationControllerTest {
     }
 
     @Test
-    public void RegisterTest_Invalid() throws Exception {
+    void RegisterTest_Invalid() throws Exception {
 
         UserPostDTO userPostDTO = new UserPostDTO();
         userPostDTO.setUsername("testUsername");
@@ -100,7 +100,7 @@ public class AuthenticationControllerTest {
 
     //try to login with a user that is not in the userRepository
     @Test
-    public void LoginTest_Invalid() throws Exception {
+    void LoginTest_Invalid() throws Exception {
 
         /*UserPostDTO userPostDTO = new UserPostDTO();
         userPostDTO.setUsername("testUsername");

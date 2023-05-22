@@ -83,7 +83,7 @@ public class Game {
 
 
     private void sendQuestion(){
-        socketBasics.sendObjectToRoom(roomCode,EventNames.GET_QUESTION.eventName,  gameRoom.getQuestions().get(roundCounter-1).getQuestion());
+        socketBasics.sendObjectToRoom(roomCode,EventNames.GET_QUESTION.eventName,  gameRoom.getQuestions().get(roundCounter-1).getQuestionString());
     }
 
     //list of answers is converted to a string to comply with constructor of Message Type

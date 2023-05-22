@@ -55,12 +55,12 @@ public class UserController {
     @GetMapping("/users/{Id}")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<UserGetDTO> getUser(@PathVariable Long Id,
+    public List<UserGetDTO> getUser(@PathVariable Long id,
                                     @RequestHeader(value = "Authorization", required = false) String bearerToken) {
 
         throwForbiddenWhenNoBearerToken(bearerToken);
 
-        User user = userService.getUser(Id, bearerToken);
+        User user = userService.getUser(id, bearerToken);
         List<UserGetDTO> userGetDTOs = new ArrayList<>();
 
         userGetDTOs.add(DTOMapper.INSTANCE.convertEntityToUserGetDTO(user));

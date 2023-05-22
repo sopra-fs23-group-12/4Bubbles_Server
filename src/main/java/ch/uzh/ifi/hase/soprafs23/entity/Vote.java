@@ -4,7 +4,7 @@ package ch.uzh.ifi.hase.soprafs23.entity;
 public class Vote {
 
     private long playerId;
-    private String vote;
+    private String voteString;
     private int remainingTime;
 
     public long getPlayerId() {
@@ -15,12 +15,12 @@ public class Vote {
         this.playerId = playerId;
     }
 
-    public String getVote() {
-        return vote;
+    public String getVoteString() {
+        return voteString;
     }
 
-    public void setVote(String vote) {
-        this.vote = vote;
+    public void setVoteString(String vote) {
+        this.voteString = vote;
     }
 
     public int getRemainingTime() {

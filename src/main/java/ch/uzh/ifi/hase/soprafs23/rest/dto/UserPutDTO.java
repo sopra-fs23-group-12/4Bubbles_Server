@@ -52,7 +52,7 @@ public class UserPutDTO {
         return birthday;
     }
 
-    public void setBirthday(String birthday) throws ParseException {
+    public void setBirthday(String birthday){
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         LocalDate date = LocalDate.parse(birthday, formatter);

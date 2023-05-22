@@ -29,11 +29,11 @@ public class GameRoomIntegrationTest {
 
 
         Question triviaQuestion1 = new Question();
-        triviaQuestion1.setQuestion("What is the largest Country in Africa by inhabitants?");
+        triviaQuestion1.setQuestionString("What is the largest Country in Africa by inhabitants?");
         triviaQuestion1.setAnswers(List.of("South Africa", "Congo", "Kenia", "Nigeria"));
         triviaQuestion1.setCorrectAnswer("Nigeria");
         Question triviaQuestion2 = new Question();
-        triviaQuestion2.setQuestion("What is the largest Country in Europe by size?");
+        triviaQuestion2.setQuestionString("What is the largest Country in Europe by size?");
         triviaQuestion2.setAnswers(List.of("Germany", "Ukraine", "Spain", "Finland"));
         triviaQuestion2.setCorrectAnswer("Ukraine");
         this.questions = List.of(triviaQuestion1, triviaQuestion2);
