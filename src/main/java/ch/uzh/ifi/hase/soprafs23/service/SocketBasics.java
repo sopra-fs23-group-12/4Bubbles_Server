@@ -19,7 +19,7 @@ public class SocketBasics {
                 client.sendEvent(eventName, message);
             }
         } catch (RoomNotFoundException e){
-            throw new RoomNotFoundException("Room not found");
+            System.out.printf("\n \n room not found in SocketBasics %s", roomCode);
         }
     }
 
