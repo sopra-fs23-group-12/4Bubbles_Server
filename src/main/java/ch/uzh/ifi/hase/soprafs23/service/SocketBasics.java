@@ -2,6 +2,8 @@ package ch.uzh.ifi.hase.soprafs23.service;
 
 import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
 import ch.uzh.ifi.hase.soprafs23.entity.RoomCoordinator;
+import ch.uzh.ifi.hase.soprafs23.exceptions.RoomNotFoundException;
+
 import com.corundumstudio.socketio.SocketIOClient;
 
 public class SocketBasics {
@@ -16,7 +18,7 @@ public class SocketBasics {
             for (SocketIOClient client : room.getNamespace().getRoomOperations(roomCode).getClients()) {
                 client.sendEvent(eventName, message);
             }
-        } catch (Exception e){
+        } catch (RoomNotFoundException e){
             System.out.printf("\n \n room not found in SocketBasics %s", roomCode);
         }
     }
