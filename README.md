@@ -10,13 +10,15 @@ You have 10 seconds to answer the questions in the bubble and collect points. Th
 you answer, the more points you will get. This will prove more difficult than you might
 expect, especially in hard mode. But not to worry - since the bubble sizes change to indicate
 the number of people that have already cast their vote on one of the answers, you can go
-the safe road and follow your friend's choice ... or can you? Depending on your game mode,
-bubble sizes could just be randomly generated without you knowing, or players could change
-their answer in the last seconds to try and confuse you.
+the safe road and follow your friend's choice ... or can you? \
+The game supports two game modes; standard locks your choice in, once you've cast your vote
+you cannot change it anymore. 3,2,1 ... lets you change your vote Players in this game mode
+have to be extra careful when deciding whether to trust their friend's choice or not.
 Whether you chose the correct answer will be revealed when the time is up; if your
 bubble doesn't burst, you've made the correct choice!
 
 [Play here](https://sopra-fs23-group-12-client.ew.r.appspot.com). Enjoy!
+Check [here](https://sopra.dkueffer.ch) whether the server is running correctly.
 
 You can find the corresponding client repository [here](https://github.com/sopra-fs23-group-12/4Bubbles_Client).
 
@@ -84,9 +86,9 @@ Running the application locally requires installing all dependencies from the se
 Developers interested in extending this application are welcome to implement additional features.\
 Here are some Ideas that can be used as inspiration:
 
-- Additional game modes: We paid special attention to modularity while designing our code. It could therefore be modified to add
+- [Additional game modes](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/25): We paid special attention to modularity while designing our code. It could therefore be modified to add
   some more game modes than the two that are already implemented.
-- Awards for special achievements: User statistics are already tracked and stored. Implementing a global leaderboard and
+- [Awards for special achievements](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/19): User statistics are already tracked and stored. Implementing a global leaderboard and
   special awards for all players that achieve a milestone (i.e. winning 20 games) would be a nice extension.
 
 
@@ -114,8 +116,9 @@ Please read [contributions.md](/contributions.md) for details of our task histor
 
 * This project was build on the basis of the [SoPra Template FS23](https://github.com/HASEL-UZH/sopra-fs23-template-server) provided by the University of Zurich for the
   Software Engineering Lab (Softwarepraktikum) course supervised by [Professor Thomas Fritz](https://www.ifi.uzh.ch/en/hasel/people/fritz.html).
-* Special Thanks also to our Teaching Assistant [Valentin Hollenstein](https://github.com/v4lentin1879)
-
+* Special Thanks also to our Teaching Assistant [Valentin Hollenstein](https://github.com/v4lentin1879).
+* We are also very grateful to the creators and contributors of the external API [Open Trivia Database](https://opentdb.com/) which we used as source for
+  our questions.
 
 ## License
 
