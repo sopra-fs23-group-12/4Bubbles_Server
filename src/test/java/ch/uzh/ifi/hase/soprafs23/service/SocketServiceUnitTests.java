@@ -7,6 +7,7 @@ import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.entity.Vote;
 import ch.uzh.ifi.hase.soprafs23.exceptions.RoomNotFoundException;
 import com.corundumstudio.socketio.SocketIOClient;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -112,7 +113,7 @@ public class SocketServiceUnitTests {
         Map<Long, Vote> votes = Map.of(1L, vote);
 
         HashMap map = socketService.votesListAsMap(votes);
-        assertEquals(1, map.size());
+        Assertions.assertEquals(1, map.size());
     }
 
     @Test

@@ -1,4 +1,4 @@
-package ch.uzh.ifi.hase.soprafs23.controller;
+package ch.uzh.ifi.hase.soprafs23;
 
 import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
@@ -14,15 +14,15 @@ import ch.uzh.ifi.hase.soprafs23.service.UserService;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -32,16 +32,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @SpringBootTest
+@DirtiesContext
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+//@TestPropertySource("classpath:application.properties")
 public class GameRoomControllerIntegrationTests {
     @Autowired
     private MockMvc mockMvc;
@@ -57,7 +52,7 @@ public class GameRoomControllerIntegrationTests {
 
     private User user;
 
-    @BeforeEach
+    @BeforeAll
     public void setup(){
         user = new User();
         user.setId(1L);
@@ -88,8 +83,8 @@ public class GameRoomControllerIntegrationTests {
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/categories")
                         .header("Authorization", "Bearer " + "top-secret-token")
-                ).andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].topicName", is(topics.get(0).getTopicName())));
+                ).andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].topicName", Matchers.is(topics.get(0).getTopicName())));
     }
 
     @Test
@@ -104,12 +99,12 @@ public class GameRoomControllerIntegrationTests {
         gameRoomPostDTO.setNumOfQuestions(5);
         gameRoomPostDTO.setQuestionTopicId(3);
 
-        MockHttpServletRequestBuilder postRequest = post("/createRoom")
+        MockHttpServletRequestBuilder postRequest = MockMvcRequestBuilders.post("/createRoom")
                 .header("Authorization", "Bearer " + "top-secret-token")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(gameRoomPostDTO));
 
-        mockMvc.perform(postRequest).andExpect(jsonPath("$.leader.username", is(user.getUsername())));
+        mockMvc.perform(postRequest).andExpect(MockMvcResultMatchers.jsonPath("$.leader.username", Matchers.is(user.getUsername())));
     }
 
     @Test
@@ -121,23 +116,23 @@ public class GameRoomControllerIntegrationTests {
         userService.createUser(secondUser);
 
         GameRoomPutDTO gameRoomPutDTO = new GameRoomPutDTO();
-        gameRoomPutDTO.setRoomCode("113311");
+        gameRoomPutDTO.setRoomCode("155311");
         gameRoomPutDTO.setUserId(userRepository.findByUsername("second").getId().intValue());
 
         GameRoom gameRoom = new GameRoom();
-        gameRoom.setRoomCode("113311");
+        gameRoom.setRoomCode("155311");
         gameRoom.setLeader(user);
         gameRoom.getMembers().put(user.getId(),user);
 
         RoomCoordinator roomCoordinator = RoomCoordinator.getInstance();
         roomCoordinator.addRoom(gameRoom);
 
-        MockHttpServletRequestBuilder putRequest = put("/joinRoom")
+        MockHttpServletRequestBuilder putRequest = MockMvcRequestBuilders.put("/joinRoom")
                 .header("Authorization", "Bearer " + "top-secret-token")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(gameRoomPutDTO));
 
-        mockMvc.perform(putRequest).andExpect(jsonPath("$.members[1].username", is(secondUser.getUsername())));
+        mockMvc.perform(putRequest).andExpect(MockMvcResultMatchers.jsonPath("$.members[1].username", Matchers.is(secondUser.getUsername())));
 
         roomCoordinator.deleteRoom("113311");
     }

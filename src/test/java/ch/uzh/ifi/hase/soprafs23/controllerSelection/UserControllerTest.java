@@ -1,13 +1,17 @@
-package ch.uzh.ifi.hase.soprafs23.controller;
+package ch.uzh.ifi.hase.soprafs23.controllerSelection;
 
 import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
+import ch.uzh.ifi.hase.soprafs23.controller.UserController;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.UserPointsPutDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.UserPostDTO;
 import ch.uzh.ifi.hase.soprafs23.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -17,6 +21,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collections;
@@ -61,26 +68,26 @@ public class UserControllerTest {
 
         // this mocks the UserService -> we define above what the userService should
         // return when getUsers() is called
-        given(userService.getUsers(Mockito.any())).willReturn(allUsers);
+        BDDMockito.given(userService.getUsers(Mockito.any())).willReturn(allUsers);
 
         // when
-        MockHttpServletRequestBuilder getRequest = get("/users").contentType(MediaType.APPLICATION_JSON)
+        MockHttpServletRequestBuilder getRequest = MockMvcRequestBuilders.get("/users").contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + "top-secret-token");
 
         // then
-        mockMvc.perform(getRequest).andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].username", is(user.getUsername())))
-                .andExpect(jsonPath("$[0].status", is(user.getStatus().toString())));
+        mockMvc.perform(getRequest).andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].username", Matchers.is(user.getUsername())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].status", Matchers.is(user.getStatus().toString())));
     }
 
     @Test
     public void getUsers_NotAuthenticated() throws Exception {
 
-        MockHttpServletRequestBuilder getRequest = get("/users").contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletRequestBuilder getRequest = MockMvcRequestBuilders.get("/users").contentType(MediaType.APPLICATION_JSON);
 
         // then
-        mockMvc.perform(getRequest).andExpect(status().isForbidden());
+        mockMvc.perform(getRequest).andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     @Test
@@ -97,19 +104,19 @@ public class UserControllerTest {
         userPostDTO.setUsername("testUsername");
         userPostDTO.setPassword("testUsername");
 
-        given(userService.createUser(Mockito.any())).willReturn(user);
+        BDDMockito.given(userService.createUser(Mockito.any())).willReturn(user);
 
         // when/then -> do the request + validate the result
-        MockHttpServletRequestBuilder postRequest = post("/users")
+        MockHttpServletRequestBuilder postRequest = MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(userPostDTO));
 
         // then
         mockMvc.perform(postRequest)
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id", is(user.getId().intValue())))
-                .andExpect(jsonPath("$.username", is(user.getUsername())))
-                .andExpect(jsonPath("$.status", is(user.getStatus().toString())));
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(user.getId().intValue())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.username", Matchers.is(user.getUsername())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status", Matchers.is(user.getStatus().toString())));
 
     }
 
@@ -119,13 +126,13 @@ public class UserControllerTest {
         UserPostDTO userPostDTO = new UserPostDTO();
 
         // when/then -> do the request + validate the result
-        MockHttpServletRequestBuilder postRequest = post("/users")
+        MockHttpServletRequestBuilder postRequest = MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(userPostDTO));
 
         // then
         mockMvc.perform(postRequest)
-                .andExpect(status().isBadRequest());
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     @Test
@@ -135,18 +142,18 @@ public class UserControllerTest {
         userPostDTO.setUsername("testUsername");
         userPostDTO.setPassword("testUsername");
 
-        given(userService.createUser(Mockito.any()))
+        BDDMockito.given(userService.createUser(Mockito.any()))
                 .willThrow(new ResponseStatusException(HttpStatus.CONFLICT,
                         String.format("You need to log in to see this information.")));
 
         // when/then -> do the request + validate the result
-        MockHttpServletRequestBuilder postRequest = post("/users")
+        MockHttpServletRequestBuilder postRequest = MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(userPostDTO));
 
         // then
         mockMvc.perform(postRequest)
-                .andExpect(status().isConflict());
+                .andExpect(MockMvcResultMatchers.status().isConflict());
 
     }
 
@@ -160,18 +167,18 @@ public class UserControllerTest {
         user.setStatus(UserStatus.ONLINE);
         user.setCreationDate(new Date());
 
-        given(userService.getUser(Mockito.any(), Mockito.any())).willReturn(user);
+        BDDMockito.given(userService.getUser(Mockito.any(), Mockito.any())).willReturn(user);
 
-        MockHttpServletRequestBuilder getRequest = get("/users/1").contentType(MediaType.APPLICATION_JSON)
+        MockHttpServletRequestBuilder getRequest = MockMvcRequestBuilders.get("/users/1").contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + "top-secret-token");
 
         // SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ",
         // Locale.ITALY);
 
-        mockMvc.perform(getRequest).andDo(print()).andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id", is(user.getId().intValue())))
-                .andExpect(jsonPath("$[0].username", is(user.getUsername())))
-                .andExpect(jsonPath("$[0].status", is(user.getStatus().toString())));
+        mockMvc.perform(getRequest).andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id", Matchers.is(user.getId().intValue())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].username", Matchers.is(user.getUsername())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].status", Matchers.is(user.getStatus().toString())));
         // .andExpect(jsonPath("$[0].creationDate",
         // is(format.format(user.getCreationDate()))));
 
@@ -184,26 +191,26 @@ public class UserControllerTest {
         user.setUsername("firstname@lastname");
         user.setStatus(UserStatus.OFFLINE);
 
-        given(userService.getUser(Mockito.any(), Mockito.any())).willReturn(user);
+        BDDMockito.given(userService.getUser(Mockito.any(), Mockito.any())).willReturn(user);
 
-        MockHttpServletRequestBuilder getRequest = get("/users/1").contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletRequestBuilder getRequest = MockMvcRequestBuilders.get("/users/1").contentType(MediaType.APPLICATION_JSON);
 
-        mockMvc.perform(getRequest).andExpect(status().isForbidden());
+        mockMvc.perform(getRequest).andExpect(MockMvcResultMatchers.status().isForbidden());
 
     }
 
     @Test
     public void getUserById_NotFound() throws Exception {
 
-        given(userService.getUser(Mockito.any(), Mockito
+        BDDMockito.given(userService.getUser(Mockito.any(), Mockito
                 .any()))
                 .willThrow(new ResponseStatusException(HttpStatus.NOT_FOUND,
                         String.format("This User does not exist.")));
 
-        MockHttpServletRequestBuilder getRequest = get("/users/2").contentType(MediaType.APPLICATION_JSON)
+        MockHttpServletRequestBuilder getRequest = MockMvcRequestBuilders.get("/users/2").contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + "top-secret-token");
 
-        mockMvc.perform(getRequest).andExpect(status().isNotFound());
+        mockMvc.perform(getRequest).andExpect(MockMvcResultMatchers.status().isNotFound());
 
     }
 
@@ -218,16 +225,16 @@ public class UserControllerTest {
         userPostDTO.setUsername("testUsername");
         userPostDTO.setPassword("testUsername");
 
-        given(userService.registerUser(Mockito.any())).willReturn(user);
+        BDDMockito.given(userService.registerUser(Mockito.any())).willReturn(user);
 
         // when/then -> do the request + validate the result
-        MockHttpServletRequestBuilder postRequest = post("/register")
+        MockHttpServletRequestBuilder postRequest = MockMvcRequestBuilders.post("/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(userPostDTO));
 
         // then
         mockMvc.perform(postRequest)
-                .andExpect(status().isNotFound());
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
 
     }
 
@@ -243,16 +250,16 @@ public class UserControllerTest {
         UserPostDTO userPostDTO = new UserPostDTO();
         userPostDTO.setUsername("testUsername2");
 
-        given(userService.updateUser(Mockito.any(), Mockito.any(), Mockito.any())).willReturn(user);
+        BDDMockito.given(userService.updateUser(Mockito.any(), Mockito.any(), Mockito.any())).willReturn(user);
 
         // when/then -> do the request + validate the result
-        MockHttpServletRequestBuilder postRequest = put("/users/1")
+        MockHttpServletRequestBuilder postRequest = MockMvcRequestBuilders.put("/users/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(userPostDTO)).header("Authorization", "Bearer " + "top-secret-token");
 
         // then
         mockMvc.perform(postRequest)
-                .andExpect(status().isNoContent());
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
 
     }
 
@@ -268,16 +275,16 @@ public class UserControllerTest {
         UserPostDTO userPostDTO = new UserPostDTO();
         userPostDTO.setUsername("testUsername2");
 
-        given(userService.updateUser(Mockito.any(), Mockito.any(), Mockito.any())).willReturn(user);
+        BDDMockito.given(userService.updateUser(Mockito.any(), Mockito.any(), Mockito.any())).willReturn(user);
 
         // when/then -> do the request + validate the result
-        MockHttpServletRequestBuilder postRequest = put("/users/1")
+        MockHttpServletRequestBuilder postRequest = MockMvcRequestBuilders.put("/users/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(userPostDTO));
 
         // then
         mockMvc.perform(postRequest)
-                .andExpect(status().isForbidden());
+                .andExpect(MockMvcResultMatchers.status().isForbidden());
 
     }
 
@@ -294,17 +301,17 @@ public class UserControllerTest {
         pointsPutDTO.setPoints(100);
         pointsPutDTO.setId(1L);
 
-        given(userService.updateUserStats(Mockito.any())).willReturn(user);
+        BDDMockito.given(userService.updateUserStats(Mockito.any())).willReturn(user);
 
         // when/then -> do the request + validate the result
-        MockHttpServletRequestBuilder putRequest = put("/users/Statistics")
+        MockHttpServletRequestBuilder putRequest = MockMvcRequestBuilders.put("/users/Statistics")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(pointsPutDTO)).header("Authorization", "Bearer " + "top-secret-token");
 
         // then
         
                 mockMvc.perform(putRequest)
-                        .andExpect(status().isNoContent());
+                        .andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     @Test
@@ -318,19 +325,19 @@ public class UserControllerTest {
         user.increaseTotalPoints(100);
         user.increaseTotalGamesPlayed();
 
-        given(userService.getUser(Mockito.any(), Mockito.any())).willReturn(user);
+        BDDMockito.given(userService.getUser(Mockito.any(), Mockito.any())).willReturn(user);
 
         // when/then -> do the request + validate the result
-        MockHttpServletRequestBuilder getRequest = get("/users/Statistics/1")
+        MockHttpServletRequestBuilder getRequest = MockMvcRequestBuilders.get("/users/Statistics/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer " + "top-secret-token");
 
         // then
         
-        mockMvc.perform(getRequest).andDo(print()).andExpect(status().isOk())
-                .andExpect(jsonPath("username", is(user.getUsername())))
-                .andExpect(jsonPath("totalPoints", is(user.getTotalPoints())))
-                .andExpect(jsonPath("totalGamesPlayed", is(user.getTotalGamesPlayed())));
+        mockMvc.perform(getRequest).andDo(MockMvcResultHandlers.print()).andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("username", Matchers.is(user.getUsername())))
+                .andExpect(MockMvcResultMatchers.jsonPath("totalPoints", Matchers.is(user.getTotalPoints())))
+                .andExpect(MockMvcResultMatchers.jsonPath("totalGamesPlayed", Matchers.is(user.getTotalGamesPlayed())));
         
 
     }
@@ -341,11 +348,11 @@ public class UserControllerTest {
         user.setUsername("firstname@lastname");
         user.setStatus(UserStatus.OFFLINE);
 
-        given(userService.getUser(Mockito.any(), Mockito.any())).willReturn(user);
+        BDDMockito.given(userService.getUser(Mockito.any(), Mockito.any())).willReturn(user);
 
-        MockHttpServletRequestBuilder getRequest = get("/users/Statistics/1").contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletRequestBuilder getRequest = MockMvcRequestBuilders.get("/users/Statistics/1").contentType(MediaType.APPLICATION_JSON);
 
-        mockMvc.perform(getRequest).andExpect(status().isForbidden());
+        mockMvc.perform(getRequest).andExpect(MockMvcResultMatchers.status().isForbidden());
     }
 
     /**

@@ -1,4 +1,4 @@
-package ch.uzh.ifi.hase.soprafs23.controller;
+package ch.uzh.ifi.hase.soprafs23.controllerSelection;
 
 import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
@@ -8,6 +8,7 @@ import ch.uzh.ifi.hase.soprafs23.service.AuthenticationService;
 import ch.uzh.ifi.hase.soprafs23.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -16,12 +17,17 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.server.ResponseStatusException;
 
 
@@ -43,6 +49,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 //@WebMvcTest(AuthenticationController.class)
 @SpringBootTest
+@DirtiesContext
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AuthenticationControllerTest {
@@ -69,8 +76,8 @@ public class AuthenticationControllerTest {
     @AfterEach
     public void clean(){
         userRepository.deleteAll();
-    }
 
+    }
 
     @Test
     public void RegisterTest_Success() throws Exception {
@@ -78,13 +85,13 @@ public class AuthenticationControllerTest {
         userPostDTO.setUsername("testUsername");
         userPostDTO.setPassword("testPassword");
 
-        MockHttpServletRequestBuilder postRequest = post("/register")
+        MockHttpServletRequestBuilder postRequest = MockMvcRequestBuilders.post("/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(userPostDTO));
 
         mockMvc.perform(postRequest)
-                .andExpect(status().isCreated()).andExpect(jsonPath("$.id", is(userRepository.findByUsername("testUsername").getId().intValue())))
-                .andExpect(jsonPath("$.token", is(userRepository.findByUsername("testUsername").getToken())));
+                .andExpect(MockMvcResultMatchers.status().isCreated()).andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(userRepository.findByUsername("testUsername").getId().intValue())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.token", Matchers.is(userRepository.findByUsername("testUsername").getToken())));
     }
 
     @Test
@@ -92,12 +99,12 @@ public class AuthenticationControllerTest {
         UserPostDTO userPostDTO = new UserPostDTO();
         userPostDTO.setUsername("testUsername");
 
-        MockHttpServletRequestBuilder postRequest = post("/register")
+        MockHttpServletRequestBuilder postRequest = MockMvcRequestBuilders.post("/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(userPostDTO));
 
         mockMvc.perform(postRequest)
-                .andExpect(status().isBadRequest());
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
     //try to login with a user that is not in the userRepository
@@ -107,7 +114,7 @@ public class AuthenticationControllerTest {
         userPostDTO.setUsername("testUsername");
         userPostDTO.setPassword("testPassword");
 
-        MockHttpServletRequestBuilder postRequest = post("/register")
+        MockHttpServletRequestBuilder postRequest = MockMvcRequestBuilders.post("/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(userPostDTO));
 
@@ -117,12 +124,12 @@ public class AuthenticationControllerTest {
         loginUserPostDTO.setUsername("testUsername");
         loginUserPostDTO.setPassword("testPassword");
 
-        MockHttpServletRequestBuilder loginPostRequest = post("/login")
+        MockHttpServletRequestBuilder loginPostRequest = MockMvcRequestBuilders.post("/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(loginUserPostDTO));
 
         mockMvc.perform(loginPostRequest)
-                .andExpect(status().isCreated());
+                .andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
     @Test
@@ -131,7 +138,7 @@ public class AuthenticationControllerTest {
         userPostDTO.setUsername("testUsername");
         userPostDTO.setPassword("testPassword");
 
-        MockHttpServletRequestBuilder postRequest = post("/register")
+        MockHttpServletRequestBuilder postRequest = MockMvcRequestBuilders.post("/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(userPostDTO));
 
@@ -141,20 +148,20 @@ public class AuthenticationControllerTest {
         loginUserPostDTO.setUsername("testUsername");
         loginUserPostDTO.setPassword("testPassword");
 
-        MockHttpServletRequestBuilder loginPostRequest = post("/login")
+        MockHttpServletRequestBuilder loginPostRequest = MockMvcRequestBuilders.post("/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(loginUserPostDTO));
 
         mockMvc.perform(loginPostRequest)
-                .andExpect(status().isCreated());
+                .andExpect(MockMvcResultMatchers.status().isCreated());
 
-        MockHttpServletRequestBuilder logoutGetRequest = get("/logout")
+        MockHttpServletRequestBuilder logoutGetRequest = MockMvcRequestBuilders.get("/logout")
                 .header("Authorization", userRepository.findByUsername("testUsername").getToken());
 
         mockMvc.perform(logoutGetRequest);
 
         User checkUser = userRepository.findByUsername("testUsername");
-        assertEquals(UserStatus.OFFLINE, checkUser.getStatus());
+        Assertions.assertEquals(UserStatus.OFFLINE, checkUser.getStatus());
     }
 
     /**

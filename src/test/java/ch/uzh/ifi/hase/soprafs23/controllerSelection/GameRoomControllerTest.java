@@ -1,6 +1,7 @@
-package ch.uzh.ifi.hase.soprafs23.controller;
+package ch.uzh.ifi.hase.soprafs23.controllerSelection;
 
 
+import ch.uzh.ifi.hase.soprafs23.controller.GameRoomController;
 import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
 import ch.uzh.ifi.hase.soprafs23.entity.RoomCoordinator;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
@@ -13,14 +14,20 @@ import ch.uzh.ifi.hase.soprafs23.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.mockito.ArgumentMatchers;
+import org.mockito.BDDMockito;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -31,6 +38,7 @@ import static org.mockito.Mockito.*;
 import static org.mockito.BDDMockito.given;
 
 
+@DirtiesContext
 @WebMvcTest(GameRoomController.class)
 public class GameRoomControllerTest {
 
@@ -98,7 +106,7 @@ public class GameRoomControllerTest {
                 .header("Authorization","BearerToken")
         ).andExpect(MockMvcResultMatchers.status().isCreated());
 
-        verify(gameRoomServiceMock, times(1)).throwForbiddenWhenNoBearerToken("BearerToken");
+        Mockito.verify(gameRoomServiceMock, Mockito.times(1)).throwForbiddenWhenNoBearerToken("BearerToken");
 
     }
 
@@ -141,9 +149,9 @@ public class GameRoomControllerTest {
         RoomCoordinator roomCoordinator = RoomCoordinator.getInstance();
         roomCoordinator.addRoom(gameRoom);
 
-        given(gameRoomServiceMock.retrieveUserFromRepo(2L)).willReturn(testUser2);
-        doNothing().when(gameRoomServiceMock).throwForbiddenWhenNoBearerToken(any());
-        when(gameRoomServiceMock.addPlayerToGameRoom(gameRoom,2L)).thenCallRealMethod();
+        BDDMockito.given(gameRoomServiceMock.retrieveUserFromRepo(2L)).willReturn(testUser2);
+        Mockito.doNothing().when(gameRoomServiceMock).throwForbiddenWhenNoBearerToken(ArgumentMatchers.any());
+        Mockito.when(gameRoomServiceMock.addPlayerToGameRoom(gameRoom,2L)).thenCallRealMethod();
 
 
         mockMvc.perform(MockMvcRequestBuilders

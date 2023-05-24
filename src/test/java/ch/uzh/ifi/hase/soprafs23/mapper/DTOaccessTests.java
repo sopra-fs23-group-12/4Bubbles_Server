@@ -1,4 +1,4 @@
-package ch.uzh.ifi.hase.soprafs23.rest.mapper;
+package ch.uzh.ifi.hase.soprafs23.mapper;
 
 import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;

@@ -5,9 +5,12 @@ import ch.uzh.ifi.hase.soprafs23.entity.RoomCoordinator;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.exceptions.RoomNotFoundException;
 import ch.uzh.ifi.hase.soprafs23.game.Game;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.List;
 import java.util.Map;
@@ -15,6 +18,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@DirtiesContext
 public class EntitiesUnitTests {
 
     private User testUser1;
@@ -34,21 +38,24 @@ public class EntitiesUnitTests {
         testUser2.setPassword("password2");
     }
 
+
+
     @Test
     public void testRoomCoordinator() throws Exception
     {
         GameRoom gameRoom = new GameRoom();
         gameRoom.setLeaderUserId(1);
-        gameRoom.setRoomCode("123456");
+        gameRoom.setRoomCode("151456");
         gameRoom.setMembers(Map.of(1L, testUser1));
+
 
         RoomCoordinator roomCoordinator = RoomCoordinator.getInstance();
         roomCoordinator.addRoom(gameRoom);
 
-        GameRoom receivedRoom = roomCoordinator.getRoomByCode("123456");
-        assertEquals(gameRoom.getLeaderUserId(), receivedRoom.getLeaderUserId());
+        GameRoom receivedRoom = roomCoordinator.getRoomByCode("151456");
+        Assertions.assertEquals(gameRoom.getLeaderUserId(), receivedRoom.getLeaderUserId());
 
-        roomCoordinator.deleteRoom("123456");
+        roomCoordinator.deleteRoom("151456");
        /* RoomNotFoundException roomNotFoundException = assertThrows(RoomNotFoundException.class, () -> {
             roomCoordinator.getRoomByCode("123456");
         });

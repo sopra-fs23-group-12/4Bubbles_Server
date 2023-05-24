@@ -12,8 +12,10 @@ import ch.uzh.ifi.hase.soprafs23.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -33,6 +35,7 @@ import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(GameRoomController.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class GameRoomIntegrationTest {
 
     private User testUser1;
@@ -50,7 +53,7 @@ public class GameRoomIntegrationTest {
     @MockBean
     UserService userService;
 
-    @BeforeEach
+    @BeforeAll
     public void setup() {
         MockitoAnnotations.openMocks(this);
 

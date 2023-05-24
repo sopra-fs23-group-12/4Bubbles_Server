@@ -2,6 +2,7 @@ package ch.uzh.ifi.hase.soprafs23.repository;
 
 import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -38,11 +39,11 @@ public class UserRepositoryIntegrationTest {
         User found = userRepository.findByUsername(user.getUsername());
 
         // then
-        assertNotNull(found.getId());
-        assertEquals(found.getUsername(), user.getUsername());
-        assertEquals(found.getToken(), user.getToken());
-        assertEquals(found.getStatus(), user.getStatus());
-        assertEquals(found.getPassword(), user.getPassword());
+        Assertions.assertNotNull(found.getId());
+        Assertions.assertEquals(found.getUsername(), user.getUsername());
+        Assertions.assertEquals(found.getToken(), user.getToken());
+        Assertions.assertEquals(found.getStatus(), user.getStatus());
+        Assertions.assertEquals(found.getPassword(), user.getPassword());
 
     }
 }

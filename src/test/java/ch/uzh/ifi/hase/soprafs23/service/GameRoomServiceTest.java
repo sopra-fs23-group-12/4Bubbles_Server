@@ -11,11 +11,10 @@ import java.util.Map;
 import java.util.Optional;
 
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
@@ -46,8 +45,8 @@ class GameRoomServiceTest {
         testUser.setPassword("password");
         testUser.setUsername("testUsername");
 
-        when(userRepository.findByid(any())).thenReturn(testUser);
-        when(userRepository.findById(any())).thenReturn(Optional.of(testUser));
+        Mockito.when(userRepository.findByid(ArgumentMatchers.any())).thenReturn(testUser);
+        Mockito.when(userRepository.findById(ArgumentMatchers.any())).thenReturn(Optional.of(testUser));
 
         userService.createUser(testUser);
         // when -> any object is being save in the userRepository -> return the dummy
@@ -62,7 +61,7 @@ class GameRoomServiceTest {
         User fetchedUser = gameRoomService.retrieveUserFromRepo(testUser.getId());
 
 
-        assertEquals(testUser, fetchedUser);
+        Assertions.assertEquals(testUser, fetchedUser);
     }
 
     @Test
@@ -73,9 +72,9 @@ class GameRoomServiceTest {
         testList.put(testUser.getId(), testUser);
         gameRoomService.initGameRoom(testRoom);
 
-        assertNotNull(testRoom.getRoomCode());
-        assertEquals(testRoom.getRoomCode().length(), 6);
-        assertEquals(testRoom.getMembers(), testList);
+        Assertions.assertNotNull(testRoom.getRoomCode());
+        Assertions.assertEquals(testRoom.getRoomCode().length(), 6);
+        Assertions.assertEquals(testRoom.getMembers(), testList);
 
     }
 
@@ -84,9 +83,9 @@ class GameRoomServiceTest {
         GameRoom testRoom = new GameRoom();
         testRoom.setLeaderUserId(testUser.getId());
         gameRoomService.setLeaderFromRepo(testRoom);
-        when(userRepository.findByid(any())).thenReturn(testUser);
+        Mockito.when(userRepository.findByid(ArgumentMatchers.any())).thenReturn(testUser);
 
-        assertEquals(testRoom.getLeader(), testUser);
+        Assertions.assertEquals(testRoom.getLeader(), testUser);
     }
 
 
@@ -99,13 +98,13 @@ class GameRoomServiceTest {
         
         gameRoomService.addPlayerToGameRoom(testRoom, testUser.getId());
 
-        assertEquals(memberList, testRoom.getMembers());
+        Assertions.assertEquals(memberList, testRoom.getMembers());
     }
 
     @Test
     void throwForbiddenWhenNoBearerTokenTest() {
         String testToken = null;
 
-        assertThrows(ResponseStatusException.class, () -> gameRoomService.throwForbiddenWhenNoBearerToken(testToken));
+        Assertions.assertThrows(ResponseStatusException.class, () -> gameRoomService.throwForbiddenWhenNoBearerToken(testToken));
     }
 }

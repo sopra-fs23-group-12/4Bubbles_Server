@@ -2,6 +2,7 @@ package ch.uzh.ifi.hase.soprafs23.service;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class ApiServiceTest {
@@ -10,7 +11,7 @@ public class ApiServiceTest {
 
     @Test
     public void test_getTopicsFromApi_successful() {
-        assertFalse(apiService.getTopicList().isEmpty());
+        Assertions.assertFalse(apiService.getTopicList().isEmpty());
     }
 
     /* @Test

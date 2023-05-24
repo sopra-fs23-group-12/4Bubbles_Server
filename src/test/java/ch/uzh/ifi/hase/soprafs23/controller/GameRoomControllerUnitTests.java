@@ -10,12 +10,8 @@ import ch.uzh.ifi.hase.soprafs23.rest.dto.*;
 import ch.uzh.ifi.hase.soprafs23.service.ApiService;
 import ch.uzh.ifi.hase.soprafs23.service.GameRoomService;
 import javassist.NotFoundException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.junit.jupiter.api.*;
+import org.mockito.*;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -77,18 +73,18 @@ public class GameRoomControllerUnitTests {
      */
     @Test
     public void testCreateRoom_apiServiceThrowsException() throws Exception{
-        when(apiService.getQuestionsFromApi(any())).thenThrow(new IOException());
-        ApiConnectionError apiConnectionError = assertThrows(ApiConnectionError.class, () -> {
+        Mockito.when(apiService.getQuestionsFromApi(ArgumentMatchers.any())).thenThrow(new IOException());
+        ApiConnectionError apiConnectionError = Assertions.assertThrows(ApiConnectionError.class, () -> {
             gameRoomController.createGameRoom(gameRoomPostDTO, null);
         });
-        assertEquals(apiConnectionError.getMessage(), "Something went wrong while accessing the API");
+        Assertions.assertEquals(apiConnectionError.getMessage(), "Something went wrong while accessing the API");
     }
 
     @Test
     public void testCreateRoom_apiServiceDoesNotThrowException() throws Exception{
         List<Question> questions = Arrays.asList(new Question(), new Question());
-        when(apiService.getQuestionsFromApi(any())).thenReturn(questions);
-        assertDoesNotThrow(() -> {
+        Mockito.when(apiService.getQuestionsFromApi(ArgumentMatchers.any())).thenReturn(questions);
+        Assertions.assertDoesNotThrow(() -> {
             gameRoomController.createGameRoom(gameRoomPostDTO, null);
         });
     }
@@ -113,7 +109,7 @@ public class GameRoomControllerUnitTests {
 
     @Test
     public void joinRoom_roomNotFoundException() throws Exception{
-        when(roomCoordinator.getRoomByCode( any())).thenThrow(new NotFoundException("Room with given room code could not be found"));
+        Mockito.when(roomCoordinator.getRoomByCode( ArgumentMatchers.any())).thenThrow(new NotFoundException("Room with given room code could not be found"));
         /*RoomNotFoundException roomNotFoundException = assertThrows(RoomNotFoundException.class, () -> {
             gameRoomController.joinGameRoom(gameRoomPutDTO, null);
         });
@@ -123,10 +119,10 @@ public class GameRoomControllerUnitTests {
     @Test
     public void testGetTopics() throws Exception {
         List<TopicGetDTO> topicGetDTOs = gameRoomController.getTopics( null);
-        verify(gameRoomService, times(1)).throwForbiddenWhenNoBearerToken(any());
+        Mockito.verify(gameRoomService, Mockito.times(1)).throwForbiddenWhenNoBearerToken(ArgumentMatchers.any());
 
-        assertEquals("https://opentdb.com/api_category.php", ApiUrls.CATEGORIES.url);
-        verify(apiService, times(1)).getTopicList();
+        Assertions.assertEquals("https://opentdb.com/api_category.php", ApiUrls.CATEGORIES.url);
+        Mockito.verify(apiService, Mockito.times(1)).getTopicList();
     }
 
     /* @Test
@@ -141,8 +137,8 @@ public class GameRoomControllerUnitTests {
     @Test
     public void testGetTopics_DoesNotThrowApiConnectionError() throws Exception{
         List<TopicGetDTO> topics= Arrays.asList(new TopicGetDTO(), new TopicGetDTO());
-        when(apiService.getTopicList()).thenReturn(topics);
-        assertDoesNotThrow(() -> {
+        Mockito.when(apiService.getTopicList()).thenReturn(topics);
+        Assertions.assertDoesNotThrow(() -> {
             gameRoomController.createGameRoom(gameRoomPostDTO, null);
         });
     }

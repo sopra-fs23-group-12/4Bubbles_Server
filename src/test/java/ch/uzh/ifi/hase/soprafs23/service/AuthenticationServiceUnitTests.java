@@ -3,11 +3,10 @@ package ch.uzh.ifi.hase.soprafs23.service;
 import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.repository.UserRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -37,22 +36,22 @@ public class AuthenticationServiceUnitTests {
 
     @Test
     public void testAuthenticateUser_UserExistsAndCorrectPassword() throws Exception {
-        when(userRepository.findByUsername(any(String.class))).thenReturn(testUser);
+        Mockito.when(userRepository.findByUsername(ArgumentMatchers.any(String.class))).thenReturn(testUser);
         User user = authenticationService.authenticateUser(testUser);
-        verify(userRepository, times(1)).findByUsername(testUser.getUsername());
+        Mockito.verify(userRepository, Mockito.times(1)).findByUsername(testUser.getUsername());
 
-        assertEquals(UserStatus.ONLINE, user.getStatus());
+        Assertions.assertEquals(UserStatus.ONLINE, user.getStatus());
     }
 
     @Test
     public void testAuthenticateUser_UserNotExists() throws Exception {
-        when(userRepository.findByUsername(any(String.class))).thenReturn(null);
+        Mockito.when(userRepository.findByUsername(ArgumentMatchers.any(String.class))).thenReturn(null);
 
-        ResponseStatusException responseStatusException = assertThrows(ResponseStatusException.class, () -> {
+        ResponseStatusException responseStatusException = Assertions.assertThrows(ResponseStatusException.class, () -> {
             authenticationService.authenticateUser(testUser);
         });
         String baseErrorMessage = "\"Wrong credentials!\"";
-        assertEquals(responseStatusException.getMessage(), HttpStatus.UNAUTHORIZED + " " +
+        Assertions.assertEquals(responseStatusException.getMessage(), HttpStatus.UNAUTHORIZED + " " +
                 String.format(baseErrorMessage, "requested user"));
     }
 
@@ -61,8 +60,8 @@ public class AuthenticationServiceUnitTests {
         User testUser2 = new User();
         testUser2.setPassword("pw2");
 
-        when(userRepository.findByUsername(any(String.class))).thenReturn(testUser);
-        assertThrows(ResponseStatusException.class, () -> {
+        Mockito.when(userRepository.findByUsername(ArgumentMatchers.any(String.class))).thenReturn(testUser);
+        Assertions.assertThrows(ResponseStatusException.class, () -> {
             authenticationService.authenticateUser(testUser2);
         });
         /*String baseErrorMessage = "Wrong credentials!";
@@ -72,12 +71,12 @@ public class AuthenticationServiceUnitTests {
 
     @Test
     public void testLogout() throws Exception {
-        when(userRepository.findByToken(any())).thenReturn(testUser);
+        Mockito.when(userRepository.findByToken(ArgumentMatchers.any())).thenReturn(testUser);
 
-        authenticationService.logout(any(String.class));
-        verify(userRepository, times(1)).findByToken(testUser.getToken());
+        authenticationService.logout(ArgumentMatchers.any(String.class));
+        Mockito.verify(userRepository, Mockito.times(1)).findByToken(testUser.getToken());
 
-        assertEquals(UserStatus.OFFLINE, testUser.getStatus());
+        Assertions.assertEquals(UserStatus.OFFLINE, testUser.getStatus());
     }
 
 

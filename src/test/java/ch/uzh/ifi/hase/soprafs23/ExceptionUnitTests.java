@@ -1,4 +1,4 @@
-package ch.uzh.ifi.hase.soprafs23.Entity;
+package ch.uzh.ifi.hase.soprafs23;
 
 import ch.uzh.ifi.hase.soprafs23.ServerCommandLineRunner;
 import ch.uzh.ifi.hase.soprafs23.exceptions.GlobalExceptionAdvice;

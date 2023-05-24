@@ -5,6 +5,7 @@ import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.game.Game;
 import ch.uzh.ifi.hase.soprafs23.game.VoteController;
 import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -74,7 +75,7 @@ public class GameRoomIntegrationTest {
         String gameRoomRoomCode = gameRoom.getRoomCode();
         String gameRoomCode = game.getRoomCode();
 
-        assertEquals(gameRoomRoomCode,gameRoomCode);
+        Assertions.assertEquals(gameRoomRoomCode,gameRoomCode);
 
     }
 
@@ -84,7 +85,7 @@ public class GameRoomIntegrationTest {
         List<Question> gameRoomQuestions = gameRoom.getQuestions();
         List<Question> gameQuestions  = game.getQuestions();
 
-        assertEquals(gameRoomQuestions,gameQuestions);
+        Assertions.assertEquals(gameRoomQuestions,gameQuestions);
 
     }
 
@@ -93,7 +94,7 @@ public class GameRoomIntegrationTest {
         VoteController gameRoomVoteController = gameRoom.getVoteController();
         VoteController gameVoteController  = game.getVoteController();
 
-        assertEquals(gameRoomVoteController,gameVoteController);
+        Assertions.assertEquals(gameRoomVoteController,gameVoteController);
 
     }
 }
