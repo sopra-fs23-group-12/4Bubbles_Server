@@ -144,12 +144,12 @@ public class UserService {
     private void checkIfUsernameIsUnique(User userToBeCreated) {
         User userByUsername = userRepository.findByUsername(userToBeCreated.getUsername());
         if (userToBeCreated.getPassword().equals("") || userToBeCreated.getUsername().equals("")) {
-            String baseErrorMessage = "Oups, your request is wrong. Please full out all fields!";
+            String baseErrorMessage = "Oups, your request is wrong. Please fill out all fields!";
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     String.format(baseErrorMessage));
         }
         if (userToBeCreated.getPassword().length() > 18 || userToBeCreated.getUsername().length() > 18) {
-            String baseErrorMessage = "Please don't use more than 20 characters for username or password!";
+            String baseErrorMessage = "Please don't use more than 18 characters for your username or password!";
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     String.format(baseErrorMessage));
         }

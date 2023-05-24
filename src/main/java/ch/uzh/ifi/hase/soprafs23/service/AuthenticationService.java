@@ -28,16 +28,6 @@ public class AuthenticationService{
 
     public User authenticateUser(User externalUser) {
         User user = this.userRepository.findByUsername(externalUser.getUsername());
-        if (externalUser.getPassword().equals("") || externalUser.getUsername().equals("")) {
-            String baseErrorMessage = "Oups, your request is wrong. Please full out all fields!";
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    String.format(baseErrorMessage));
-        }
-        if (externalUser.getPassword().length() > 18 || externalUser.getUsername().length() > 18) {
-            String baseErrorMessage = "Please don't use more than 20 characters for username or password!";
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    String.format(baseErrorMessage));
-        }
         if (user == null || !externalUser.getPassword().equals(user.getPassword())) {
             log.debug("Created Information for User: {}", user);
             String baseErrorMessage = "Wrong credentials!";
