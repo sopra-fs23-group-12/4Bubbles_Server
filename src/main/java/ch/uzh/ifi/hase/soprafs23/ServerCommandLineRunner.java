@@ -13,9 +13,9 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PreDestroy;
 
 
+
 @Component
 public class ServerCommandLineRunner implements CommandLineRunner {
-
     private final SocketIOServer server;
 
     @Autowired
@@ -27,6 +27,7 @@ public class ServerCommandLineRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         server.startAsync().syncUninterruptibly();
+
     }
 
     @PreDestroy
