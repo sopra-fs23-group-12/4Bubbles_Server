@@ -1,6 +1,6 @@
 ## UZH SoPra Course FS23
 
-<img title="favicon" alt="Soap Bubble" src="https://github.com/sopra-fs23-group-12/4Bubbles_Client/public/favicon.png" width="100">
+<img title="favicon" alt="Soap Bubble" src="favicon.png" width="100">
 
 # 4Bubble Trivia
 
