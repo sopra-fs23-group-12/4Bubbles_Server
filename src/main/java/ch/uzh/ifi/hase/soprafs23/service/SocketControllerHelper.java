@@ -49,7 +49,7 @@ public class SocketControllerHelper {
     }
 
 
-    public void requestRankingMethod(String roomCode) throws NotFoundException {
+    public void requestRankingMethod(String roomCode) {
         // change this round to currentRoundCounter in game
         try{
             GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
