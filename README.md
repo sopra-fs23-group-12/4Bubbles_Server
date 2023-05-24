@@ -1,24 +1,26 @@
-# UZH SoPra Course FS23 
+## UZH SoPra Course FS23
 
 # 4Bubble Trivia
 
 Make Trivia fun again!  \
-This is a trivia game with a focus on multiplayer aspects. 
+This is a trivia game with a focus on multiplayer aspects.
 You can test your trivia knowledge by battling your friends in your preferred
-topic. Choose your difficulty, the number of questions and your game mode. 
+topic. Choose your difficulty, the number of questions and your game mode.
 You have 10 seconds to answer the questions in the bubble and collect points. The faster
 you answer, the more points you will get. This will prove more difficult than you might
 expect, especially in hard mode. But not to worry - since the bubble sizes change to indicate
 the number of people that have already cast their vote on one of the answers, you can go
-the safe road and follow your friend's choice ... or can you? Depending on your gamemode,
-bubble sizes could just be randomly generated without you knowing, or players could change
-their answer in the last seconds to try and confuse you. 
-Whether you chose the correct answer will be revealed when the time is up; if your 
+the safe road and follow your friend's choice ... or can you? \
+The game supports two game modes; standard locks your choice in, once you've cast your vote
+you cannot change it anymore. 3,2,1 ... lets you change your vote Players in this game mode
+have to be extra careful when deciding whether to trust their friend's choice or not.
+Whether you chose the correct answer will be revealed when the time is up; if your
 bubble doesn't burst, you've made the correct choice!
 
-[Play here](sopra-fs23-group-12-client.ew.r.appspot.com). Enjoy!
+[Play here](https://sopra-fs23-group-12-client.ew.r.appspot.com). Enjoy!
+Check [here](https://sopra.dkueffer.ch) whether the server is running correctly.
 
-
+You can find the corresponding client repository [here](https://github.com/sopra-fs23-group-12/4Bubbles_Client).
 
 ## Technologies
 
@@ -27,11 +29,24 @@ Server-Client communications are handled with REST API and Socket.io with the [N
 
 ## High-level Components
 
-*what is meant by this?? server, client and DB?
+Our Server consists of four major components;
 
-## Contributing
+[GameRoom](/src/main/java/ch/uzh/ifi/hase/soprafs23/entity/GameRoom.java) and [Game](/src/main/java/ch/uzh/ifi/hase/soprafs23/game/Game.java) are the main
+classes that handle the sequence of game actions and its members.
+They are summarized and managed by the GameRoomController class.
 
-Please read [contributions.md]() for details of our task history.
+Our controllers, especially [Socket](/src/main/java/ch/uzh/ifi/hase/soprafs23/controller/SocketController.java) and [GameRoom](/src/main/java/ch/uzh/ifi/hase/soprafs23/controller/GameRoomController.java) controllers handle all incoming traffic.\
+SocketController specifically handles all traffic related to Websockets.
+
+[API Service](/src/main/java/ch/uzh/ifi/hase/soprafs23/service/ApiService.java) handles the connection to the trivia question API.
+
+The [User](/src/main/java/ch/uzh/ifi/hase/soprafs23/entity/User.java) class is the only entity we store in a [Database](/src/main/java/ch/uzh/ifi/hase/soprafs23/repository/UserRepository.java). This allows users to create
+and account they can revisit and allows the system to track statistics that can be displayed to the users.
+
+Many helper classes support the main class in their functionalities; these include the [service classes](/src/main/java/ch/uzh/ifi/hase/soprafs23/service)
+for the components, the abstractions of [Votes](/src/main/java/ch/uzh/ifi/hase/soprafs23/entity/Vote.java), and manager classes, such as [RoomCoordinator](/src/main/java/ch/uzh/ifi/hase/soprafs23/entity/RoomCoordinator.java)
+or [VoteController](/src/main/java/ch/uzh/ifi/hase/soprafs23/game/VoteController.java), that afford finding rooms and evaluating votes respectively.
+
 
 ## Launch and Deployment
 
@@ -62,30 +77,24 @@ You can verify that the server is running by visiting `localhost:8080` in your b
 
 ### Prerequisites
 
-TODO: are there any prerequisites? I dont think so since it is in google cloud right?<
-OR do we actually have to provide info on how to run it locally?
+To play this game on the Google compute engine instance, no prerequisites exist.
 
-
-## Illustrations
-
-Login/signup
-welcomepage
-user stats
-create a game
-join a game
-questions
-ranking
+Running the application locally requires installing all dependencies from the server and the client.
 
 ## Roadmap
-tbd
 
+Developers interested in extending this application are welcome to implement additional features.\
+Here are some Ideas that can be used as inspiration:
 
-
+- [Additional game modes](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/25): We paid special attention to modularity while designing our code. It could therefore be modified to add
+  some more game modes than the two that are already implemented.
+- [Awards for special achievements](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/19): User statistics are already tracked and stored. Implementing a global leaderboard and
+  special awards for all players that achieve a milestone (i.e. winning 20 games) would be a nice extension.
 
 
 ## Authors
 
-in alpahbetical order:
+In alphabetical order:
 * **Dario Küffer** - [GitHub](https://github.com/dariokueffer)
 * **Fabio Bertschi** - [GitHub](https://github.com/fabibert)
 * **Maaike van Vliet** - [GitHub](https://github.com/Bluee1Bird)
@@ -97,13 +106,21 @@ Special thanks to the authors of the template:
 * **Roy Rutishauser** - [GitHub](https://github.com/royru)
 * **Dennis Huber** - [GitHub](https://github.com/devnnys)
 
-## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+## Contributing
+
+Please read [contributions.md](/contributions.md) for details of our task history.
+
 
 ## Acknowledgments
 
-* This project was build on the basis of the SoPra Template FS23 provided by the University of Zurich for the 
-Software Engineering Lab (Softwarepraktikum) course supervised by Professor Thomas Fritz
-* Special Thanks also to our Teaching Assistant [Valentin Hollenstein](https://github.com/v4lentin1879)
+* This project was build on the basis of the [SoPra Template FS23](https://github.com/HASEL-UZH/sopra-fs23-template-server) provided by the University of Zurich for the
+  Software Engineering Lab (Softwarepraktikum) course supervised by [Professor Thomas Fritz](https://www.ifi.uzh.ch/en/hasel/people/fritz.html).
+* Special Thanks also to our Teaching Assistant [Valentin Hollenstein](https://github.com/v4lentin1879).
+* We are also very grateful to the creators and contributors of the external API [Open Trivia Database](https://opentdb.com/) which we used as source for
+  our questions.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 

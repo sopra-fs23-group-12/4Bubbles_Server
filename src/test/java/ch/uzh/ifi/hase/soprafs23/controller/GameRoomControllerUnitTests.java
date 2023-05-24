@@ -1,7 +1,6 @@
 package ch.uzh.ifi.hase.soprafs23.controller;
 
 import ch.uzh.ifi.hase.soprafs23.constant.ApiUrls;
-import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
 import ch.uzh.ifi.hase.soprafs23.entity.RoomCoordinator;
 import ch.uzh.ifi.hase.soprafs23.exceptions.ApiConnectionError;
 import ch.uzh.ifi.hase.soprafs23.exceptions.RoomNotFoundException;
@@ -14,7 +13,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
@@ -23,7 +21,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 public class GameRoomControllerUnitTests {
@@ -113,7 +110,7 @@ public class GameRoomControllerUnitTests {
 
     @Test
     public void joinRoom_roomNotFoundException() throws Exception{
-        when(roomCoordinator.getRoomByCode( any())).thenThrow(new NotFoundException("Room with given room code could not be found"));
+        when(roomCoordinator.getRoomByCode( any())).thenThrow(new RoomNotFoundException("Room with given room code could not be found"));
         /*RoomNotFoundException roomNotFoundException = assertThrows(RoomNotFoundException.class, () -> {
             gameRoomController.joinGameRoom(gameRoomPutDTO, null);
         });
