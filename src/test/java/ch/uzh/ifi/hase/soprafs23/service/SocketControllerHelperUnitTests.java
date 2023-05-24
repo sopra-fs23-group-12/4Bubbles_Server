@@ -209,6 +209,7 @@ public class SocketControllerHelperUnitTests {
         question.setQuestionString("Largest city in the world?");
         question.setAnswers(List.of("Los Angeles", " Delhi", "Tokyo", "London"));
         gameRoom.setQuestions(List.of(question));
+        gameRoom.setGameStarted(false);
 
         Game game = new Game(gameRoom);
         gameRoom.setCurrentGame(game);
@@ -225,7 +226,7 @@ public class SocketControllerHelperUnitTests {
 
         verify(senderClient, times(1)).getSessionId();
 
-        roomCoordinator.deleteRoom("123456");
+        //roomCoordinator.deleteRoom("123456");
 
     }
 

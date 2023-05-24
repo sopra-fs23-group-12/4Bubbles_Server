@@ -3,6 +3,7 @@ package ch.uzh.ifi.hase.soprafs23.controller;
 import ch.uzh.ifi.hase.soprafs23.constant.ApiUrls;
 import ch.uzh.ifi.hase.soprafs23.entity.RoomCoordinator;
 import ch.uzh.ifi.hase.soprafs23.exceptions.ApiConnectionError;
+import ch.uzh.ifi.hase.soprafs23.exceptions.RoomNotFoundException;
 import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.*;
 import ch.uzh.ifi.hase.soprafs23.service.ApiService;
@@ -109,7 +110,7 @@ public class GameRoomControllerUnitTests {
 
     @Test
     public void joinRoom_roomNotFoundException() throws Exception{
-        when(roomCoordinator.getRoomByCode( any())).thenThrow(new NotFoundException("Room with given room code could not be found"));
+        when(roomCoordinator.getRoomByCode( any())).thenThrow(new RoomNotFoundException("Room with given room code could not be found"));
         /*RoomNotFoundException roomNotFoundException = assertThrows(RoomNotFoundException.class, () -> {
             gameRoomController.joinGameRoom(gameRoomPutDTO, null);
         });

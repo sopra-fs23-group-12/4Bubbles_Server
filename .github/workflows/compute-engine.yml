@@ -51,3 +51,25 @@ jobs:
             --project "sopra-fs23-group-12-server-v2" \
             --zone "us-central1-a" \
             --command "PRODUCTION=true nohup java -jar soprafs23.jar > output.log 2>&1 &"
+            
+      - name: Delay
+        run: |
+          sleep 30s
+          
+      - name: Check if process is running
+        id: process-check
+        run: |
+          output=$(gcloud compute ssh instance-1 \
+            --project "sopra-fs23-group-12-server-v2" \
+            --zone "us-central1-a" \
+            --command "pgrep -f soprafs23.jar")
+          echo "::set-output name=pid::$output"
+          
+      - name: Process status
+        run: |
+          if [[ -n "${{ steps.process-check.outputs.pid }}" ]]; then
+            echo "Process is running"
+          else
+            echo "Process is not running"
+            exit 1
+          fi
