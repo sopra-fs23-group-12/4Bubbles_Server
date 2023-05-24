@@ -1,5 +1,7 @@
 ## UZH SoPra Course FS23
 
+<img title="favicon" alt="Soap Bubble" src="https://github.com/sopra-fs23-group-12/4Bubbles_Client/public/favicon.png" width="100">
+
 # 4Bubble Trivia
 
 Make Trivia fun again!  \
@@ -12,8 +14,8 @@ expect, especially in hard mode. But not to worry - since the bubble sizes chang
 the number of people that have already cast their vote on one of the answers, you can go
 the safe road and follow your friend's choice ... or can you? \
 The game supports two game modes; standard locks your choice in, once you've cast your vote
-you cannot change it anymore. 3,2,1 ... lets you change your vote Players in this game mode
-have to be extra careful when deciding whether to trust their friend's choice or not.
+you cannot change it anymore. 3,2,1 ... let's you change your vote. Players in this game mode
+have to be extra careful when deciding whether to trust their friend's choices.
 Whether you chose the correct answer will be revealed when the time is up; if your
 bubble doesn't burst, you've made the correct choice!
 
@@ -25,7 +27,7 @@ You can find the corresponding client repository [here](https://github.com/sopra
 ## Technologies
 
 This project is a Node.js application running ReactJS with JavaScript.\
-Server-Client communications are handled with REST API and Socket.io with the [Netty-Socketio](https://github.com/mrniko/netty-socketio) library for the java server.
+Server-Client communications are handled with REST API and Socket.io with the [Netty-Socketio](https://github.com/mrniko/netty-socketio) library for the server.
 
 ## High-level Components
 
@@ -50,6 +52,9 @@ or [VoteController](/src/main/java/ch/uzh/ifi/hase/soprafs23/game/VoteController
 
 ## Launch and Deployment
 
+### Prerequisites
+
+All dependencies are handled with Gradle.
 
 ### Setup this Template with your IDE of choice
 Download your IDE of choice (e.g., [IntelliJ](https://www.jetbrains.com/idea/download/), [Visual Studio Code](https://code.visualstudio.com/), or [Eclipse](http://www.eclipse.org/downloads/)). Make sure Java 17 is installed on your system (for Windows, please make sure your `JAVA_HOME` environment variable is set to the correct version of Java). \
@@ -75,11 +80,6 @@ You can verify that the server is running by visiting `localhost:8080` in your b
 ./gradlew test
 ```
 
-### Prerequisites
-
-To play this game on the Google compute engine instance, no prerequisites exist.
-
-Running the application locally requires installing all dependencies from the server and the client.
 
 ## Roadmap
 
@@ -116,11 +116,11 @@ Please read [contributions.md](/contributions.md) for details of our task histor
 
 * This project was build on the basis of the [SoPra Template FS23](https://github.com/HASEL-UZH/sopra-fs23-template-server) provided by the University of Zurich for the
   Software Engineering Lab (Softwarepraktikum) course supervised by [Professor Thomas Fritz](https://www.ifi.uzh.ch/en/hasel/people/fritz.html).
-* Special Thanks also to our Teaching Assistant [Valentin Hollenstein](https://github.com/v4lentin1879).
-* We are also very grateful to the creators and contributors of the external API [Open Trivia Database](https://opentdb.com/) which we used as source for
+* Special Thanks also to our Teaching Assistant [Valentin Hollenstein](https://github.com/v4lentin1879)for his support.
+* We are also grateful to the creators and contributors of the external API [Open Trivia Database](https://opentdb.com/) which we used as source for
   our questions.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
 
