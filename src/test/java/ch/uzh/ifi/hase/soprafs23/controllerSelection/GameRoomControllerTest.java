@@ -153,7 +153,6 @@ public class GameRoomControllerTest {
         Mockito.doNothing().when(gameRoomServiceMock).throwForbiddenWhenNoBearerToken(ArgumentMatchers.any());
         Mockito.when(gameRoomServiceMock.addPlayerToGameRoom(gameRoom,2L)).thenCallRealMethod();
 
-
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/joinRoom")
                         .contentType(MediaType.APPLICATION_JSON)

@@ -28,7 +28,7 @@ public class RoomCoordinator {
 
     public GameRoom getRoomByCode(String roomId) throws NotFoundException {
         for (GameRoom room : rooms) {
-            if (room.getRoomCode().equals(roomId)) {
+            if (room.getRoomCode() != null && room.getRoomCode().equals(roomId)) {
                 return room;
             }
         }
