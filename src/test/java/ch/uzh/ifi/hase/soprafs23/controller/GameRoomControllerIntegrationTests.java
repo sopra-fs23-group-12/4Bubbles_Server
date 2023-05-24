@@ -82,7 +82,7 @@ public class GameRoomControllerIntegrationTests {
     }
 
     @Test
-    void testGetTopics() throws Exception {
+    public void testGetTopics() throws Exception {
         List<TopicGetDTO> topics = apiService.getTopicList();
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -93,7 +93,7 @@ public class GameRoomControllerIntegrationTests {
     }
 
     @Test
-    void testCreateGameRoom() throws Exception {
+    public void testCreateGameRoom() throws Exception {
         userService.createUser(user);
         //User savedUser = userRepository.save(user);
 
@@ -113,7 +113,7 @@ public class GameRoomControllerIntegrationTests {
     }
 
     @Test
-    void testJoinGameRoom() throws Exception {
+    public void testJoinGameRoom() throws Exception {
         User secondUser = new User();
         secondUser.setUsername("second");
         secondUser.setPassword("pw2");

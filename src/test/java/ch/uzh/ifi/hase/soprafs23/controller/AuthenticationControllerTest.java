@@ -88,7 +88,7 @@ public class AuthenticationControllerTest {
     }
 
     @Test
-    void RegisterTest_Invalid() throws Exception {
+    public void RegisterTest_Invalid() throws Exception {
         UserPostDTO userPostDTO = new UserPostDTO();
         userPostDTO.setUsername("testUsername");
 
@@ -102,7 +102,7 @@ public class AuthenticationControllerTest {
 
     //try to login with a user that is not in the userRepository
     @Test
-    void testLogin() throws Exception {
+    public void testLogin() throws Exception {
         UserPostDTO userPostDTO = new UserPostDTO();
         userPostDTO.setUsername("testUsername");
         userPostDTO.setPassword("testPassword");
@@ -126,7 +126,7 @@ public class AuthenticationControllerTest {
     }
 
     @Test
-    void testLogout() throws Exception {
+    public void testLogout() throws Exception {
         UserPostDTO userPostDTO = new UserPostDTO();
         userPostDTO.setUsername("testUsername");
         userPostDTO.setPassword("testPassword");
