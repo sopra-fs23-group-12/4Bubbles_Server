@@ -118,7 +118,7 @@ Definition of week dates:
 ###### Week 5
 - [ ] [#49](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/49)
 - [ ] [#50](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/50)
-
+###### Week 6
 
 
 ### Maaike van Vliet
