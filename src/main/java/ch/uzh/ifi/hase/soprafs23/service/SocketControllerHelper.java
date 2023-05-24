@@ -141,7 +141,7 @@ public class SocketControllerHelper {
             // notifies all clients that are already joined that there is a new member
             socketService.sendMemberArray(roomCode, senderClient);
         } catch (Exception e) {
-            logger.info("room could not be joined, either room was null or no room with that code exists");
+            logger.info("room could not be joined. See error below:");
             logger.info(e.toString());
         }
 
