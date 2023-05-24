@@ -150,9 +150,14 @@ public class SocketControllerHelper {
     }
 
     public void leaveRoomMethod(SocketIOClient senderClient, String roomCode, Long userId) throws NotFoundException {
-        GameRoom room = roomCoordinator.getRoomByCode(roomCode);
-
         try {
+            GameRoom room = roomCoordinator.getRoomByCode(roomCode);
+            if (room.getLeaderUserId() == userId) {
+                socketBasics.sendObjectToRoom(roomCode, EventNames.ROOM_IS_DELETED.eventName, "The leader left the game. Please join a new game or create a new game.");
+                roomCoordinator.deleteRoom(roomCode);
+                logger.info("Room " + roomCode +" was deleted!");
+                return;
+            }
             // leave the gameRoom (server entity)
             socketService.removePlayerFromGameRoom(room, userId);
             // leave the socket namespace

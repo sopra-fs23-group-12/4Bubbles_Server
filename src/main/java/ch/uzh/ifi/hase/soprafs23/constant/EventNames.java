@@ -15,6 +15,7 @@ public enum EventNames {
     GET_RIGHT_ANSWER("get_right_answer"),
     END_OF_QUESTION("end_of_question"),
     AN_ERROR_OCCURED("an_error_occured"),
+    ROOM_IS_DELETED("room_is_deleted"),
 
 
     
