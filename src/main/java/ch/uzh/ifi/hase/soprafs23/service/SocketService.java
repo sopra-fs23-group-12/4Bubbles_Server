@@ -4,7 +4,6 @@ package ch.uzh.ifi.hase.soprafs23.service;
 import ch.uzh.ifi.hase.soprafs23.constant.EventNames;
 import ch.uzh.ifi.hase.soprafs23.constant.MessageType;
 import ch.uzh.ifi.hase.soprafs23.entity.*;
-import ch.uzh.ifi.hase.soprafs23.exceptions.AlreadyInRoomException;
 import ch.uzh.ifi.hase.soprafs23.exceptions.GameIsRunningExeption;
 import ch.uzh.ifi.hase.soprafs23.exceptions.RoomNotFoundException;
 
@@ -42,10 +41,7 @@ public class SocketService {
             if (room.isGameStarted()){
                 throw new GameIsRunningExeption("Game is already running");
             }
-            if (room.getMembers().containsKey(userId) ){ //only add the new member if the member is not already in the room
-                log.info("User is already in the room");
-                throw new AlreadyInRoomException("User is already in the room");
-            }else{
+            if (room.getLeaderUserId() != userId ){ //only add the new member if the member is not the game leader (the leader is added upon creation)
                 gameRoomService.addPlayerToGameRoom(room, userId);
             }
             if (room.getNamespace() == null){
@@ -57,9 +53,6 @@ public class SocketService {
         }catch (GameIsRunningExeption e){
             socketBasics.sendObject(EventNames.AN_ERROR_OCCURED.eventName, "Unable to join the room. The game is already running", senderClient);
             throw new GameIsRunningExeption("Game is already running");
-        }catch (AlreadyInRoomException e){
-            socketBasics.sendObject(EventNames.AN_ERROR_OCCURED.eventName, "Unable to join the room. You are already in the room", senderClient);
-            throw new AlreadyInRoomException("User is already in the room");
         }
     }
 
