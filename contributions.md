@@ -129,7 +129,12 @@ Definition of week dates:
 - [x] [#75](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/75)
 - [x] [#92](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/92)
 - [x] [#106](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/106)
-
+###### Week 9
+- [x] [#162](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/162)
+- [x] [#118](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/118)
+- [x] [#119](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/119)
+- [x] [#120](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/120)
+- [x] [#121](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/121)
 
 ### Maaike van Vliet
 
