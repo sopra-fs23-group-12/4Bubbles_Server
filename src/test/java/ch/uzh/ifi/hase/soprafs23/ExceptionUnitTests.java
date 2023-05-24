@@ -23,7 +23,7 @@ public class ExceptionUnitTests {
 
     @Test
     public void testRoomNotFoundException() throws Exception {
-        RoomNotFoundException roomNotFoundException = new RoomNotFoundException("room with code 123456 not found", new Throwable());
+        RoomNotFoundException roomNotFoundException = new RoomNotFoundException("room with code 123456 not found");
     }
 
     @Test
