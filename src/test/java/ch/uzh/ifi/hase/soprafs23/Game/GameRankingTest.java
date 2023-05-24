@@ -22,7 +22,7 @@ public class GameRankingTest {
 
     private List<Question> questions;
 
-    private List<Vote> votes;
+    private Map<Long, Vote> votes;
 
     @BeforeEach
     public void setup() {
@@ -63,21 +63,22 @@ public class GameRankingTest {
         triviaQuestion2.setCorrectAnswer("Ukraine");
         this.questions = List.of(triviaQuestion1, triviaQuestion2);
 
-        this.votes = new ArrayList<Vote>();
+        votes = new HashMap<Long, Vote>();
         Vote vote1 = new Vote();
         vote1.setRemainingTime(8);
         vote1.setVote("Nigeria");
         vote1.setPlayerId(1L);
-        votes.add(vote1);
+        votes.put(1L, vote1);
 
         Vote vote2 = new Vote();
         vote2.setRemainingTime(6);
         vote2.setVote("Kenia");
         vote2.setPlayerId(2L);
-        votes.add(vote2);
+        votes.put(2L, vote2);
     }
 
-   /*  @Test
+
+   @Test
     public void testCorrectVotingGivesPoints() {
         this.ranking  = new GameRanking(this.gameRoom.getMembers());
 
@@ -107,5 +108,5 @@ public class GameRankingTest {
 
         assertEquals(0,newRanking.get(3L));
 
-    } */
+    }
 }
