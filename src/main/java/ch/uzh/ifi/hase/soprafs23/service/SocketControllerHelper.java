@@ -48,8 +48,8 @@ public class SocketControllerHelper {
         }
     }
 
+    public void requestRankingMethod(String roomCode){
 
-    public void requestRankingMethod(String roomCode) {
         // change this round to currentRoundCounter in game
         try{
             GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
@@ -119,6 +119,7 @@ public class SocketControllerHelper {
     }
 
     public void joinRoomMethod(SocketIOClient senderClient, String roomCode, Long userId, String bearerToken) {
+
         // if a room is specified (and exists) and passed with the url, you sign the
         // user into the room. Otherwise, a room is created that has the name of the
         // socket id
