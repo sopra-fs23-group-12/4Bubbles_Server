@@ -3,6 +3,8 @@ package ch.uzh.ifi.hase.soprafs23.service;
 import ch.uzh.ifi.hase.soprafs23.constant.EventNames;
 import ch.uzh.ifi.hase.soprafs23.controller.SocketController;
 import ch.uzh.ifi.hase.soprafs23.entity.*;
+import ch.uzh.ifi.hase.soprafs23.exceptions.GameIsRunningExeption;
+import ch.uzh.ifi.hase.soprafs23.exceptions.RoomNotFoundException;
 import ch.uzh.ifi.hase.soprafs23.game.Game;
 import ch.uzh.ifi.hase.soprafs23.game.GameRanking;
 import ch.uzh.ifi.hase.soprafs23.game.VoteController;
@@ -11,8 +13,7 @@ import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
 import com.corundumstudio.socketio.SocketIOClient;
 import javassist.NotFoundException;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -35,14 +36,6 @@ public class SocketControllerHelper {
         this.socketBasics = new SocketBasics();
     }
 
-    public void sendRightAnswerMethod(String roomCode) throws NotFoundException {
-        GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
-        Integer roundIndex = gameRoom.getCurrentGame().getRoundCounter();
-        String correctAnswer = gameRoom.getQuestions().get(roundIndex-1)
-                .getCorrectAnswer();
-        socketBasics.sendObjectToRoom(roomCode, EventNames.GET_RIGHT_ANSWER.eventName, correctAnswer);
-    }
-
     public void updateVoteMethod(Long userId, String message, int remainingTime,String roomCode) throws NotFoundException {
         if (remainingTime > 0) {
             GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
@@ -55,43 +48,48 @@ public class SocketControllerHelper {
         }
     }
 
+
     public void requestRankingMethod(String roomCode) throws NotFoundException {
         // change this round to currentRoundCounter in game
-        GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
-        VoteController voteController = gameRoom.getVoteController();
-        Map<Long, Vote> votes = voteController.getVotes();
-        Game game = gameRoom.getCurrentGame();
-        game.decreaseCounter();
-        int round = game.getRoundCounter();
-        GameRanking gameRanking = game.getRanking();
+        try{
+            GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
+            VoteController voteController = gameRoom.getVoteController();
+            Map<Long, Vote> votes = voteController.getVotes();
+            Game game = gameRoom.getCurrentGame();
+            game.decreaseCounter();
+            int round = game.getRoundCounter();
+            GameRanking gameRanking = game.getRanking();
 
-        // send ranking as a json
-        Map<Long, Integer> currentRanking = gameRanking.updateRanking(gameRoom.getQuestions().get(round), votes);
-        voteController.resetVotes();
+            // send ranking as a json
+            Map<Long, Integer> currentRanking = gameRanking.updateRanking(gameRoom.getQuestions().get(round), votes);
+            voteController.resetVotes();
 
-        JSONObject json = new JSONObject(currentRanking);
-        JSONObject response = new JSONObject();
-        response.append("ranking", json);
+            JSONObject json = new JSONObject(currentRanking);
+            JSONObject response = new JSONObject();
+            response.append("ranking", json);
 
-        boolean finalRound = false;
-        if (gameRoom.getCurrentGame().getRoundCounter() == 0) {
-            finalRound = true;
-        }
-        response.append("final_round", finalRound);
-        // append with append method the boolean on whether it is final
-        System.out.println(response);
-        socketBasics.sendObjectToRoom(roomCode, EventNames.GET_RANKING.eventName, response.toString());
+            boolean finalRound = false;
+            if (gameRoom.getCurrentGame().getRoundCounter() == 0) {
+                finalRound = true;
+            }
+            response.append("final_round", finalRound);
+            // append with append method the boolean on whether it is final
+            System.out.println(response);
+            socketBasics.sendObjectToRoom(roomCode, EventNames.GET_RANKING.eventName, response.toString());
 
-        if (finalRound){
-            roomCoordinator.deleteRoom(roomCode);
-        }
-        else if (!finalRound) {
+            if (finalRound){
+                roomCoordinator.deleteRoom(roomCode);
+                return;
+            }
+            
             // start game after 5 seconds of ranking (get_question will then automatically
             // let the client know the game continues)
             TimerController timerController = new TimerController();
             timerController.setTimer(5);
             timerController.startTimer(roomCode);
             gameRoom.getCurrentGame().startGame();
+        } catch (RoomNotFoundException e){
+           logger.info("Room not found");
         }
     }
 
@@ -106,6 +104,7 @@ public class SocketControllerHelper {
         logger.info(String.valueOf(roomCode));
         Game game = new Game(gameRoom);
         gameRoom.setCurrentGame(game);
+        gameRoom.setGameStarted(true);
         game.startPreGame();
         game.startGame();
     }
@@ -143,8 +142,8 @@ public class SocketControllerHelper {
         } catch (Exception e) {
             logger.info("room could not be joined, either room was null or no room with that code exists");
             logger.info(e.toString());
-
         }
+
         logger.info("Socket ID[{}]  Connected to socket");
         logger.info(senderClient.getSessionId().toString());
     }

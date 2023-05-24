@@ -11,7 +11,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
-import java.util.concurrent.TimeUnit;
+
 
 
 @Component
@@ -27,15 +27,11 @@ public class ServerCommandLineRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         server.startAsync().syncUninterruptibly();
-        System.out.println("Server was started");
-        /* server.start();
-        Thread.sleep(Integer.MAX_VALUE);
-        server.stop();  */
+
     }
 
     @PreDestroy
     public void stopSocketServer() {
         server.stop();
-        System.out.println("Server was stopped");
     }
 }

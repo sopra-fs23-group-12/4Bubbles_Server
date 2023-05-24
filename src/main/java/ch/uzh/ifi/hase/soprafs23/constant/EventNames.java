@@ -14,6 +14,7 @@ public enum EventNames {
     GET_RANKING("get_ranking"),
     GET_RIGHT_ANSWER("get_right_answer"),
     END_OF_QUESTION("end_of_question"),
+    AN_ERROR_OCCURED("an_error_occured"),
 
 
     

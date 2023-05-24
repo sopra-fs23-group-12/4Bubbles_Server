@@ -49,5 +49,5 @@ public class SocketControllerUnitTests {
         verify(server, times(1)).addEventListener(eq(EventNames.SEND_VOTE.eventName),any(),any());
         verify(server, times(1)).addEventListener(eq(EventNames.REQUEST_RANKING.eventName),any(),any());
         verify(server, times(1)).addEventListener(eq(EventNames.END_OF_QUESTION.eventName),any(),any());
-    }*/
+    }
 }

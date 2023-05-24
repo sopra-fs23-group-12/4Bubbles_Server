@@ -2,14 +2,11 @@ package ch.uzh.ifi.hase.soprafs23.service;
 
 import ch.uzh.ifi.hase.soprafs23.ServerCommandLineRunner;
 import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
-import ch.uzh.ifi.hase.soprafs23.entity.Message;
 import ch.uzh.ifi.hase.soprafs23.entity.RoomCoordinator;
-import ch.uzh.ifi.hase.soprafs23.entity.VoteMessage;
 import ch.uzh.ifi.hase.soprafs23.game.Game;
 import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
 import com.corundumstudio.socketio.*;
-import com.corundumstudio.socketio.listener.*;
-import com.corundumstudio.socketio.protocol.Packet;
+
 import javassist.NotFoundException;
 import org.aspectj.apache.bcel.classfile.Module;
 import org.junit.jupiter.api.*;
@@ -18,13 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.net.http.HttpHeaders;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
+
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -221,6 +215,7 @@ public class SocketControllerHelperUnitTests {
         question.setQuestion("Largest city in the world?");
         question.setAnswers(List.of("Los Angeles", " Delhi", "Tokyo", "London"));
         gameRoom.setQuestions(List.of(question));
+        gameRoom.setGameStarted(false);
 
         Game game = new Game(gameRoom);
         gameRoom.setCurrentGame(game);
@@ -237,7 +232,7 @@ public class SocketControllerHelperUnitTests {
 
         verify(senderClient, times(1)).getSessionId();
 
-        roomCoordinator.deleteRoom("123456");
+        //roomCoordinator.deleteRoom("123456");
 
     }
 
