@@ -14,7 +14,7 @@ expect, especially in hard mode. But not to worry - since the bubble sizes chang
 the number of people that have already cast their vote on one of the answers, you can go
 the safe road and follow your friend's choice ... or can you? \
 The game supports two game modes; standard locks your choice in, once you've cast your vote
-you cannot change it anymore. 3,2,1 ... let's you change your vote. Players in this game mode
+you cannot change it anymore. 3,2,1 ... lets you change your vote. Players in this game mode
 have to be extra careful when deciding whether to trust their friend's choices.
 Whether you chose the correct answer will be revealed when the time is up; if your
 bubble doesn't burst, you've made the correct choice!
