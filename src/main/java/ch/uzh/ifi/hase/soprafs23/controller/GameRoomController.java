@@ -74,8 +74,8 @@ public class GameRoomController {
             gameRoomService.addPlayerToGameRoom(room, gameRoomPutDTO.getUserId());
             return DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(room);
         }
-        catch (NotFoundException e) {
-            throw new RoomNotFoundException("Unable to find game room with code: " + gameRoomPutDTO.getRoomCode(), e);
+        catch (RoomNotFoundException e) {
+            throw new RoomNotFoundException("Unable to find game room with code: " + gameRoomPutDTO.getRoomCode());
         }
     }
 }

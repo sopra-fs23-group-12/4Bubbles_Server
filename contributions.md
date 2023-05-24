@@ -52,8 +52,11 @@ Definition of week dates:
 - [x] [#126](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/126)
 - [x] [#125](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/125) 
 ###### Week 8
-- [ ] [#135](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/135)
-- [ ] [#137](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/137)
+- [x] [#135](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/135)
+- [x] [#137](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/137)
+###### Week 9
+- [ ] [#157](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/157)
+- [ ] [#160](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/160)
 
 
 
@@ -71,10 +74,33 @@ Definition of week dates:
 ###### Week 4
 - [x] [#39](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/39)
 - [ ] [#40](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/40)
+
 ###### Week 5
 - [ ] [#47](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/47)
 - [ ] [#48](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/48)
 
+###### Week 6
+- [ ] [#65](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/65)
+- [ ] [#67](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/67)
+- [ ] [#69](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/69)
+
+###### Week 7
+- [ ] [#73](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/73)
+- [ ] [#85](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/85)
+- [ ] [#82](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/82)
+- [ ] [#123](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/123)
+- [ ] [#87](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/87)
+- [ ] [#74](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/74)
+- [ ] [#79](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/79)
+- [ ] [#80](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/80)
+
+###### Week 8
+- [ ] [#90](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/90)
+- [ ] [#96](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/96)
+- [ ] [#91](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/91)
+- [ ] [#146](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/146)
+- [ ] [#144](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/144)
+- [ ] [#152](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/152)
 
 
 ### Marlen Kühn
@@ -91,10 +117,24 @@ Definition of week dates:
 - [x] [#41](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/41)
 - [x] [#42](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/42)
 ###### Week 5
-- [ ] [#49](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/49)
-- [ ] [#50](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/50)
-
-
+- [x] [#49](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/49)
+- [x] [#50](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/50)
+###### Week 6
+- [x] [#71](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/71)
+- [x] [#72](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/72)
+###### Week 7
+- [x] [#76](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/76)
+- [x] [#133](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/133)
+###### Week 8
+- [x] [#75](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/75)
+- [x] [#92](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/92)
+- [x] [#106](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/106)
+###### Week 9
+- [x] [#162](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/162)
+- [x] [#118](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/118)
+- [x] [#119](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/119)
+- [x] [#120](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/120)
+- [x] [#121](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/121)
 
 ### Maaike van Vliet
 
@@ -114,5 +154,15 @@ Definition of week dates:
 - [x] [#81](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/81)
 - [x] [#86](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/86)
 ###### Week 6
-- [ ] [#117](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/117)
-- [ ] [#116](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/116)
+- [x] [#117](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/117)
+- [x] [#116](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/116)
+###### Week 7
+- [x] [#122](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/122)
+- [x] [#93](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/93)
+###### Week 8
+- [x] [#102](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/102)
+- [x] [#97](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/97)
+- [x] [#155](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/155)
+###### Week 8
+- [ ] [#128] (https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/127)
+- [ ] [#127] (https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/128)
