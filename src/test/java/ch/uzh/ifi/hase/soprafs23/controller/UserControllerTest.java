@@ -305,8 +305,6 @@ public class UserControllerTest {
         
                 mockMvc.perform(putRequest)
                         .andExpect(status().isNoContent());
-        
-
     }
 
     @Test

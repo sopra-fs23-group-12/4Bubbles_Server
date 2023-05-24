@@ -56,7 +56,6 @@ public class SocketControllerHelper {
     }
 
     public void requestRankingMethod(String roomCode) throws NotFoundException {
-
         // change this round to currentRoundCounter in game
         GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
         VoteController voteController = gameRoom.getVoteController();
@@ -121,7 +120,6 @@ public class SocketControllerHelper {
     }
 
     public void joinRoomMethod(SocketIOClient senderClient, String roomCode, Long userId, String bearerToken) {
-
         // if a room is specified (and exists) and passed with the url, you sign the
         // user into the room. Otherwise, a room is created that has the name of the
         // socket id

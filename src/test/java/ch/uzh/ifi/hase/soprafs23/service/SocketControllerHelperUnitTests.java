@@ -1,5 +1,6 @@
 package ch.uzh.ifi.hase.soprafs23.service;
 
+import ch.uzh.ifi.hase.soprafs23.ServerCommandLineRunner;
 import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
 import ch.uzh.ifi.hase.soprafs23.entity.Message;
 import ch.uzh.ifi.hase.soprafs23.entity.RoomCoordinator;
@@ -11,10 +12,7 @@ import com.corundumstudio.socketio.listener.*;
 import com.corundumstudio.socketio.protocol.Packet;
 import javassist.NotFoundException;
 import org.aspectj.apache.bcel.classfile.Module;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,7 +28,11 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class SocketControllerHelperUnitTests {
+
+    @Autowired
+    ServerCommandLineRunner serverCommandLineRunner;
 
     @Mock
     private SocketIOClient senderClient;
@@ -40,13 +42,15 @@ public class SocketControllerHelperUnitTests {
     @Autowired
     private SocketControllerHelper socketControllerHelper;
 
-    @BeforeEach
+    @BeforeAll
     public void Setup(){
         MockitoAnnotations.openMocks(this);
+        serverCommandLineRunner.stopSocketServer();
     }
 
-    @AfterEach
+    @AfterAll
     public void clean(){
+        serverCommandLineRunner.stopSocketServer();
     }
 
     //commented test were failing for unknown reasons delete before final deadline
@@ -142,7 +146,7 @@ public class SocketControllerHelperUnitTests {
 
         roomCoordinator.addRoom(gameRoom);
 
-        assertDoesNotThrow(() ->socketControllerHelper.startTimerMethod("123456"));
+        assertDoesNotThrow(() -> socketControllerHelper.startTimerMethod("123456"));
 
         roomCoordinator.deleteRoom("123456");
     }
@@ -331,6 +335,5 @@ public class SocketControllerHelperUnitTests {
         verify(senderClient, times(1)).getSessionId();
 
         roomCoordinator.deleteRoom("123456");
-
     }
 }
