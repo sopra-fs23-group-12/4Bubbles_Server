@@ -13,20 +13,20 @@ import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
 import com.corundumstudio.socketio.SocketIOClient;
 import javassist.NotFoundException;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 @Service
 public class SocketControllerHelper {
 
     private final RoomCoordinator roomCoordinator;
     private final SocketService socketService;
-    Logger logger = Logger.getLogger(
-            SocketController.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(SocketController.class);
 
     private SocketBasics socketBasics;
 
@@ -64,9 +64,8 @@ public class SocketControllerHelper {
             Map<Long, Integer> currentRanking = gameRanking.updateRanking(gameRoom.getQuestions().get(round), votes);
             voteController.resetVotes();
 
-            JSONObject json = new JSONObject(currentRanking);
             JSONObject response = new JSONObject();
-            response.append("ranking", json);
+            response.append("ranking", new JSONObject(currentRanking));
 
             boolean finalRound = false;
             if (gameRoom.getCurrentGame().getRoundCounter() == 0) {
@@ -94,14 +93,12 @@ public class SocketControllerHelper {
     }
 
     public void startTimerMethod(String roomCode) {
-        logger.info("timer has been started:");
-        logger.info(roomCode);
+        logger.info("timer has been started: \n {}", roomCode);
     }
 
     public void socketStartGameMethod(String roomCode) throws NotFoundException {
         GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
-        logger.info("This game was started:");
-        logger.info(String.valueOf(roomCode));
+        logger.info("This game was started: \n {}", String.valueOf(roomCode));
         Game game = new Game(gameRoom);
         gameRoom.setCurrentGame(game);
         gameRoom.setGameStarted(true);
@@ -110,11 +107,8 @@ public class SocketControllerHelper {
     }
 
     public void onChatReceivedMethod(SocketIOClient senderClient, String message, String roomCode, String userId) {
-        System.out.println("message received:");
-        logger.info(senderClient.getHandshakeData().getHttpHeaders().toString());
-        logger.info(message);
-        logger.info(roomCode);
-        logger.info(userId);
+        System.out.println("message received: ");
+        logger.info("{} \n {} \n {} \n {}", senderClient.getHandshakeData().getHttpHeaders().toString(), message, roomCode, userId);
         socketBasics.sendObject(EventNames.GET_MESSAGE.eventName, "hello this is the server", senderClient);
     }
 
@@ -127,8 +121,7 @@ public class SocketControllerHelper {
             socketService.joinRoom(roomCode, userId, bearerToken, senderClient);
             // join the socket namespace
             senderClient.joinRoom(roomCode);
-            logger.info("room is joined!");
-            logger.info(roomCode);
+            logger.info("room is joined! \n {}", roomCode);
 
             // prepare the response:
             GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
@@ -140,12 +133,10 @@ public class SocketControllerHelper {
             // notifies all clients that are already joined that there is a new member
             socketService.sendMemberArray(roomCode, senderClient);
         } catch (Exception e) {
-            logger.info("room could not be joined, either room was null or no room with that code exists");
-            logger.info(e.toString());
+            logger.info("room could not be joined, either room was null or no room with that code exists \n {}", e.toString());
         }
 
-        logger.info("Socket ID[{}]  Connected to socket");
-        logger.info(senderClient.getSessionId().toString());
+        logger.info("Socket ID[{}]  Connected to socket \n {}", senderClient.getSessionId().toString());
     }
 
     public void leaveRoomMethod(SocketIOClient senderClient, String roomCode, Long userId) throws NotFoundException {
@@ -156,18 +147,14 @@ public class SocketControllerHelper {
             socketService.removePlayerFromGameRoom(room, userId);
             // leave the socket namespace
             senderClient.leaveRoom(roomCode);
-            logger.info("room was left!");
-            logger.info(roomCode);
+            logger.info("room was left! \n {}", roomCode);
 
             // notifies all clients that are already joined that there is a new member
             socketService.sendMemberArray(roomCode, senderClient);
         } catch (Exception e) {
-            logger.info("room could not be left, either room was null or no room with that code exists");
-            logger.info(e.toString());
-
+            logger.info("room could not be left, either room was null or no room with that code exists \n {}", e.toString());
         }
-        logger.info("Socket ID[{}]  Connected to socket");
-        logger.info(senderClient.getSessionId().toString());
+        logger.info("Socket ID[{}]  Connected to socket \n {}", senderClient.getSessionId().toString());
     }
 
     public void onConnectedMethod(SocketIOClient senderClient) {
@@ -178,15 +165,13 @@ public class SocketControllerHelper {
         roomCode = (senderClient.getSessionId().toString());
         senderClient.joinRoom(roomCode);
         logger.info("session id was made into a room");
-        logger.info("Socket ID[{}]  Connected to socket");
-        logger.info(roomCode);
+        logger.info("Socket ID[{}]  Connected to socket \n {}", roomCode);
         socketService.sendObject(senderClient, EventNames.GET_MESSAGE.eventName,
                 String.format("single namespace: joined room: %s", roomCode));
     }
 
     public void onDisconectedMethod(SocketIOClient client) {
-        logger.info("Client[{}] - Disconnected from socket");
-        logger.info(client.getSessionId().toString());
+        logger.info("Client[{}] - Disconnected from socket \n {}", client.getSessionId().toString());
         System.out.print("\n\n DISCONNECT!! \n\n");
     }
 }
