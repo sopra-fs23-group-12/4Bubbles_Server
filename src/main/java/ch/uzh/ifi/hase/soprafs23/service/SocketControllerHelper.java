@@ -26,9 +26,9 @@ public class SocketControllerHelper {
 
     private final RoomCoordinator roomCoordinator;
     private final SocketService socketService;
-    private static final Logger logger = LoggerFactory.getLogger(SocketController.class);
+    private static final Logger logger = LoggerFactory.getLogger(SocketControllerHelper.class);
 
-    private SocketBasics socketBasics;
+    private final SocketBasics socketBasics;
 
     public SocketControllerHelper(SocketService socketService) {
         this.socketService = socketService;
@@ -96,9 +96,9 @@ public class SocketControllerHelper {
         logger.info("timer has been started: \n {}", roomCode);
     }
 
-    public void socketStartGameMethod(String roomCode) throws NotFoundException {
+    public void socketStartGameMethod(String roomCode) {
         GameRoom gameRoom = roomCoordinator.getRoomByCode(roomCode);
-        logger.info("This game was started: \n {}", String.valueOf(roomCode));
+        logger.info("This game was started: \n {}", roomCode);
         Game game = new Game(gameRoom);
         gameRoom.setCurrentGame(game);
         gameRoom.setGameStarted(true);
@@ -108,7 +108,7 @@ public class SocketControllerHelper {
 
     public void onChatReceivedMethod(SocketIOClient senderClient, String message, String roomCode, String userId) {
         System.out.println("message received: ");
-        logger.info("{} \n {} \n {} \n {}", senderClient.getHandshakeData().getHttpHeaders().toString(), message, roomCode, userId);
+        logger.info("{} \n {} \n {} \n {}", senderClient.getHandshakeData().getHttpHeaders(), message, roomCode, userId);
         socketBasics.sendObject(EventNames.GET_MESSAGE.eventName, "hello this is the server", senderClient);
     }
 
@@ -136,7 +136,7 @@ public class SocketControllerHelper {
             logger.info("room could not be joined, either room was null or no room with that code exists \n {}", e.toString());
         }
 
-        logger.info("Socket ID[{}]  Connected to socket \n {}", senderClient.getSessionId().toString());
+        logger.info("Socket ID[{}]  Connected to socket", senderClient.getSessionId());
     }
 
     public void leaveRoomMethod(SocketIOClient senderClient, String roomCode, Long userId) throws NotFoundException {
@@ -154,7 +154,7 @@ public class SocketControllerHelper {
         } catch (Exception e) {
             logger.info("room could not be left, either room was null or no room with that code exists \n {}", e.toString());
         }
-        logger.info("Socket ID[{}]  Connected to socket \n {}", senderClient.getSessionId().toString());
+        logger.info("Socket ID[{}]  Connected to socket", senderClient.getSessionId());
     }
 
     public void onConnectedMethod(SocketIOClient senderClient) {
@@ -165,13 +165,13 @@ public class SocketControllerHelper {
         roomCode = (senderClient.getSessionId().toString());
         senderClient.joinRoom(roomCode);
         logger.info("session id was made into a room");
-        logger.info("Socket ID[{}]  Connected to socket \n {}", roomCode);
+        logger.info("Socket ID[{}]  Connected to socket", roomCode);
         socketService.sendObject(senderClient, EventNames.GET_MESSAGE.eventName,
                 String.format("single namespace: joined room: %s", roomCode));
     }
 
     public void onDisconectedMethod(SocketIOClient client) {
-        logger.info("Client[{}] - Disconnected from socket \n {}", client.getSessionId().toString());
+        logger.info("Client[{}] - Disconnected from socket", client.getSessionId());
         System.out.print("\n\n DISCONNECT!! \n\n");
     }
 }
