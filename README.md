@@ -79,7 +79,15 @@ You can verify that the server is running by visiting `localhost:8080` in your b
 ```bash
 ./gradlew test
 ```
+### Deployment
 
+It seems that App Engine only has port 80 and port 443 open, but our WebSocket server is listening on port 9092. We have tried several things to get it to work with Google App Engine, unfortunately without success. It looks like App Engine only provides access to ports 80 and 443, so switched to Google Compute Engine, which provides much more flexibility. We included our own [GitHub Action](https://github.com/sopra-fs23-group-12/4Bubbles_Server/blob/main/.github/workflows/compute-engine.yml), which copies the soprafs23.jar file from the build/libs folder to Google Compute Engine. The old process is shut down and the updated version of soprafs23.js is started. 
+
+To use the server in production set the environment variable PRODUCTION=true.
+
+```bash
+PRODUCTION=true java -jar soprafs23.jar
+```
 
 ## Roadmap
 
