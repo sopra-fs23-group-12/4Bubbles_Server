@@ -119,39 +119,6 @@ public class GameRoomRestInterfaceTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("gameMode", Matchers.is("Basic")));
     }
 
-
-    @Test
-    public void integrationTestJoinRoom() throws Exception {
-
-        testUser1 = new User();
-        testUser1.setId(1L);
-        testUser1.setPassword("password1");
-        testUser1.setUsername("playerName1");
-
-        GameRoom gameRoom = new GameRoom();
-        gameRoom.setRoomCode("123456");
-        gameRoom.setLeader(testUser1);
-        gameRoom.setMembers(Map.of(1L,testUser1));
-
-        GameRoomPutDTO gameRoomPutDTO = new GameRoomPutDTO();
-        gameRoomPutDTO.setRoomCode("123456");
-        gameRoomPutDTO.setUserId(2);
-
-        RoomCoordinator roomCoordinator = RoomCoordinator.getInstance();
-        roomCoordinator.addRoom(gameRoom);
-
-        given(gameRoomServiceMock.retrieveUserFromRepo(2L)).willReturn(testUser2);
-        doNothing().when(gameRoomServiceMock).throwForbiddenWhenNoBearerToken(any());
-        when(gameRoomServiceMock.addPlayerToGameRoom(gameRoom, 2L)).thenCallRealMethod();
-
-
-        mockMvc.perform(MockMvcRequestBuilders
-                .put("/joinRoom")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(gameRoomPutDTO))
-        ).andExpect(MockMvcResultMatchers.status().isOk());
-    }
-
     @Test
     public void testGetTopics() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders

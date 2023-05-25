@@ -5,7 +5,6 @@ import ch.uzh.ifi.hase.soprafs23.entity.Vote;
 import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class GameRanking {

@@ -1,30 +1,19 @@
 package ch.uzh.ifi.hase.soprafs23.controller;
 
 import ch.uzh.ifi.hase.soprafs23.entity.*;
-import ch.uzh.ifi.hase.soprafs23.game.GameRanking;
-import ch.uzh.ifi.hase.soprafs23.game.VoteController;
-import ch.uzh.ifi.hase.soprafs23.game.stateStorage.TimerController;
+
 import ch.uzh.ifi.hase.soprafs23.service.SocketControllerHelper;
 import ch.uzh.ifi.hase.soprafs23.service.SocketService;
 import ch.uzh.ifi.hase.soprafs23.constant.EventNames;
-import ch.uzh.ifi.hase.soprafs23.game.Game;
-import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
 
-import ch.uzh.ifi.hase.soprafs23.service.SocketBasics;
-
-import com.corundumstudio.socketio.SocketIOClient;
 import com.corundumstudio.socketio.SocketIOServer;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
-import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.Map;
+
 import java.util.logging.Logger;
 
 /*

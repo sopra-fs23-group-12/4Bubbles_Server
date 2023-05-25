@@ -1,6 +1,5 @@
 package ch.uzh.ifi.hase.soprafs23.entity;
 
-import javassist.NotFoundException;
 import org.springframework.stereotype.Component;
 
 import ch.uzh.ifi.hase.soprafs23.exceptions.RoomNotFoundException;

@@ -3,7 +3,6 @@ package ch.uzh.ifi.hase.soprafs23.service;
 import ch.uzh.ifi.hase.soprafs23.constant.EventNames;
 import ch.uzh.ifi.hase.soprafs23.controller.SocketController;
 import ch.uzh.ifi.hase.soprafs23.entity.*;
-import ch.uzh.ifi.hase.soprafs23.exceptions.GameIsRunningExeption;
 import ch.uzh.ifi.hase.soprafs23.exceptions.RoomNotFoundException;
 import ch.uzh.ifi.hase.soprafs23.game.Game;
 import ch.uzh.ifi.hase.soprafs23.game.GameRanking;
@@ -43,7 +42,6 @@ public class SocketControllerHelper {
             Game game = gameRoom.getCurrentGame();
             game.setVoteGame(userId, message, remainingTime);
             HashMap<String, Integer> votesHash = socketService.votesListAsMap(voteController.getVotes());
-            System.out.println(votesHash);
             socketBasics.sendObjectToRoom(roomCode, EventNames.SOMEBODY_VOTED.eventName, votesHash);
         }
     }
@@ -73,7 +71,6 @@ public class SocketControllerHelper {
             }
             response.append("final_round", finalRound);
             // append with append method the boolean on whether it is final
-            System.out.println(response);
             socketBasics.sendObjectToRoom(roomCode, EventNames.GET_RANKING.eventName, response.toString());
 
             if (finalRound){
@@ -107,7 +104,6 @@ public class SocketControllerHelper {
     }
 
     public void onChatReceivedMethod(SocketIOClient senderClient, String message, String roomCode, String userId) {
-        System.out.println("message received:" + "\n" + "Handshake:" + senderClient.getHandshakeData().getHttpHeaders().toString() + "\n Message: " + message + "\n RoomCode: " + roomCode + "\n userId: " + userId);
         socketBasics.sendObject(EventNames.GET_MESSAGE.eventName, "hello this is the server", senderClient);
     }
 
@@ -170,6 +166,5 @@ public class SocketControllerHelper {
 
     public void onDisconectedMethod(SocketIOClient client) {
         logger.info("Client[{}] - Disconnected from socket" + "\n" + client.getSessionId().toString());
-        System.out.print("\n\n DISCONNECT!! \n\n");
     }
 }
