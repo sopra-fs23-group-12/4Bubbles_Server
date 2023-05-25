@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - main
-      - fixedSocketTests
 
   pull_request:
     types: [opened, synchronize, reopened]
