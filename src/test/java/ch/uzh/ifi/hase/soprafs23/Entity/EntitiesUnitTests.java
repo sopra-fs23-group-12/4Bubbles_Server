@@ -38,7 +38,7 @@ public class EntitiesUnitTests {
     }
 
     @Test
-    public void testRoomCoordinator() throws Exception
+    void testRoomCoordinator() throws Exception
     {
         GameRoom gameRoom = new GameRoom();
         gameRoom.setLeaderUserId(1);
@@ -58,33 +58,34 @@ public class EntitiesUnitTests {
         assertEquals(roomNotFoundException.getMessage(), "Unable to find game room with code: " + "123456");*/
     }
 
-    @Test
+    /*@Test
     public void testAddRoom_RoomNotFound() throws Exception
     {
-        /*RoomCoordinator roomCoordinator = RoomCoordinator.getInstance();
+        RoomCoordinator roomCoordinator = RoomCoordinator.getInstance();
 
         RoomNotFoundException roomNotFoundException = assertThrows(RoomNotFoundException.class, () -> {
             roomCoordinator.getRoomByCode("199803");
         });
-        assertEquals(roomNotFoundException.getMessage(), "Unable to find game room with code: " + "123456");*/
-    }
+        assertEquals(roomNotFoundException.getMessage(), "Unable to find game room with code: " + "123456");
+    }*/
 
-    @Test
+    /*@Test
     public void testDeleteRoom_RoomNotFound() throws Exception
     {
-        /*RoomCoordinator roomCoordinator = RoomCoordinator.getInstance();
+        RoomCoordinator roomCoordinator = RoomCoordinator.getInstance();
 
         RoomNotFoundException roomNotFoundException = assertThrows(RoomNotFoundException.class, () -> {
             roomCoordinator.deleteRoom("199803");
         });
-        assertEquals(roomNotFoundException.getMessage(), "Unable to find game room with code: " + "123456");*/
-    }
+        assertEquals(roomNotFoundException.getMessage(), "Unable to find game room with code: " + "123456");
+    }*/
 
     @Test
-    public void testGameRoomOperations() throws Exception
+    void testGameRoomOperations() throws Exception
     {
         GameRoom gameRoom = new GameRoom();
         gameRoom.setNamespace(new Namespace("Namespace", new Configuration()));
+        gameRoom.getNamespace();
         gameRoom.setQuestions(List.of(new Question()));
         Game game = new Game(gameRoom);
         game.getGameMode();
