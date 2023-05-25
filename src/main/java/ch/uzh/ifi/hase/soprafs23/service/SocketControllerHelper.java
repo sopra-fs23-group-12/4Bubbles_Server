@@ -59,7 +59,7 @@ public class SocketControllerHelper {
             GameRanking gameRanking = game.getRanking();
 
             // send ranking as a json
-            Map<Long, Integer> currentRanking = gameRanking.updateRanking(gameRoom.getQuestions().get(round), votes);
+            Map<Long, Integer> currentRanking = gameRanking.updateRanking(gameRoom.getQuestions().get(round-1), votes);
             voteController.resetVotes();
 
             JSONObject response = new JSONObject();
@@ -101,10 +101,6 @@ public class SocketControllerHelper {
         gameRoom.setGameStarted(true);
         game.startPreGame();
         game.startGame();
-    }
-
-    public void onChatReceivedMethod(SocketIOClient senderClient, String message, String roomCode, String userId) {
-        socketBasics.sendObject(EventNames.GET_MESSAGE.eventName, "hello this is the server", senderClient);
     }
 
     public void joinRoomMethod(SocketIOClient senderClient, String roomCode, Long userId, String bearerToken) {
@@ -160,8 +156,6 @@ public class SocketControllerHelper {
         roomCode = (senderClient.getSessionId().toString());
         senderClient.joinRoom(roomCode);
         logger.info("session id was made into a room" + "\n" + "Socket ID[{}]  Connected to socket" + "\n" +  roomCode);
-        socketService.sendObject(senderClient, EventNames.GET_MESSAGE.eventName,
-                String.format("single namespace: joined room: %s", roomCode));
     }
 
     public void onDisconectedMethod(SocketIOClient client) {

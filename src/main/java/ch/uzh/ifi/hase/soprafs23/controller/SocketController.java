@@ -73,7 +73,6 @@ public class SocketController {
     public void addEventListeners(SocketIOServer server) {
         server.addConnectListener(onConnected());
         server.addDisconnectListener(onDisconnected());
-        server.addEventListener(EventNames.SEND_MESSAGE.eventName, Message.class, onChatReceived());
         server.addEventListener(EventNames.START_GAME.eventName, Message.class, socketStartGame());
         server.addEventListener(EventNames.START_TIMER.eventName, Message.class, startTimer());
         server.addEventListener(EventNames.JOIN_ROOM.eventName, Message.class, joinRoom());
@@ -98,12 +97,6 @@ public class SocketController {
 
     private DataListener<Message> socketStartGame() {
         return (senderClient, data, ackSender) -> {socketControllerHelper.socketStartGameMethod(data.getRoomCode());};
-    }
-
-    // great to use for debugging, sends a message to every member of a namespace
-    // upon receiving a message
-    private DataListener<Message> onChatReceived() {
-        return (senderClient, data, ackSender) -> {socketControllerHelper.onChatReceivedMethod(senderClient, data.getMessage(), data.getRoomCode(), String.valueOf(data.getUserId()));};
     }
 
     // this method is only called once the gameroom has been created.

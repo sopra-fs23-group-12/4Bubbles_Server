@@ -63,9 +63,10 @@ public class SocketService {
             List<User> membersList = members.stream().toList();
             socketBasics.sendObjectToRoom(roomCode, EventNames.JOINED_PLAYERS.eventName, membersList);
         } catch (Exception e){
-            System.out.printf("Exception occurred while sending user array: %s", e);
+            throw new RoomNotFoundException("Unable to find game room with code: " + roomCode);
         }
     }
+    
 
     //this is used to send a data package for the data hook
     public void sendObject(SocketIOClient client, String eventName, Object data) {

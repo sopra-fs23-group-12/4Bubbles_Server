@@ -40,7 +40,7 @@ public class RoomCoordinator {
         try{ GameRoom gameRoom = getRoomByCode(roomCode);
             this.rooms.remove(gameRoom);
         } catch (Exception e){
-            System.out.println("room could not be deleted because it wasn't found");
+            throw new RoomNotFoundException("Room with given room code could not be found");        
         }
 
     }

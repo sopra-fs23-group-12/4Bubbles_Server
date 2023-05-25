@@ -4,7 +4,6 @@ public enum EventNames {
     //send events
     GET_ANSWERS("get_answers"),
     GET_QUESTION("get_question"),
-    GET_MESSAGE("get_message"),
     JOINED_PLAYERS("joined_players"),
     ROOM_IS_JOINED("room_is_joined"),
     TIMER_COUNT("timer_count"),
@@ -21,7 +20,6 @@ public enum EventNames {
     START_GAME("start_game"),
     START_TIMER("start_timer"),
     JOIN_ROOM("join_room"),
-    SEND_MESSAGE("send_message"),
     USER_LEFT_GAMEROOM("user_left_gameroom"),
     REQUEST_RANKING("request_ranking");
 

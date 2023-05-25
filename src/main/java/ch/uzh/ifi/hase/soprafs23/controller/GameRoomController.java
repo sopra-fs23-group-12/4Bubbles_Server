@@ -4,7 +4,6 @@ import ch.uzh.ifi.hase.soprafs23.constant.ApiUrls;
 import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
 import ch.uzh.ifi.hase.soprafs23.entity.RoomCoordinator;
 import ch.uzh.ifi.hase.soprafs23.exceptions.ApiConnectionError;
-import ch.uzh.ifi.hase.soprafs23.exceptions.RoomNotFoundException;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.*;
 import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs23.service.ApiService;

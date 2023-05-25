@@ -78,7 +78,6 @@ public class Game {
     public void setVoteGame(long userId, String message, int remainingTime){
         voteController.setVote(userId, message,remainingTime);
         Map<Long, Vote> votes = voteController.getVotes();
-        System.out.print(votes);
 
     }
 
