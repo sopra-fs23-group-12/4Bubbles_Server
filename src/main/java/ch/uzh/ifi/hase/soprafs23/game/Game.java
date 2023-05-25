@@ -67,8 +67,7 @@ public class Game {
             public void run() {
                 timerController.setTimer(10);
                 timerController.startTimer(roomCode);
-                socketBasics.sendObjectToRoom(roomCode, "end_of_question", 0);
-            }
+                socketBasics.sendObjectToRoom(roomCode, "end_of_question", 0);}
         });
         timerThread.start();
         

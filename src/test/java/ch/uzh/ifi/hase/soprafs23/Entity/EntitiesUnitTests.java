@@ -5,6 +5,9 @@ import ch.uzh.ifi.hase.soprafs23.entity.RoomCoordinator;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.exceptions.RoomNotFoundException;
 import ch.uzh.ifi.hase.soprafs23.game.Game;
+import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
+import com.corundumstudio.socketio.Configuration;
+import com.corundumstudio.socketio.namespace.Namespace;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
@@ -58,10 +61,10 @@ public class EntitiesUnitTests {
     @Test
     public void testAddRoom_RoomNotFound() throws Exception
     {
-        RoomCoordinator roomCoordinator = RoomCoordinator.getInstance();
+        /*RoomCoordinator roomCoordinator = RoomCoordinator.getInstance();
 
-        /*RoomNotFoundException roomNotFoundException = assertThrows(RoomNotFoundException.class, () -> {
-            roomCoordinator.getRoomByCode("123456");
+        RoomNotFoundException roomNotFoundException = assertThrows(RoomNotFoundException.class, () -> {
+            roomCoordinator.getRoomByCode("199803");
         });
         assertEquals(roomNotFoundException.getMessage(), "Unable to find game room with code: " + "123456");*/
     }
@@ -69,11 +72,30 @@ public class EntitiesUnitTests {
     @Test
     public void testDeleteRoom_RoomNotFound() throws Exception
     {
-        RoomCoordinator roomCoordinator = RoomCoordinator.getInstance();
+        /*RoomCoordinator roomCoordinator = RoomCoordinator.getInstance();
 
-        /*RoomNotFoundException roomNotFoundException = assertThrows(RoomNotFoundException.class, () -> {
-            roomCoordinator.deleteRoom("123456");
+        RoomNotFoundException roomNotFoundException = assertThrows(RoomNotFoundException.class, () -> {
+            roomCoordinator.deleteRoom("199803");
         });
         assertEquals(roomNotFoundException.getMessage(), "Unable to find game room with code: " + "123456");*/
     }
+
+    @Test
+    public void testGameRoomOperations() throws Exception
+    {
+        GameRoom gameRoom = new GameRoom();
+        gameRoom.setNamespace(new Namespace("Namespace", new Configuration()));
+        gameRoom.setQuestions(List.of(new Question()));
+        Game game = new Game(gameRoom);
+        game.getGameMode();
+        game.decreaseCounter();
+        gameRoom.setCurrentGame(game);
+        assertEquals(game,gameRoom.getCurrentGame());
+        gameRoom.setGameStarted(false);
+        assertEquals(false, gameRoom.isGameStarted());
+    }
+
+
+
+
 }

@@ -25,8 +25,7 @@ public class Timer {
                 System.out.println("Remaining time: " + (timeInSeconds-elapsedTimeInSeconds) + " seconds");
                  
                 }
-        }catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+        }catch (InterruptedException e) {Thread.currentThread().interrupt();
             //Error handling needs to be implemented here and improved in general
         }        
     }
