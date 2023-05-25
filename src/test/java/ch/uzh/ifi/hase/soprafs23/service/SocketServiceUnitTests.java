@@ -5,22 +5,22 @@ import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
 import ch.uzh.ifi.hase.soprafs23.entity.RoomCoordinator;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.entity.Vote;
-import ch.uzh.ifi.hase.soprafs23.exceptions.RoomNotFoundException;
+
 import com.corundumstudio.socketio.SocketIOClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
+
 import org.mockito.MockitoAnnotations;
-import javassist.NotFoundException;
+
 
 import java.util.HashMap;
-import java.util.List;
+
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+
 
 public class SocketServiceUnitTests {
 

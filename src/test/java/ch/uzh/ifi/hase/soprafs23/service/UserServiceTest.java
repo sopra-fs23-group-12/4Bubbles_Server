@@ -99,7 +99,7 @@ public class UserServiceTest {
 
         assertEquals(updatedUser.getId(), userPointsPutDTO.getId());
         assertEquals(updatedUser.getTotalPoints(), userPointsPutDTO.getPoints());
-        assertEquals(updatedUser.getTotalGamesPlayed(), 1);
+        assertEquals(1, updatedUser.getTotalGamesPlayed());
         
     }
 

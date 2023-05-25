@@ -1,9 +1,7 @@
 package ch.uzh.ifi.hase.soprafs23.Entity;
 
-import ch.uzh.ifi.hase.soprafs23.constant.EventNames;
 import ch.uzh.ifi.hase.soprafs23.constant.MessageType;
 import ch.uzh.ifi.hase.soprafs23.entity.Message;
-import ch.uzh.ifi.hase.soprafs23.entity.Vote;
 import ch.uzh.ifi.hase.soprafs23.entity.VoteMessage;
 import org.junit.jupiter.api.Test;
 

@@ -8,7 +8,6 @@ import ch.uzh.ifi.hase.soprafs23.game.stateStorage.Question;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.*;
 import ch.uzh.ifi.hase.soprafs23.service.ApiService;
 import ch.uzh.ifi.hase.soprafs23.service.GameRoomService;
-import javassist.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -56,22 +55,7 @@ public class GameRoomControllerUnitTests {
         gameRoomPutDTO.setRoomCode("123456");
     }
 
-    /*
-    @Test
-    public void testCreateRoom() throws Exception {
-        GameRoomGetDTO gameRoomGetDTO = gameRoomController.createGameRoom(gameRoomPostDTO, null);
-        verify(gameRoomService, times(1)).throwForbiddenWhenNoBearerToken(any());
-        verify(gameRoomService, times(1)).setLeaderFromRepo(any());
-        verify(gameRoomService, times(1)).initGameRoom(any());
-        verify(apiService, times(1)).getQuestionsFromApi(eq("https://opentdb.com/api.php?amount=5&category=3&difficulty=Basic&type=multiple"));
-        verify(roomCoordinator, times(1)).addRoom(any());
-
-        assertTrue(gameRoomGetDTO.getGameMode().equals("Basic"));
-        assertEquals(gameRoomGetDTO.getNumOfQuestions(), 5);
-    }
-
-
-     */
+    
     @Test
     public void testCreateRoom_apiServiceThrowsException() throws Exception{
         when(apiService.getQuestionsFromApi(any())).thenThrow(new IOException());

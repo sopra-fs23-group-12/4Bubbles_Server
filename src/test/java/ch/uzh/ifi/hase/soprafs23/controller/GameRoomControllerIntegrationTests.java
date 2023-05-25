@@ -5,13 +5,11 @@ import ch.uzh.ifi.hase.soprafs23.entity.GameRoom;
 import ch.uzh.ifi.hase.soprafs23.entity.RoomCoordinator;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.repository.UserRepository;
-import ch.uzh.ifi.hase.soprafs23.rest.dto.GameRoomGetDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.GameRoomPostDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.GameRoomPutDTO;
 import ch.uzh.ifi.hase.soprafs23.rest.dto.TopicGetDTO;
 import ch.uzh.ifi.hase.soprafs23.service.ApiService;
 import ch.uzh.ifi.hase.soprafs23.service.UserService;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
@@ -24,16 +22,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -110,36 +105,6 @@ public class GameRoomControllerIntegrationTests {
                 .content(asJsonString(gameRoomPostDTO));
 
         mockMvc.perform(postRequest).andExpect(jsonPath("$.leader.username", is(user.getUsername())));
-    }
-
-    @Test
-    public void testJoinGameRoom() throws Exception {
-        User secondUser = new User();
-        secondUser.setUsername("second");
-        secondUser.setPassword("pw2");
-
-        userService.createUser(secondUser);
-
-        GameRoomPutDTO gameRoomPutDTO = new GameRoomPutDTO();
-        gameRoomPutDTO.setRoomCode("113311");
-        gameRoomPutDTO.setUserId(userRepository.findByUsername("second").getId().intValue());
-
-        GameRoom gameRoom = new GameRoom();
-        gameRoom.setRoomCode("113311");
-        gameRoom.setLeader(user);
-        gameRoom.getMembers().put(user.getId(),user);
-
-        RoomCoordinator roomCoordinator = RoomCoordinator.getInstance();
-        roomCoordinator.addRoom(gameRoom);
-
-        MockHttpServletRequestBuilder putRequest = put("/joinRoom")
-                .header("Authorization", "Bearer " + "top-secret-token")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(gameRoomPutDTO));
-
-        mockMvc.perform(putRequest).andExpect(jsonPath("$.members[1].username", is(secondUser.getUsername())));
-
-        roomCoordinator.deleteRoom("113311");
     }
 
 

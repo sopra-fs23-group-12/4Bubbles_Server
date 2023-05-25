@@ -2,13 +2,11 @@ package ch.uzh.ifi.hase.soprafs23.service;
 
 
 import ch.uzh.ifi.hase.soprafs23.constant.EventNames;
-import ch.uzh.ifi.hase.soprafs23.constant.MessageType;
 import ch.uzh.ifi.hase.soprafs23.entity.*;
 import ch.uzh.ifi.hase.soprafs23.exceptions.GameIsRunningExeption;
 import ch.uzh.ifi.hase.soprafs23.exceptions.RoomNotFoundException;
 
 import com.corundumstudio.socketio.SocketIOClient;
-import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;

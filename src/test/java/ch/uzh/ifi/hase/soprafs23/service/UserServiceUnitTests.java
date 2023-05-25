@@ -3,14 +3,14 @@ package ch.uzh.ifi.hase.soprafs23.service;
 import ch.uzh.ifi.hase.soprafs23.constant.UserStatus;
 import ch.uzh.ifi.hase.soprafs23.entity.User;
 import ch.uzh.ifi.hase.soprafs23.repository.UserRepository;
-import ch.uzh.ifi.hase.soprafs23.rest.dto.TopicGetDTO;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.Qualifier;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.mock.mockito.MockBean;
+
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
@@ -94,7 +94,7 @@ public class UserServiceUnitTests {
 
 
         User user = userService.updateUser(1L, "bearerToken", testUser2);
-        assertTrue(testUser1.getUsername().equals(testUser2.getUsername()));
+        assertEquals(testUser1.getUsername(), testUser2.getUsername());
 
         testUser1.setUsername("playerName1");
         testUser1.setPassword("password1");
@@ -141,7 +141,7 @@ public class UserServiceUnitTests {
 
 
         User user = userService.updateUser(1L, "bearerToken", testUser2);
-        assertTrue(testUser1.getUsername().equals(testUser2.getUsername()));
+        assertEquals(testUser1.getUsername(),testUser2.getUsername());
 
         testUser1.setUsername("playerName1");
         testUser1.setPassword("password1");
@@ -164,6 +164,6 @@ public class UserServiceUnitTests {
 
         User user = userService.registerUser(testUser2);
         assertNotEquals(user.getToken(), null);
-        assertEquals(user.getStatus(), UserStatus.ONLINE);
+        assertEquals(UserStatus.ONLINE, user.getStatus());
     }
 }

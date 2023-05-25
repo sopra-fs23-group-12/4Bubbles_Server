@@ -9,7 +9,6 @@ import ch.uzh.ifi.hase.soprafs23.rest.dto.*;
 import ch.uzh.ifi.hase.soprafs23.rest.mapper.DTOMapper;
 import ch.uzh.ifi.hase.soprafs23.service.ApiService;
 import ch.uzh.ifi.hase.soprafs23.service.GameRoomService;
-import javassist.NotFoundException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -63,19 +62,5 @@ public class GameRoomController {
         System.out.println("create room triggered, game room; " + gameRoom.getRoomCode() );
 
         return DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(gameRoom);
-    }
-
-    @PutMapping("/joinRoom")
-    @ResponseStatus(HttpStatus.OK)
-    public GameRoomGetDTO joinGameRoom(@RequestBody GameRoomPutDTO gameRoomPutDTO, @RequestHeader(value = "Authorization", required = false) String bearerToken) {
-        gameRoomService.throwForbiddenWhenNoBearerToken(bearerToken);
-        try {
-            GameRoom room = roomCoordinator.getRoomByCode(gameRoomPutDTO.getRoomCode());
-            gameRoomService.addPlayerToGameRoom(room, gameRoomPutDTO.getUserId());
-            return DTOMapper.INSTANCE.convertEntityToGameRoomGetDTO(room);
-        }
-        catch (RoomNotFoundException e) {
-            throw new RoomNotFoundException("Unable to find game room with code: " + gameRoomPutDTO.getRoomCode());
-        }
     }
 }
