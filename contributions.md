@@ -6,6 +6,10 @@ Definition of week dates:
 	-Week 3: April 09-April 15 (easter break no tasks required)
 	-Week 4: April 16-April 22
 	-Week 5: April 23-April 29
+    -Week 6: April 30-May 06
+    -Week 7: May 07-May 13
+    -Week 8: May 14-May 20
+    -Week 9: May 21-May 27 
 
 ### Fabio Bertschi 
 
@@ -181,6 +185,6 @@ Definition of week dates:
 - [x] [#102](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/102)
 - [x] [#97](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/97)
 - [x] [#155](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/155)
-###### Week 8
+###### Week 9
 - [x] [#128] (https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/127)
 - [x] [#127] (https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/128)
