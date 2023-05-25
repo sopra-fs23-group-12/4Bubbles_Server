@@ -23,6 +23,18 @@ Definition of week dates:
 ###### Week 5
 - [x] [#89](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/89)
 - [x] [#90](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/90)
+###### Week 6
+- [x] [#114](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/114)
+- [x] [#118](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/118)
+###### Week 7
+- [x] [#143](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/143)
+- [x] [#124](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/124)
+###### Week 8
+- [x] [#138](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/138)
+- [x] [#139](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/139)
+###### Week 9
+- [x] [#157](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/173)
+- [x] [#160](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/172)
 
 
 
@@ -107,6 +119,7 @@ Definition of week dates:
 - [x] [#114](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/114)
 - [x] [#115](https://github.com/sopra-fs23-group-12/4Bubbles_Client/issues/115)
 - [x] [#158](https://github.com/sopra-fs23-group-12/4Bubbles_Server/issues/158)
+- 
 
 ### Marlen Kühn
 
